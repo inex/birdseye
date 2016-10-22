@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Bird\Parser\Status as StatusParser;
+use App\Bird\Parser\Symbols as SymbolsParser;
 use App\Bird\Parser\Protocol\Bgp as BgpProtocolParser;
 
 class BirdDummy
@@ -15,6 +16,11 @@ class BirdDummy
         $status = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-status') );
 
         return ( new StatusParser($status) )->parse();
+    }
+
+    public function symbols() {
+        $symbols = file_get_contents( realpath(__DIR__.'/../data/sample-bird/symbols') );
+        return ( new SymbolsParser($symbols) )->parse();
     }
 
     public function protocols() {

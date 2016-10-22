@@ -23,5 +23,7 @@ $app->get('/', function () use ($app) {
 $app->get('api/status', 'Status@show');
 
 $app->get('api/protocols/bgp', 'Protocols@bgp');
-
 $app->get('api/protocol/{protocol}', 'Protocols@protocol');
+
+$app->get('api/symbols', 'Symbols@all');
+$app->get('api/symbols/tables', 'Symbols@tables');

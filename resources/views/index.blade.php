@@ -15,6 +15,8 @@
         <li> <a href="{{{ url('api/status') }}}">{{{ url('api/status') }}}</a> </li>
         <li> <a href="{{{ url('api/protocols/bgp') }}}">{{{ url('api/protocols/bgp') }}}</a> </li>
         <li> {{{ url('api/protocol') }}}/$protocol </li>
+        <li> <a href="{{{ url('api/symbols') }}}">{{{ url('api/symbols') }}}</a> </li>
+        <li> <a href="{{{ url('api/symbols/tables') }}}">{{{ url('api/symbols/tables') }}}</a> </li>
     </ul>
 </body>
 </html>
