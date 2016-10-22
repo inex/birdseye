@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 
+use Cache;
+
 class Controller extends BaseController
 {
     private $cacheKey;
@@ -33,6 +35,16 @@ class Controller extends BaseController
         }
 
         return response()->json(['api' => $api, $key => $response]);
-
     }
+
+    protected function getSymbols() {
+        if( $symbols = Cache::get( $this->cacheKey() . 'symbols' ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $symbols = app('Bird')->symbols();
+            Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 1 ) );
+        }
+        return $symbols;
+    }
+
 }

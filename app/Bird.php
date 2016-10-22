@@ -96,15 +96,14 @@ class Bird
     }
 
     public function routesProtocol( $protocol ) {
-        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-protocol') );
+        $routesBlob = $this->run('show route protocol ' . $protocol . ' all');
 
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
     public function routesTable( $table ) {
-        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-table-all') );
+        $routesBlob = $this->run('show route table ' . $table . ' all');
 
         return ( new RoutesParser($routesBlob ) )->parse();
     }
-
 }

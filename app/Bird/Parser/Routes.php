@@ -25,14 +25,17 @@ class Routes extends Parser
                 continue;
             }
 
+            if( substr( $line, 0, 17 ) == 'Access restricted' ) {
+                continue;
+            }
+
             // should always be starting with a route definition
             if( $r == [] && preg_match( "/^\s+.*$/", $line ) ) {
                 continue;
             }
 
-
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+[0-9\-]+\]\s+\*\s+\((\d+)\).*$/", $line, $matches ) ) {
-                // 188.93.0.0/21      via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+[0-9\-\:]+\]\s+\*\s+\((\d+)\).*$/", $line, $matches ) ) {
+                // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
 
                 // this is the start of a route definition - so store the previous one if it exists:
                 if( $r !== [] ) {

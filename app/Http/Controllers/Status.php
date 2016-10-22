@@ -10,6 +10,7 @@ class Status extends Controller
     {
         if( $status = Cache::get( $this->cacheKey() . 'status' ) ) {
             $api['from_cache'] = true;
+            $api['ttl_mins']   = env( 'CACHE_SHOW_STATUS', 1 );
         } else {
             $status = app('Bird')->status();
             Cache::put($this->cacheKey() . 'status', $status, env( 'CACHE_SHOW_STATUS', 1 ) );

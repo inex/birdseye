@@ -6,19 +6,9 @@ use Cache;
 
 class Symbols extends Controller
 {
-    private function getSymbols() {
-        if( $symbols = Cache::get( $this->cacheKey() . 'symbols' ) ) {
-            $this->cacheUsed = true;
-        } else {
-            $symbols = app('Bird')->symbols();
-            Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 1 ) );
-        }
-        return $symbols;
-    }
-
     public function all()
     {
-        return $this->verifyAndSendJSON( 'symbols', $this->getSymbols(), ['from_cache' => $this->cacheUsed] );
+        return $this->verifyAndSendJSON( 'symbols', $this->getSymbols(), ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_SHOW_SYMBOLS', 5 )] );
     }
 
 
@@ -30,7 +20,7 @@ class Symbols extends Controller
             $symbols['routing table'] = [];
         }
 
-        return $this->verifyAndSendJSON( 'symbols', $symbols['routing table'], ['from_cache' => $this->cacheUsed] );
+        return $this->verifyAndSendJSON( 'symbols', $symbols['routing table'], ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_SHOW_SYMBOLS', 5 )] );
     }
 
     public function protocols()
@@ -41,7 +31,7 @@ class Symbols extends Controller
             $symbols['protocol'] = [];
         }
 
-        return $this->verifyAndSendJSON( 'symbols', $symbols['protocol'], ['from_cache' => $this->cacheUsed] );
+        return $this->verifyAndSendJSON( 'symbols', $symbols['protocol'], ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_SHOW_SYMBOLS', 5 )] );
     }
 
 }
