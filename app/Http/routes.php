@@ -30,3 +30,4 @@ $app->get('api/symbols/tables', 'Symbols@tables');
 $app->get('api/symbols/protocols', 'Symbols@protocols');
 
 $app->get('api/routes/protocol/{protocol}', 'Routes@protocol');
+$app->get('api/routes/table/{table}', 'Routes@table');

@@ -82,4 +82,10 @@ class BirdDummy
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
+    public function routesTable( $table ) {
+        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-table-all') );
+
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
 }
