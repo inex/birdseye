@@ -1,0 +1,41 @@
+BIRD 1.4.0 ready.
+188.93.0.0/21      via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 42227
+	BGP.next_hop: 193.242.111.54
+	BGP.med: 100
+	BGP.local_pref: 100
+	BGP.community: (0,31122)
+93.89.240.0/20     via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 42227
+	BGP.next_hop: 193.242.111.54
+	BGP.med: 100
+	BGP.local_pref: 100
+	BGP.community: (0,31122)
+195.222.108.0/22   via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 42227
+	BGP.next_hop: 193.242.111.54
+	BGP.med: 100
+	BGP.local_pref: 100
+	BGP.community: (0,31122)
+91.189.64.0/21     via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 42227
+	BGP.next_hop: 193.242.111.54
+	BGP.med: 100
+	BGP.local_pref: 100
+	BGP.community: (0,31122)
+195.43.155.0/24    via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS47490i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 42227 47490
+	BGP.next_hop: 193.242.111.54
+	BGP.med: 100
+	BGP.local_pref: 100
+	BGP.community: (0,31122)

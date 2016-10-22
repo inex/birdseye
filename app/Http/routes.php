@@ -12,5 +12,12 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return $app->make('view')->make('index');
 });
+//
+// $app->get('/', function () use ($app) {
+//     return $app->version();
+// });
+
+
+$app->get('api/status', 'Status@show');
