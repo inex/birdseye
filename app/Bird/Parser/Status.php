@@ -26,13 +26,13 @@ class Status extends Parser
                 $response['router_id'] = $matches[1];
             }
             else if( preg_match( "/^Current\sserver\stime\sis\s([0-9\-]+)\s([0-9\:]+)\s*$/", $line, $matches ) ) {
-                $response['server_time' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" );
+                $response['server_time' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" )->format('c');
             }
             else if( preg_match( "/^Last\sreboot\son\s([0-9\-]+)\s([0-9\:]+)\s*$/", $line, $matches ) ) {
-                $response['last_reboot' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" );
+                $response['last_reboot' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" )->format('c');
             }
             else if( preg_match( "/^Last\sreconfiguration\son\s([0-9\-]+)\s([0-9\:]+)\s*$/", $line, $matches ) ) {
-                $response['last_reconfig' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" );
+                $response['last_reconfig' ] = DateTime::createFromFormat( 'Y-m-d H:i:s', "{$matches[1]} {$matches[2]}" )->format('c');
             }
 
             if( !preg_match( "/^\s*$/", $line ) ) {

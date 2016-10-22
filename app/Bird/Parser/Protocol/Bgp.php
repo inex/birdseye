@@ -25,7 +25,7 @@ class Bgp extends ProtocolParser
                 $p['protocol']      = $matches[1];
                 $p['table']         = $matches[2];
                 $p['state']         = $matches[3];
-                $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] . ' 00:00:00' );
+                $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] . ' 00:00:00' )->format('c');
                 $p['connection']    = $matches[5];
             }
             else if( preg_match( "/^\s+Description:\s+(.*)\s*$/", $line, $matches ) ) {
