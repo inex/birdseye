@@ -6,6 +6,19 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    private $cacheKey;
+
+    public function __construct() {
+        if( !env('CACHE_KEY',false) ) {  //}|| !is_executable( env('BIRDC') ) ) {
+            abort( 500, "Cache key not specified" );
+        }
+        $this->cacheKey = env('CACHE_KEY');
+    }
+
+    public function cacheKey() {
+        return $this->cacheKey;
+    }
+
     protected function verifyAndSendJSON( $key, $response, $api = null ) {
         if( $api === null ) {
             $api = [];

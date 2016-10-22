@@ -1,0 +1,5 @@
+#! /bin/bash
+
+IFS=" "
+
+/usr/sbin/birdc -s /run/bird/rs.sock -r "$*"

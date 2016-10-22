@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Cache;
+
 class Status extends Controller
 {
     public function show()
     {
-        $status = app('Bird')->status();
+        if( $status = Cache::get( $this->cacheKey() . 'show status' ) ) {
+            $api['from_cache'] = true;
+        } else {
+            $status = app('Bird')->status();
+            Cache::put($this->cacheKey() . 'show status', $status, 1 );
+            $api['from_cache'] = false;
+        }
 
-        return $this->verifyAndSendJSON( 'status', $status );
+        return $this->verifyAndSendJSON( 'status', $status, $api );
     }
 }

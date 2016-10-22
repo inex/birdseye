@@ -20,7 +20,12 @@ class BirdServiceProvider extends ServiceProvider
             if( env('USE_BIRD_DUMMY', false ) ) {
                 return new BirdDummy;
             }
-            return new Bird;
+
+            if( !env('BIRDC',false) ) {  //}|| !is_executable( env('BIRDC') ) ) {
+                abort( 500, "Birdc command not specified / executable" );
+            }
+
+            return new Bird( env('BIRDC'), env( 'CACHE_KEY' ) );
         });
     }
 }
