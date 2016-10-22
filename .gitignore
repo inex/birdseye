@@ -1,2 +1,6 @@
 /vendor
 .env
+
+*.log
+.screenrc
+.vagrant
