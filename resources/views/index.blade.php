@@ -17,6 +17,12 @@
         <li> {{{ url('api/protocol') }}}/$protocol </li>
         <li> <a href="{{{ url('api/symbols') }}}">{{{ url('api/symbols') }}}</a> </li>
         <li> <a href="{{{ url('api/symbols/tables') }}}">{{{ url('api/symbols/tables') }}}</a> </li>
+        <li> {{{ url('api/routes/protocol')}}}/$protocol
+            @if (env('USE_BIRD_DUMMY',false) )
+                <br>
+                E.g. <a href="{{{ url( 'api/routes/protocol/pb_0127_as42227' ) }}}">{{{url( 'api/routes/protocol/pb_0127_as42227' )}}}</a>
+            @endif
+        </li>
     </ul>
 </body>
 </html>

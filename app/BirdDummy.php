@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Bird\Parser\Routes as RoutesParser;
 use App\Bird\Parser\Status as StatusParser;
 use App\Bird\Parser\Symbols as SymbolsParser;
 use App\Bird\Parser\Protocol\Bgp as BgpProtocolParser;
@@ -75,6 +76,10 @@ class BirdDummy
         return $protocols;
     }
 
+    public function routesProtocol( $protocol ) {
+        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-protocol') );
 
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
 
 }
