@@ -15,6 +15,18 @@ class Protocols extends Controller
     {
         $protocols = app('Bird')->protocolsBgp();
 
-        return $this->verifyAndSendJSON( $protocols );
+        return $this->verifyAndSendJSON( 'protocols', $protocols );
     }
+
+    public function protocol($protocol)
+    {
+        $protocols = app('Bird')->protocolsBgp();
+
+        if( !isset( $protocols[$protocol] ) ) {
+            abort( 404, "Protocol not found" );
+        }
+
+        return $this->verifyAndSendJSON( 'protocol', $protocols[$protocol] );
+    }
+
 }

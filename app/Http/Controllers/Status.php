@@ -8,6 +8,6 @@ class Status extends Controller
     {
         $status = app('Bird')->status();
 
-        return $this->verifyAndSendJSON( $status );
+        return $this->verifyAndSendJSON( 'status', $status );
     }
 }

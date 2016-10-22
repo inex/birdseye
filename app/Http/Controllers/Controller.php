@@ -6,7 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    protected function verifyAndSendJSON( $response, $api = null ) {
+    protected function verifyAndSendJSON( $key, $response, $api = null ) {
         if( $api === null ) {
             $api = [];
         }
@@ -17,7 +17,7 @@ class Controller extends BaseController
             abort(503, "Unknown internal error");
         }
 
-        return response()->json(['api' => $api, 'status' => $response]);
+        return response()->json(['api' => $api, $key => $response]);
 
     }
 }
