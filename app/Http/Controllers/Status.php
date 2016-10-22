@@ -8,11 +8,11 @@ class Status extends Controller
 {
     public function show()
     {
-        if( $status = Cache::get( $this->cacheKey() . 'show status' ) ) {
+        if( $status = Cache::get( $this->cacheKey() . 'status' ) ) {
             $api['from_cache'] = true;
         } else {
             $status = app('Bird')->status();
-            Cache::put($this->cacheKey() . 'show status', $status, 1 );
+            Cache::put($this->cacheKey() . 'status', $status, 1 );
             $api['from_cache'] = false;
         }
 

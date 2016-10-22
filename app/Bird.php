@@ -40,8 +40,7 @@ class Bird
     }
 
     public function symbols() {
-        $symbols = file_get_contents( realpath(__DIR__.'/../data/sample-bird/symbols') );
-        return ( new SymbolsParser($symbols) )->parse();
+        return ( new SymbolsParser($this->run('show symbols')) )->parse();
     }
 
     public function protocols() {

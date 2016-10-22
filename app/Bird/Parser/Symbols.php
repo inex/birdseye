@@ -22,6 +22,10 @@ class Symbols extends Parser
                 continue;
             }
 
+            if( substr( $line, 0, 17 ) == 'Access restricted' ) {
+                continue;
+            }
+
             if( preg_match( "/^([^\s]+)\s+(.+)\s*$/", $line, $matches ) ) {
                 $response[$matches[2]][] = $matches[1];
             }
