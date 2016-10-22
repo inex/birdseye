@@ -7,6 +7,8 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     private $cacheKey;
+    protected $cacheUsed = false;
+
 
     public function __construct() {
         if( !env('CACHE_KEY',false) ) {  //}|| !is_executable( env('BIRDC') ) ) {

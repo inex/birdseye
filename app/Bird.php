@@ -44,7 +44,7 @@ class Bird
     }
 
     public function protocols() {
-        $protocolsBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-protocols-all') );
+        $protocolsBlob = $this->run('show protocols all');
 
         // each protocol is separated by a blank line
         $protocolBlobs = [];

@@ -12,7 +12,7 @@ class Status extends Controller
             $api['from_cache'] = true;
         } else {
             $status = app('Bird')->status();
-            Cache::put($this->cacheKey() . 'status', $status, 1 );
+            Cache::put($this->cacheKey() . 'status', $status, env( 'CACHE_SHOW_STATUS', 1 ) );
             $api['from_cache'] = false;
         }
 

@@ -6,14 +6,12 @@ use Cache;
 
 class Symbols extends Controller
 {
-    private $cacheUsed = false;
-
     private function getSymbols() {
         if( $symbols = Cache::get( $this->cacheKey() . 'symbols' ) ) {
             $this->cacheUsed = true;
         } else {
             $symbols = app('Bird')->symbols();
-            Cache::put($this->cacheKey() . 'symbols', $symbols, 1 );
+            Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 1 ) );
         }
         return $symbols;
     }
