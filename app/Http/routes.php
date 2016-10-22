@@ -27,5 +27,6 @@ $app->get('api/protocol/{protocol}', 'Protocols@protocol');
 
 $app->get('api/symbols', 'Symbols@all');
 $app->get('api/symbols/tables', 'Symbols@tables');
+$app->get('api/symbols/protocols', 'Symbols@protocols');
 
 $app->get('api/routes/protocol/{protocol}', 'Routes@protocol');

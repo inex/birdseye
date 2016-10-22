@@ -19,7 +19,18 @@ class Symbols extends Controller
             $symbols['routing table'] = [];
         }
 
-        return $this->verifyAndSendJSON( 'tables', $symbols['routing table'] );
+        return $this->verifyAndSendJSON( 'symbols', $symbols['routing table'] );
+    }
+
+    public function protocols()
+    {
+        $symbols = app('Bird')->symbols();
+
+        if( !isset( $symbols['protocol'] ) ) {
+            $symbols['protocol'] = [];
+        }
+
+        return $this->verifyAndSendJSON( 'symbols', $symbols['protocol'] );
     }
 
 }

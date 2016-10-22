@@ -13,10 +13,17 @@
 
     <ul>
         <li> <a href="{{{ url('api/status') }}}">{{{ url('api/status') }}}</a> </li>
+    </ul>
+    <ul>
         <li> <a href="{{{ url('api/protocols/bgp') }}}">{{{ url('api/protocols/bgp') }}}</a> </li>
         <li> {{{ url('api/protocol') }}}/$protocol </li>
+    </ul>
+    <ul>
         <li> <a href="{{{ url('api/symbols') }}}">{{{ url('api/symbols') }}}</a> </li>
         <li> <a href="{{{ url('api/symbols/tables') }}}">{{{ url('api/symbols/tables') }}}</a> </li>
+        <li> <a href="{{{ url('api/symbols/protocols') }}}">{{{ url('api/symbols/protocols') }}}</a> </li>
+    </ul>
+    <ul>
         <li> {{{ url('api/routes/protocol')}}}/$protocol
             @if (env('USE_BIRD_DUMMY',false) )
                 <br>
