@@ -83,6 +83,11 @@ class Routes extends Parser
             }
         }
 
+        // catche the last one:
+        if( $r !== [] ) {
+            $routes[] = $r;
+        }
+        
         return $routes;
     }
 }

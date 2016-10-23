@@ -125,4 +125,10 @@ class Bird
 
         return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
+
+    public function routesLookup( $net, $table ) {
+        $routesBlob = $this->run('show route for ' . $net . ' table ' . $table . ' all');
+
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
 }

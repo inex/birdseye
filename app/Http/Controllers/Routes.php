@@ -115,4 +115,29 @@ class Routes extends Controller
         return $this->verifyAndSendJSON( 'count', $this->getTableRoutesCount($table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
+
+    private function getLookupRoutes($net,$table) {
+        if( $routes = Cache::get( $this->cacheKey() . 'routes-lookup-' . $net . '-table-' . $table ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesLookup($net,$table);
+            Cache::put($this->cacheKey() . 'routes-lookup-' . $net . '-table-' . $table, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
+    public function lookup( $net, $table = 'master' ) {
+        $net = urldecode($net);
+
+        // validate net as a IP / network
+        if( !( preg_match( "/^([0-9]{1,3}\.){3}[0-9]{1,3}(\/\d{1,2}){0,1}$/", $net)
+                || preg_match( "/^[a-f0-9\:]+(\/\d{1,3}){0,1}$/", $net ) ) ) {
+
+            // FIXME: a better v6 checker would be useful
+            abort(400,'Bad IP address');
+        }
+
+        return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutes($net, $table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
 }

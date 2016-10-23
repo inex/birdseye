@@ -34,3 +34,6 @@ $app->get('api/routes/table/{table}', 'Routes@table');
 
 $app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount');
 $app->get('api/routes/count/table/{table}', 'Routes@tableCount');
+
+$app->get('api/route/{net}', 'Routes@lookup');
+$app->get('api/route/{net}/{table}', 'Routes@lookup');
