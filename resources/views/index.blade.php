@@ -43,7 +43,7 @@
     <div class="container">
       <br><br><br><br><br><br>
       <div class="starter-template">
-        <h1>Bird's Eye V{{{ env('API_VERSION','0.0.0') }}}</h1>
+        <h1>Bird's Eye V{{{ $_ENV['BIRDSEYE_API_VERSION'] }}}</h1>
         <p class="lead">
             An API to Bird for querying BGP protocol details.
         </p>
