@@ -12,6 +12,7 @@ This is a project of the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid,
 
 At the hackathon, the team also produced comsumers of this API:
 
+* https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/mhannig/birdseye - Python based web consumer by Matthias Hannig
 
 ## Rationale
