@@ -29,7 +29,9 @@ class Controller extends BaseController
         }
 
         $api['version'] = $_ENV['BIRDSEYE_API_VERSION'];
-        $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
+        if( env('APP_DEBUG',false)) {
+            $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
+        }
 
         if( !is_array($response) ) {
             abort(503, "Unknown internal error");

@@ -10,7 +10,7 @@ try {
     if( isset( $_SERVER['BIRDSEYE_ENV_LOCATION']) ) {
         $envpath = $_SERVER['BIRDSEYE_ENV_LOCATION'];
     } else {
-        $envpath = __DIR__.'/../';
+        $envpath = realpath( __DIR__.'/..' );
     }
 
     if( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) ) {
