@@ -31,3 +31,6 @@ $app->get('api/symbols/protocols', 'Symbols@protocols');
 
 $app->get('api/routes/protocol/{protocol}', 'Routes@protocol');
 $app->get('api/routes/table/{table}', 'Routes@table');
+
+$app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount');
+$app->get('api/routes/count/table/{table}', 'Routes@tableCount');

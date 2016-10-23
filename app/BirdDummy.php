@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Bird\Parser\Routes as RoutesParser;
+use App\Bird\Parser\Routes\Count as RoutesCountParser;
 use App\Bird\Parser\Status as StatusParser;
 use App\Bird\Parser\Symbols as SymbolsParser;
 use App\Bird\Parser\Protocol\Bgp as BgpProtocolParser;
@@ -82,10 +83,22 @@ class BirdDummy
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
+    public function routesProtocolCount( $protocol ) {
+        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count') );
+
+        return ( new RoutesCountParser( $routesCountBlob ) )->parse();
+    }
+
     public function routesTable( $table ) {
         $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-table-all') );
 
         return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
+    public function routesTableCount( $table ) {
+        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count') );
+
+        return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
 
 }

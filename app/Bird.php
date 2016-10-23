@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Bird\Parser\Routes as RoutesParser;
+use App\Bird\Parser\Routes\Count as RoutesCountParser;
 use App\Bird\Parser\Status as StatusParser;
 use App\Bird\Parser\Symbols as SymbolsParser;
 use App\Bird\Parser\Protocol\Bgp as BgpProtocolParser;
@@ -101,9 +102,22 @@ class Bird
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
+    public function routesProtocolCount( $protocol ) {
+        $routesCountBlob = $this->run('show route protocol ' . $protocol . ' count');
+
+        return ( new RoutesCountParser( $routesCountBlob ) )->parse();
+    }
+
+
     public function routesTable( $table ) {
         $routesBlob = $this->run('show route table ' . $table . ' all');
 
         return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
+    public function routesTableCount( $table ) {
+        $routesCountBlob = $this->run('show route table ' . $table . ' count');
+
+        return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
 }

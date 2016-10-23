@@ -37,5 +37,19 @@
             @endif
         </li>
     </ul>
+    <ul>
+        <li> {{{ url('api/routes/count/protocol')}}}/$protocol
+            @if (env('USE_BIRD_DUMMY',false) )
+                <br>
+                E.g. <a href="{{{ url( 'api/routes/count/protocol/pb_0127_as42227' ) }}}">{{{url( 'api/routes/count/protocol/pb_0127_as42227' )}}}</a>
+            @endif
+        </li>
+        <li> {{{ url('api/routes/count/table')}}}/$table
+            @if (env('USE_BIRD_DUMMY',false) )
+                <br>
+                E.g. <a href="{{{ url( 'api/routes/count/table/t_0119_as50088' ) }}}">{{{url( 'api/routes/count/table/t_0119_as50088' )}}}</a>
+            @endif
+        </li>
+    </ul>
 </body>
 </html>
