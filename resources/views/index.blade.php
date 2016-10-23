@@ -60,7 +60,7 @@
       <h3>Status</h3>
 
       <ul>
-          <li> <a href="{{{ url('api/status') }}}">{{{ url('api/status') }}}</a> </li>
+          <li> <a href="{{{ $url }}}/api/status">{{{ $url }}}/api/status</a> </li>
       </ul>
 
       <h3>BGP Protocol Detail</h3>

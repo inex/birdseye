@@ -12,7 +12,9 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->make('view')->make('index');
+    return $app->make('view')->make('index')->with(
+        [ 'url' => isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : url() ]
+    );
 });
 //
 // $app->get('/', function () use ($app) {
