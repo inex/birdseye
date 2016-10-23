@@ -14,14 +14,15 @@ try {
 
     if( isset( $_SERVER['HTTP_HOST'] ) ) {
         $envfile = 'birdseye-' . explode( '.', $_SERVER['HTTP_HOST'] )[0] . '.env';
-
-        if( file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
-            $dotenv = new Dotenv\Dotenv($envpath, $envfile);
-        }
-    } else {
-        $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
     }
 
+    if( isset( $envfile ) && file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
+        $dotenv = new Dotenv\Dotenv($envpath, $envfile);
+        $_ENV['BIRDSEYE_ENV_FILE'] = $envpath.'/'.$envfile;
+    }else {
+        $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
+        $_ENV['BIRDSEYE_ENV_FILE'] = '.env';
+    }
     $dotenv->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
