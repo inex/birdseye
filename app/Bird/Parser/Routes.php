@@ -34,8 +34,9 @@ class Routes extends Parser
                 continue;
             }
 
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+[0-9\-\:]+\]\s+\*\s+\((\d+)\).*$/", $line, $matches ) ) {
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+[0-9\-\:]+(\s+from\s+[0-9a-f\.\:\/]+){0,1}\]\s+(\*\s+){0,1}\((\d+)\).*$/", $line, $matches ) ) {
                 // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
+                // 2a02:2078::/32 via 2001:7f8:18:210::15 on ens160 [pb_as43760_vli226_ipv6 2016-10-13 from 2001:7f8:18:210::8] (100) [AS47720i]
 
                 // this is the start of a route definition - so store the previous one if it exists:
                 if( $r !== [] ) {
@@ -47,7 +48,7 @@ class Routes extends Parser
                 $r['gateway']         = $matches[2];
                 $r['interface']       = $matches[3];
                 $r['from_protocol']   = $matches[4];
-                $r['metric']          = intval( $matches[5] );
+                $r['metric']          = intval( $matches[7] );
             }
             else if( preg_match( "/^\s+Type:\s+(.*)\s*$/", $line, $matches ) ) {
                 // 	Type: BGP unicast univ
@@ -87,7 +88,7 @@ class Routes extends Parser
         if( $r !== [] ) {
             $routes[] = $r;
         }
-        
+
         return $routes;
     }
 }
