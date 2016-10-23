@@ -34,7 +34,9 @@ $app->get('api/routes/table/{table}', 'Routes@table');
 $app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount');
 $app->get('api/routes/count/table/{table}', 'Routes@tableCount');
 
-//$app->group(['middleware' => 'auth'], function () use ($app) {
+$throttle = env('THROTTLE_PER_MIN',20);
+
+$app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($app) {
     $app->get('api/route/{net}', 'Routes@lookup');
     $app->get('api/route/{net}/table/{table}', 'Routes@lookup');
-//});
+});
