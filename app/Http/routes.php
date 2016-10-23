@@ -19,7 +19,6 @@ $app->get('/', function () use ($app) {
 //     return $app->version();
 // });
 
-
 $app->get('api/status', 'Status@show');
 
 $app->get('api/protocols/bgp', 'Protocols@bgp');
@@ -35,5 +34,7 @@ $app->get('api/routes/table/{table}', 'Routes@table');
 $app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount');
 $app->get('api/routes/count/table/{table}', 'Routes@tableCount');
 
-$app->get('api/route/{net}', 'Routes@lookup');
-$app->get('api/route/{net}/table/{table}', 'Routes@lookup');
+//$app->group(['middleware' => 'auth'], function () use ($app) {
+    $app->get('api/route/{net}', 'Routes@lookup');
+    $app->get('api/route/{net}/table/{table}', 'Routes@lookup');
+//});

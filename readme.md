@@ -1,21 +1,122 @@
-# Lumen PHP Framework
+# Bird's Eye - A Bird API
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+This is a project of the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
 
-## Official Documentation
+## Authors:
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+ * Barry O'Donovan, INEX, Dublin, Ireland
 
-## Security Vulnerabilities
+## Complementary Projects
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Add Daniel's/Mattias' frontend here...
+
+## Rationale
+
+Historically, IXPs made route collector and route server information available via looking glasses. Over the past few years, many IXPs have selected Bird as their route server / collector BGP daemon for a number of good reasons.
+
+Bird is however lacking an API to allow IXPs to provide thise same looking glass type tools. More over, this also affects an IXP's ability to monitor these routing daemons and member sessions to them.
+
+In a typical IXP, there will be six daemons per peering LAN:
+
+ * two route servers and one route collector
+ * a daemon per protocol
+
+Having looked at existing Bird LG implementations, I could not identify one that met my requirements. Specifically:
+
+1. One that could be bent to meet my requires in less time to (re)create this micro-service;
+2. Fitted my skill set for such bending (primarily PHP);
+3. Assured security.
+
+## Security
+
+As this is intended to be deployed on IXP's route servers / route collectors, security is vital. In that regard, I have made the following considerations:
+
+* Natural rate limiting via caching by default. All queries are cached for a (configurable) period of at least one minute. This means the most you can hit the Bird daemon for a specific request is once / minute.
+* Built in rate limiter for queries that take variable parameters (e.g. route lookup).
+* Strict parameter parsing and checking.
+* Bundled `birdc` bash script for safe use via sudo (web process will require this to access the Bird socket).
+* `birdc` executed in *restricted* mode (allows show commands only).
+
+This API was not designed with the notion of making it publically available. *It can be, but probably for route collectors rather than route servers in production.* Ideally it would be run on an internal private network and fronted by one of the looking glass frontends above that consume this API.
+
+## Outlook
+
+In an ideal world, this micro-service will be deprecated once the good folks who develop Bird release a version with a HTTP JSON API built in. This is a (hopefully) temporary solution to plug a gap.
+
+## Installation
+
+This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requirements are:
+
+* PHP >= 5.5.9
+* Mbstring PHP Extension
+
+Download the release package and install on your server. E.g.:
+
+```sh
+cd /srv
+wget ....
+tar jxf ....
+```
+
+You'll need a web server to front it. Apache or Lighttpd are good choices. As the requirements are small and you most likely don't have any other use for a web server on the route server / collector boxes, Lighttpd has a small footprint:
+
+```sh
+# replace php7.0-cgi with php5-cgi as appropriate:
+apt-get install lighttpd php7.0-cgi
+lighty-enable-mod fastcgi
+lighty-enable-mod fastcgi-php
+```
+
+And configure Lighttpd - see `data/configs/lighttpd.conf` for an example.
+
+## Configuration
+
+I have tried to make configuration as easy as possible while allowing for the fact that we'll typically have *at least* two Bird processed to query on the same server. Explanation is easiest with an example:
+
+Let's say we have a route server providing IPv4 and IPv6 services to two peering LANs on a server called `rs1.inex.ie`.
+
+To query the individual four daemons, we create DNS aliases as follows:
+
+```
+rs1-lan1-ipv4.inex.ie IN CNAME rs1.inex.ie
+rs1-lan1-ipv6.inex.ie IN CNAME rs1.inex.ie
+rs1-lan2-ipv4.inex.ie IN CNAME rs1.inex.ie
+rs1-lan2-ipv6.inex.ie IN CNAME rs1.inex.ie
+```
+
+The micro-service will extract the first element of the hostname (see beginning of `bootstrap/app.php`) and look for an environment file in the applications root directory (say `/srv/birdseye`) named as follows for the above examples:
+
+```
+rs1-lan1-ipv4.inex.ie -> /srv/birdseye/birdseye-rs1-lan1-ipv4.env
+rs1-lan1-ipv6.inex.ie -> /srv/birdseye/birdseye-rs1-lan1-ipv6.env
+rs1-lan2-ipv4.inex.ie -> /srv/birdseye/birdseye-rs1-lan2-ipv4.env
+rs1-lan2-ipv6.inex.ie -> /srv/birdseye/birdseye-rs1-lan2-ipv6.env
+```
+
+To create your env file, just (following the above naming convention):
+
+```
+cd /srv/birdseye
+cp .env.example birdseye-rs1-lan1-ipv4.env
+```
+
+This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) we'd set it to:
+
+```
+BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.socket"
+```
+
+with the assumption that we've named and located the Bird socket at that location.
+
+The last thing you need to do is give the `www-data` user permission to run the `birdc` script. Edit `/etc/sudoers` and add:
+
+```
+www-data        ALL=(ALL)       NOPASSWD: /vagrant/bin/birdc
+```
+
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+This application is open-sourced software licensed under the MIT license.

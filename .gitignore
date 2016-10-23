@@ -4,3 +4,5 @@
 *.log
 .screenrc
 .vagrant
+
+birdseye-*.env

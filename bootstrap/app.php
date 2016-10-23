@@ -10,7 +10,7 @@ try {
     if( isset( $_SERVER['BIRDSEYE_ENV_LOCATION']) ) {
         $envpath = $_SERVER['BIRDSEYE_ENV_LOCATION'];
     } else {
-        $envpath = '/usr/local/etc';
+        $envpath = __DIR__.'/../';
     }
 
     if( isset( $_SERVER['HTTP_HOST'] ) ) {
