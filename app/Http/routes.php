@@ -13,7 +13,7 @@
 
 $app->get('/', function () use ($app) {
     return $app->make('view')->make('index')->with(
-        [ 'url' => isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : url() ]
+        [ 'url' => isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? 'http://' . $_SERVER['HTTP_X_FORWARDED_HOST'] : url() ]
     );
 });
 //
