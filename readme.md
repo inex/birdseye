@@ -57,8 +57,8 @@ Download the release package and install on your server. E.g.:
 ```sh
 apt-get install php-cgi php-mbstring php-xml
 cd /srv
-wget ....
-tar jxf ....
+wget https://github.com/inex/birdseye/releases/download/v1.0.0/birdseye-v1.0.0.tar.bz2
+tar jxf birdseye-v1.0.0.tar.bz2
 ```
 
 You'll need a web server to front it. Apache or Lighttpd are good choices. As the requirements are small and you most likely don't have any other use for a web server on the route server / collector boxes, Lighttpd has a small footprint:
@@ -69,7 +69,17 @@ lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php
 ```
 
-And configure Lighttpd - see `data/configs/lighttpd.conf` for an example.
+And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/inex/birdseye/blob/v1.0.0/data/configs/lighttpd.conf) for an example.
+
+### Install from Source with Composer
+
+If you prefer to install from source with composer:
+
+```sh
+git clone https://github.com/inex/birdseye.git
+cd birdseye
+composer install
+```
 
 ## Configuration
 
