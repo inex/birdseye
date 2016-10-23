@@ -13,10 +13,10 @@ class Controller extends BaseController
 
 
     public function __construct() {
-        if( !env('CACHE_KEY',false) ) {  //}|| !is_executable( env('BIRDC') ) ) {
+        if( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) {
             abort( 500, "Cache key not specified" );
         }
-        $this->cacheKey = env('CACHE_KEY');
+        $this->cacheKey = $_ENV['BIRDSEYE_CACHE_KEY'];
     }
 
     public function cacheKey() {
@@ -28,7 +28,7 @@ class Controller extends BaseController
             $api = [];
         }
 
-        $api['version'] = env('API_VERSION','0.0.0');
+        $api['version'] = $_ENV['BIRDSEYE_API_VERSION'];
         $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
 
         if( !is_array($response) ) {

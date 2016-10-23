@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../version.php';
 
 try {
     // we want to determine various settings based on host so
@@ -13,7 +14,9 @@ try {
     }
 
     if( isset( $_SERVER['HTTP_HOST'] ) ) {
-        $envfile = 'birdseye-' . explode( '.', $_SERVER['HTTP_HOST'] )[0] . '.env';
+        $name = explode( '.', $_SERVER['HTTP_HOST'] )[0];
+        $envfile = 'birdseye-' . $name . '.env';
+        $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
     }
 
     if( isset( $envfile ) && file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
