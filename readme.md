@@ -55,7 +55,7 @@ This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requ
 Download the release package and install on your server. E.g.:
 
 ```sh
-apt-get install php7.0-cgi php7.0-mbstring php7.0-xml
+apt-get install php-cgi php-mbstring php-xml
 cd /srv
 wget ....
 tar jxf ....
@@ -64,7 +64,6 @@ tar jxf ....
 You'll need a web server to front it. Apache or Lighttpd are good choices. As the requirements are small and you most likely don't have any other use for a web server on the route server / collector boxes, Lighttpd has a small footprint:
 
 ```sh
-# replace php7.0-cgi with php5-cgi as appropriate:
 apt-get install lighttpd
 lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php
@@ -106,15 +105,15 @@ cp .env.example birdseye-rs1-lan1-ipv4.env
 This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) we'd set it to:
 
 ```
-BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.socket"
+BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.ctl"
 ```
 
 with the assumption that we've named and located the Bird socket at that location.
 
-The last thing you need to do is give the `www-data` user permission to run the `birdc` script. Edit `/etc/sudoers` and add:
+The last thing you need to do is give the `www-data` user permission to run the `birdc` script. Edit `/etc/sudoers` and add (example):
 
 ```
-www-data        ALL=(ALL)       NOPASSWD: /vagrant/bin/birdc
+www-data        ALL=(ALL)       NOPASSWD: /srv/birdseye/bin/birdc
 ```
 
 
