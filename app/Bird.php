@@ -13,7 +13,7 @@ class Bird
     private $cmd = null;
 
     public function __construct( $cmd ) {
-        $this->cmd      = $cmd;
+        $this->cmd = $cmd;
     }
 
     public function cmd() {
@@ -21,9 +21,14 @@ class Bird
     }
 
     private function run( $show ) {
+
         $output = shell_exec( $this->cmd() . " " . escapeshellarg($show) );
 
         if( $output === null ) {
+            abort( 503, "Error querying bird" );
+        }
+
+        if( !preg_match( "/^BIRD\s+[0-9\.]+\s+ready/", $output ) ) {
             abort( 503, "Error querying bird" );
         }
 

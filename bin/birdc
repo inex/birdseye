@@ -1,5 +1,33 @@
 #! /bin/bash
 
+# Birdc wrapper for Bird's Eye
+
+# requires:
+#
+# parameter $1: either -4 or -6 to chose between birdc and birdc6
+# parameter $2 $3: -s /path/to/bird/socket
 IFS=" "
 
-/usr/sbin/birdc -s /run/bird/rs.sock -r "$*"
+if [[ "$1" = "-4" ]]; then
+    CMD=/usr/sbin/birdc
+elif [[ "$1" = "-6" ]]; then
+    CMD=/usr/sbin/birdc6
+else
+    echo "Bad parameters"
+    exit 1
+fi
+
+if [[ "$2" != "-s" ]]; then
+    echo "Bad parameters"
+    exit 1
+fi
+
+if [[ ! -S "$3" ]]; then
+    echo "Bad parameters - socket does not exist"
+    exit 1
+fi
+SOCKET="$3"
+
+set -- "${@:4}"
+
+$CMD -s $SOCKET -r "$*"

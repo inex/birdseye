@@ -25,7 +25,7 @@ class BirdServiceProvider extends ServiceProvider
                 abort( 500, "Birdc command not specified / executable" );
             }
 
-            return new Bird( env('BIRDC'), env( 'CACHE_KEY' ) );
+            return new Bird( env('BIRDC') );
         });
     }
 }
