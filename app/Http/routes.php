@@ -12,14 +12,12 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->make('view')->make('index')->with(
-        [ 'url' => isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? 'http://' . $_SERVER['HTTP_X_FORWARDED_HOST'] : url() ]
-    );
+
+    $proto = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ? 'https://' : 'http://';
+    $url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
+
+    return $app->make('view')->make('index')->with( [ 'url' => $url ] );
 });
-//
-// $app->get('/', function () use ($app) {
-//     return $app->version();
-// });
 
 $app->get('api/status', 'Status@show');
 
