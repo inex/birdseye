@@ -3,7 +3,26 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
-    (new Dotenv\Dotenv(__DIR__.'/../'))->load();
+    // we want to determine various settings based on host so
+    // we can query multiple instances of bird on the same server
+
+    if( isset( $_SERVER['BIRDSEYE_ENV_LOCATION']) ) {
+        $envpath = $_SERVER['BIRDSEYE_ENV_LOCATION'];
+    } else {
+        $envpath = '/usr/local/etc';
+    }
+
+    if( isset( $_SERVER['HTTP_HOST'] ) ) {
+        $envfile = 'birdseye-' . explode( '.', $_SERVER['HTTP_HOST'] )[0] . '.env';
+
+        if( file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
+            $dotenv = new Dotenv\Dotenv($envpath, $envfile);
+        }
+    } else {
+        $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
+    }
+
+    $dotenv->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
 }
