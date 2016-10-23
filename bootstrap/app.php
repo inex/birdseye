@@ -13,7 +13,11 @@ try {
         $envpath = __DIR__.'/../';
     }
 
-    if( isset( $_SERVER['HTTP_HOST'] ) ) {
+    if( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) ) {
+        $name = explode( '.', $_SERVER['HTTP_X_FORWARDED_HOST'] )[0];
+        $envfile = 'birdseye-' . $name . '.env';
+        $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
+    }else if( isset( $_SERVER['HTTP_HOST'] ) ) {
         $name = explode( '.', $_SERVER['HTTP_HOST'] )[0];
         $envfile = 'birdseye-' . $name . '.env';
         $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';

@@ -55,6 +55,7 @@ This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requ
 Download the release package and install on your server. E.g.:
 
 ```sh
+apt-get install php7.0-cgi php7.0-mbstring php7.0-xml
 cd /srv
 wget ....
 tar jxf ....
@@ -64,7 +65,7 @@ You'll need a web server to front it. Apache or Lighttpd are good choices. As th
 
 ```sh
 # replace php7.0-cgi with php5-cgi as appropriate:
-apt-get install lighttpd php7.0-cgi
+apt-get install lighttpd
 lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php
 ```
