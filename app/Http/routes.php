@@ -40,8 +40,9 @@ $throttle = env('THROTTLE_PER_MIN',20);
 $app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($app, $url) {
     $app->make('view')->share('url',$url);
 
-    $app->get('api/route/{net}', 'Routes@lookup');
-    $app->get('api/route/{net}/table/{table}', 'Routes@lookup');
+    $app->get('api/route/{net}',                     'Routes@lookupTable');
+    $app->get('api/route/{net}/table/{table}',       'Routes@lookupTable');
+    $app->get('api/route/{net}/protocol/{protocol}', 'Routes@lookupProtocol');
 });
 
 if( env('LOOKING_GLASS_ENABLED', false ) ) {

@@ -101,7 +101,13 @@ class BirdDummy
         return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
 
-    public function routesLookup( $net, $table ) {
+    public function routesLookupTable( $net, $table ) {
+        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-protocol') );
+
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
+    public function routesLookupProtocol( $net, $table ) {
         $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-protocol') );
 
         return ( new RoutesParser($routesBlob ) )->parse();

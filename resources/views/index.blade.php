@@ -102,7 +102,7 @@
       <h3>Routes</h3>
 
       <p>
-          This is an API call to get details for a given ip/prefix in a given table (or <code>master</code> by default). Valid example
+          This is an API call to get details for a given ip/prefix in a given table (or <code>master</code> by default) / protocol. Valid example
           ip/prefixs are:
       </p>
 
@@ -126,6 +126,12 @@
               @if (env('USE_BIRD_DUMMY',false) )
                   <br>
                   E.g. <a href="{{{ $url }}}/api/route/net/1.2.3.4/table/master">{{{$url}}}/api/route/net/1.2.3.4/table/master</a>
+              @endif
+          </li>
+          <li> {{{ $url }}}/api/route/$net/protocol/$protocol
+              @if (env('USE_BIRD_DUMMY',false) )
+                  <br>
+                  E.g. <a href="{{{ $url }}}/api/route/net/1.2.3.4/protocol/master">{{{$url}}}/api/route/net/1.2.3.4/table/master</a>
               @endif
           </li>
       </ul>
