@@ -40,3 +40,16 @@ $app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Co
     $app->get('api/route/{net}', 'Routes@lookup');
     $app->get('api/route/{net}/table/{table}', 'Routes@lookup');
 });
+
+if( env('LOOKING_GLASS_ENABLED', false ) ) {
+
+    $app->group(['prefix' => 'lg', 'namespace' => 'App\Http\Controllers\LookingGlass'], function () use ($app) {
+
+        $app->get('', function() use ($app) {
+            return redirect( '/lg/protocols/bgp' );
+        });
+
+        $app->get('protocols/bgp', 'Protocols\Bgp@summary' );
+
+    });
+}
