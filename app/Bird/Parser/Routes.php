@@ -17,6 +17,7 @@ class Routes extends Parser
         $routes  = [];
         $r       = [];
         $matches = [];
+        $i       = 0;
 
         foreach( preg_split("/((\r?\n)|(\r\n?))/",  $this->data() ) as $line ) {
 
@@ -40,7 +41,7 @@ class Routes extends Parser
 
                 // this is the start of a route definition - so store the previous one if it exists:
                 if( $r !== [] ) {
-                    $routes[] = $r;
+                    $routes['r'.$i++] = $r;
                     $r = [];
                 }
 
@@ -86,7 +87,7 @@ class Routes extends Parser
 
         // catche the last one:
         if( $r !== [] ) {
-            $routes[] = $r;
+            $routes['r'.$i] = $r;
         }
 
         return $routes;
