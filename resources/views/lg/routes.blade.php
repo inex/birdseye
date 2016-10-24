@@ -10,6 +10,7 @@
             <th>Next Hop</th>
             <th>Metric</th>
             <th>AS Path</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,11 @@
                 {{implode(' ', $r->bgp->as_path)}}
             @endif
         </td>
+        <td>
+            <a class="btn btn-default btn-xs" data-toggle="modal"
+                href="{{$url}}/lg/route/{{urlencode($r->network)}}/{{$source}}/{{$name}}"
+                data-target="#route-modal">Details</button>
+        </td>
     </tr>
 
 @empty
@@ -35,6 +41,15 @@
 
     </tbody>
 </table>
+
+
+<div class="modal fade" id="route-modal" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
 
 @endsection
 

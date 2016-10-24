@@ -57,5 +57,7 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         $app->get('routes/protocol/{protocol}', 'Routes@protocol' );
         $app->get('routes/table/{table}',       'Routes@table' );
 
+        $app->get('route/{net}/protocol/{protocol}', 'Routes@lookupProtocol' );
+        $app->get('route/{net}/table/{table}',       'Routes@lookupTable' );
     });
 }
