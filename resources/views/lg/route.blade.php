@@ -4,7 +4,7 @@
 <h4 class="modal-title" id="myModalLabel">Route Details</h4>
 </div>
 <div class="modal-body">
-    @foreach ( $routes->routes as $r )
+    @foreach ( $content->routes as $r )
     <table class="table">
         <tbody>
             <tr>

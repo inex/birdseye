@@ -15,7 +15,7 @@
     </thead>
     <tbody>
 
-@forelse ($routes->routes as $r )
+@forelse ($content->routes as $r )
 
     <tr>
         <td>{{$r->network}}</td>

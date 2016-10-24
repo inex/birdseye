@@ -16,7 +16,7 @@
     </thead>
     <tbody>
 
-@forelse ($bgpSummary->protocols as $name => $p )
+@forelse ($content->protocols as $name => $p )
 
     <tr @if( $p->state != 'up' ) class="warning" @endif>
         <td>{{$p->neighbor_address}}</td>
