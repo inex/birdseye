@@ -2,7 +2,9 @@
 
 A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON.
 
-This is a project of the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
+This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain. 
+
+The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]
 
 ## Authors:
 
@@ -14,6 +16,15 @@ At the hackathon, the team also produced comsumers of this API:
 
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/mhannig/birdseye - Python based web consumer by Matthias Hannig
+
+### Live (Demonstration) Endpoints
+
+*These may not exist indefinitely.*
+
+* http://rc1-cix-ipv4.inex.ie (API Endpoint - INEX Cork production route collector, IPv4)
+* http://rc1-cix-ipv6.inex.ie (API Endpoint - INEX Cork production route collector, IPv6)
+* http://hannig.cc:8001/birdseye/app/ (Web based consumer which includes the above)
+
 
 ## Rationale
 
