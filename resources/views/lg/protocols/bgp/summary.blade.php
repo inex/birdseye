@@ -19,11 +19,11 @@
 @forelse ($bgpSummary->protocols as $name => $p )
 
     <tr @if( $p->state != 'up' ) class="warning" @endif>
-        <td>{{{$p->neighbor_address}}}</td>
-        <td>{{{$p->neighbor_as}}}</td>
+        <td>{{$p->neighbor_address}}</td>
+        <td>{{$p->neighbor_as}}</td>
         <td>
-            <a href="{{{url('routes/table')}}}/{{{$p->table}}}">
-                {{{$p->table}}}
+            <a href="{{$url}}/lg/routes/table/{{$p->table}}">
+                {{$p->table}}
             </a>
         </td>
         <td>
@@ -35,7 +35,7 @@
                         class="label label-warning"
                     @endif
                 >
-                    {{{$p->route_limit_at}}}/{{{$p->import_limit}}}
+                    {{$p->route_limit_at}}/{{$p->import_limit}}
                 </span>
             @endif
         </td>
@@ -43,19 +43,19 @@
             @if( $p->state != 'up' )
                 {{{$p->bgp_state}}}</a>
             @else
-                <a href="{{{url('routes/protocol')}}}/{{{$name}}}">{{{$p->routes->imported}}}</a>
+                <a href="{{$url}}/lg/routes/protocol/{{$name}}">{{$p->routes->imported}}</a>
             @endif
         </td>
         <td>
             @if( $p->state == 'up' )
-                <a href="{{{url('routes/table')}}}/{{{$p->table}}}">{{{$p->routes->exported}}}</a>
+                <a href="{{$url}}/lg/routes/table/{{$p->table}}">{{$p->routes->exported}}</a>
             @endif
         </td>
     </tr>
 
 @empty
 
-<tr><td colspan="3">No BGP sessions found</td></tr>
+<tr><td colspan="6">No BGP sessions found</td></tr>
 
 @endforelse
 

@@ -11,11 +11,12 @@
 |
 */
 
-$app->get('/', function () use ($app) {
+// This is pretty kack but fideloper/TrustedProxy seems to not work on Lumen yet
+$proto = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ? 'https://' : 'http://';
+$url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
 
-    $proto = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ? 'https://' : 'http://';
-    $url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
 
+$app->get('/', function () use ($app,$url) {
     return $app->make('view')->make('index')->with( [ 'url' => $url ] );
 });
 
@@ -36,7 +37,9 @@ $app->get('api/routes/count/table/{table}', 'Routes@tableCount');
 
 $throttle = env('THROTTLE_PER_MIN',20);
 
-$app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($app) {
+$app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($app, $url) {
+    $app->make('view')->share('url',$url);
+
     $app->get('api/route/{net}', 'Routes@lookup');
     $app->get('api/route/{net}/table/{table}', 'Routes@lookup');
 });
@@ -49,7 +52,9 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
             return redirect( '/lg/protocols/bgp' );
         });
 
-        $app->get('protocols/bgp', 'Protocols\Bgp@summary' );
+        $app->get('protocols/bgp',              'Protocols\Bgp@summary' );
+        $app->get('routes/protocol/{protocol}', 'Routes@protocol' );
+        $app->get('routes/table/{table}',       'Routes@table' );
 
     });
 }

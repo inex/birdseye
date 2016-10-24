@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\LookingGlass\Protocols;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
+use App\Http\Controllers\LookingGlass\Controller as BaseController;
 
 class Bgp extends BaseController
 {
