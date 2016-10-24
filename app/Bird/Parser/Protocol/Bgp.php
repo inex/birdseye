@@ -20,12 +20,18 @@ class Bgp extends ProtocolParser
 
         foreach( preg_split("/((\r?\n)|(\r\n?))/", $this->data()) as $line ) {
 
-            if( preg_match( "/^(\w+)\s+BGP\s+(\w+)\s+(\w+)\s+([0-9\-]+)\s+(\w+)\s*$/", $line, $matches ) ) {
+            if( preg_match( "/^(\w+)\s+BGP\s+(\w+)\s+(\w+)\s+([0-9\-\:]+)\s+(\w+).*$/", $line, $matches ) ) {
                 // pb_0109_as42 BGP      t_0109_as42 up     2016-09-30  Established
+                // pb_0081_as30900 BGP      t_0081_as30900 start  2015-11-27  Active        Socket: No route to host
+
                 $p['protocol']      = $matches[1];
                 $p['table']         = $matches[2];
                 $p['state']         = $matches[3];
-                $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] . ' 00:00:00' )->format('c');
+                if( strpos($matches[4], ':' ) ) {
+                    $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[4] )->format('c');
+                } else {
+                    $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] . ' 00:00:00' )->format('c');
+                }
                 $p['connection']    = $matches[5];
             }
             else if( preg_match( "/^\s+Description:\s+(.*)\s*$/", $line, $matches ) ) {
