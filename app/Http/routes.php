@@ -48,7 +48,7 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
     $app->group(['prefix' => 'lg', 'namespace' => 'App\Http\Controllers\LookingGlass'], function () use ($app,$url) {
 
         $app->make('view')->share('url',$url);
-        $app->make('view')->share('status', $app->call('\App\Http\Controllers\Status@show' )->content() );
+        $app->make('view')->share('status', json_decode( $app->call('\App\Http\Controllers\Status@show' )->content() ) );
 
         $app->get('', function() use ($app) {
             return redirect( '/lg/protocols/bgp' );

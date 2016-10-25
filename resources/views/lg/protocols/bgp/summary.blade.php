@@ -3,6 +3,8 @@
 
 @section('content')
 
+<h2>BGP Protocol Summary</h2>
+
 <table class="table" id="bgpsummary">
     <thead>
         <tr>
@@ -74,7 +76,15 @@
         $(document).ready(function() {
             $('#bgpsummary').DataTable({
                 paging: false,
-                order: [[ 1, "asc" ]]
+                order: [[ 1, "asc" ]],
+                columnDefs: [
+                    { type: 'ip-address', targets: 0 },
+                    { type: 'int', targets: 0 },
+                    { type: 'string', targets: 0 },
+                    { type: 'string', targets: 0 },
+                    { type: 'int', targets: 0 },
+                    { type: 'int', targets: 0 }
+                ]
             });
         });
 
