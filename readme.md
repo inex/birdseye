@@ -1,12 +1,12 @@
 # Bird's Eye - A Bird API
 
-A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON.
+A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON *(with an optional built-in looking glass implementation)*.
 
-This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain. 
+This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
 
 The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]
 
-## Authors:
+## Author(s):
 
  * Barry O'Donovan, INEX, Dublin, Ireland
 
@@ -140,7 +140,18 @@ The last thing you need to do is give the `www-data` user permission to run the 
 www-data        ALL=(ALL)       NOPASSWD: /srv/birdseye/bin/birdc
 ```
 
+## Built in Looking Glass
+
+This API has an optional built in looking glass which utilises the API internally. This is mildly inefficient as it means a json_encode/json_decode of the same data but it proves the API, keeps us honest and it not a major performance overhead.
+
+To enable it, set the following parameter to true in your configuration file:
+
+```
+LOOKING_GLASS_ENABLED=true
+```
+
+This will activate the looking glass routes, add a link to the header and make the looking glass available under the base URL `/lg`.
 
 ## License
 
-This application is open-sourced software licensed under the MIT license.
+This application is open-sourced software licensed under the MIT license - see [the license file](LICENSE.md).
