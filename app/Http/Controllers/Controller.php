@@ -13,9 +13,6 @@ class Controller extends BaseController
 
 
     public function __construct() {
-        if( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) {
-            abort( 500, "Cache key not specified" );
-        }
         $this->cacheKey = $_ENV['BIRDSEYE_CACHE_KEY'];
     }
 

@@ -15,24 +15,36 @@ try {
 
     if( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) ) {
         $name = explode( '.', $_SERVER['HTTP_X_FORWARDED_HOST'] )[0];
-        $envfile = 'birdseye-' . $name . '.env';
-        $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
     }else if( isset( $_SERVER['HTTP_HOST'] ) ) {
         $name = explode( '.', $_SERVER['HTTP_HOST'] )[0];
+    }
+
+    if( isset( $name ) ) {
+        // a little sanity check on $name:
+        if( !preg_match( '/^[a-zA-Z0-9_\-]+$/', $name ) ) {
+            abort( 500, 'Bad hostname - see bootstrap/app.php' );
+        }
         $envfile = 'birdseye-' . $name . '.env';
-        $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
     }
 
     if( isset( $envfile ) && file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
         $dotenv = new Dotenv\Dotenv($envpath, $envfile);
         $_ENV['BIRDSEYE_ENV_FILE'] = $envpath.'/'.$envfile;
+        $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
+        $dotenv->load();
     }else {
         $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
+        $dotenv->load();
         $_ENV['BIRDSEYE_ENV_FILE'] = '.env';
+        $_ENV['BIRDSEYE_CACHE_KEY'] = env('BIRDSEYE_CACHE_KEY');
     }
-    $dotenv->load();
+
+    if( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) || !strlen( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) {
+        abort( 500, "Cache key not specified" );
+    }
+
 } catch (Dotenv\Exception\InvalidPathException $e) {
-    //
+    abort( 500, "Configuration issue - see bootstrap/app.php" );
 }
 
 /*
