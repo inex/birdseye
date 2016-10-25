@@ -5,6 +5,7 @@
 </div>
 <div class="modal-body">
     @foreach ( $content->routes as $r )
+
     <table class="table">
         <tbody>
             <tr>
@@ -73,6 +74,7 @@
             @endif
         </tbody>
     </table>
+    <br><br>
     @endforeach
 </div>
 <div class="modal-footer">

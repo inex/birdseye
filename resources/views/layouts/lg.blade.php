@@ -42,12 +42,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Bird's Eye :: Looking Glass</a>
+          <a class="navbar-brand" href="#">Bird's Eye :: API
+              @if( env('LOOKING_GLASS_ENABLED',false) )
+                and Looking Glass
+              @endif
+          </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <!-- <li class="active"><a href="#">Home</a></li> -->
-            <li><a href="{{$url}}/lg/protocols/bgp">BGP Summary</a></li>
+            @if( env('LOOKING_GLASS_ENABLED',false) )
+                <li><a href="{{$url}}/lg/protocols/bgp">BGP Summary</a></li>
+            @endif
             <li><a href="{{$url}}/">API Overview</a></li>
             <li><a href="https://github.com/inex/birdseye/">GitHub</a></li>
           </ul>
@@ -101,7 +106,6 @@
 
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.6/dt-1.10.12/r-2.1.0/datatables.min.js"></script>
 
     <script type="text/javascript">

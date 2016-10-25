@@ -45,6 +45,8 @@
     </tbody>
 </table>
 
+@endsection
+
 
 <div class="modal fade" id="route-modal" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -54,7 +56,6 @@
 </div>
 
 
-@endsection
 
 @section('scripts')
 
