@@ -51,7 +51,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             @if( env('LOOKING_GLASS_ENABLED',false) )
-                <li><a href="{{$url}}/lg/protocols/bgp">BGP Summary</a></li>
+                <li><a href="{{$url}}/lg">Looking Glass</a></li>
             @endif
             <li><a href="{{$url}}/">API Overview</a></li>
             <li><a href="https://github.com/inex/birdseye/">GitHub</a></li>
