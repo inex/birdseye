@@ -68,7 +68,13 @@
 
       @section('header')
           <div class="starter-template">
-            <h1>Bird's Eye Looking Glass - API V{{{ $_ENV['BIRDSEYE_API_VERSION'] }}}</h1>
+            <h1>
+                @if( env('LOOKING GLASS TITLE', false) )
+                    {{ env('LOOKING GLASS TITLE') }}
+                @else
+                    Bird's Eye Looking Glass - API V{{{ $_ENV['BIRDSEYE_API_VERSION'] }}}
+                @endif
+            </h1>
             <p class="lead">
                 Bird {{$status->status->version}}.
                 @if( isset( $status->status->router_id ))
