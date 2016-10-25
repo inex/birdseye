@@ -74,28 +74,27 @@ class Routes extends Controller
 
         // does the number of routes exceed the maximum?
         $count = $this->getProtocolRoutesCount($protocol)['routes'];
-
         if( $count > env('MAX_ROUTES',1000) ) {
-            abort( 403, 'Number of routes exceeds maximum allowed' );
+            abort( 403, "Number of routes exceeds maximum allowed ({$count}/" . env('MAX_ROUTES',1000) . ")" );
         }
 
-        // reset cache used flag after above query:
+        // reset cache used flag after above count query:
         $this->cacheUsed = false;
 
         return $this->verifyAndSendJSON( 'routes', $this->getProtocolRoutes($protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
-    public function table($table)
+    public function tableCount($table)
     {
         // let's make sure the protocol is valid:
         if( !in_array( $table, $this->getSymbols()['routing table'] ) ) {
             abort( 404, "Invalid table" );
         }
 
-        return $this->verifyAndSendJSON( 'routes', $this->getTableRoutes($table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+        return $this->verifyAndSendJSON( 'count', $this->getTableRoutesCount($table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
-    public function tableCount($table)
+    public function table($table)
     {
         // let's make sure the protocol is valid:
         if( !in_array( $table, $this->getSymbols()['routing table'] ) ) {
@@ -106,15 +105,14 @@ class Routes extends Controller
         $count = $this->getTableRoutesCount($table)['routes'];
 
         if( $count > env('MAX_ROUTES',1000) ) {
-            abort( 403, 'Number of routes exceeds maximum allowed' );
+            abort( 403, "Number of routes exceeds maximum allowed ({$count}/" . env('MAX_ROUTES',1000) . ")" );
         }
 
-        // reset cache used flag after above query:
+        // reset cache used flag after above count query:
         $this->cacheUsed = false;
 
-        return $this->verifyAndSendJSON( 'count', $this->getTableRoutesCount($table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+        return $this->verifyAndSendJSON( 'routes', $this->getTableRoutes($table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
-
 
     private function getLookupRoutesTable($net,$table) {
         if( $routes = Cache::get( $this->cacheKey() . 'routes-lookup-' . $net . '-table-' . $table ) ) {

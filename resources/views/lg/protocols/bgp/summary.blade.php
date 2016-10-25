@@ -45,12 +45,24 @@
             @if( $p->state != 'up' )
                 {{{$p->bgp_state}}}</a>
             @else
-                <a href="{{$url}}/lg/routes/protocol/{{$name}}">{{$p->routes->imported}}</a>
+                @if( is_int( $p->routes->imported ) and is_int( $content->api->max_routes ) and $p->routes->imported < $content->api->max_routes )
+                    <a href="{{$url}}/lg/routes/protocol/{{$name}}">
+                @endif
+                {{$p->routes->imported}}
+                @if( is_int( $p->routes->imported ) and is_int( $content->api->max_routes ) and $p->routes->imported < $content->api->max_routes )
+                    </a>
+                @endif
             @endif
         </td>
         <td>
             @if( $p->state == 'up' )
-                <a href="{{$url}}/lg/routes/table/{{$p->table}}">{{$p->routes->exported}}</a>
+                @if( is_int( $p->routes->exported ) and is_int( $content->api->max_routes ) and $p->routes->exported < $content->api->max_routes )
+                    <a href="{{$url}}/lg/routes/table/{{$p->table}}">
+                @endif
+                {{$p->routes->exported}}
+                @if( is_int( $p->routes->exported ) and is_int( $content->api->max_routes ) and $p->routes->exported < $content->api->max_routes )
+                    </a>
+                @endif
             @endif
         </td>
     </tr>

@@ -96,7 +96,7 @@ class BirdDummy
     }
 
     public function routesTableCount( $table ) {
-        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count') );
+        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count2') );
 
         return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }

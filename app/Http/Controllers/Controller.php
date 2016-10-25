@@ -32,6 +32,7 @@ class Controller extends BaseController
         if( env('APP_DEBUG',false)) {
             $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
         }
+        $api['max_routes'] = intval(env('MAX_ROUTES',1000));
 
         if( !is_array($response) ) {
             abort(503, "Unknown internal error");
