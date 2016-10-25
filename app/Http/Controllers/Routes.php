@@ -116,28 +116,56 @@ class Routes extends Controller
     }
 
 
-    private function getLookupRoutes($net,$table) {
+    private function getLookupRoutesTable($net,$table) {
         if( $routes = Cache::get( $this->cacheKey() . 'routes-lookup-' . $net . '-table-' . $table ) ) {
             $this->cacheUsed = true;
         } else {
-            $routes = app('Bird')->routesLookup($net,$table);
+            $routes = app('Bird')->routesLookupTable($net,$table);
             Cache::put($this->cacheKey() . 'routes-lookup-' . $net . '-table-' . $table, $routes, env( 'CACHE_ROUTES', 5 ) );
         }
         return $routes;
     }
 
-    public function lookup( $net, $table = 'master' ) {
+    public function lookupTable( $net, $table = 'master' ) {
         $net = urldecode($net);
 
-        // validate net as a IP / network
-        if( !( preg_match( "/^([0-9]{1,3}\.){3}[0-9]{1,3}(\/\d{1,2}){0,1}$/", $net)
-                || preg_match( "/^[a-f0-9\:]+(\/\d{1,3}){0,1}$/", $net ) ) ) {
+        $this->assertValidPrefix($net);
 
-            // FIXME: a better v6 checker would be useful
-            abort(400,'Bad IP address');
+        // let's make sure the table is valid:
+        if( !in_array( $table, $this->getSymbols()['routing table'] ) ) {
+            abort( 404, "Invalid table" );
         }
 
-        return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutes($net, $table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+        // reset cache used flag after above query:
+        $this->cacheUsed = false;
+
+        return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutesTable($net, $table), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
+    private function getLookupRoutesProtocol($net,$protocol) {
+        if( $routes = Cache::get( $this->cacheKey() . 'routes-lookup-' . $net . '-protocol-' . $protocol ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesLookupProtocol($net,$protocol);
+            Cache::put($this->cacheKey() . 'routes-lookup-' . $net . '-protocol-' . $protocol, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
+    public function lookupProtocol( $net, $protocol ) {
+        $net = urldecode($net);
+
+        $this->assertValidPrefix($net);
+
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        // reset cache used flag after above query:
+        $this->cacheUsed = false;
+
+        return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutesProtocol($net, $protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
 }
