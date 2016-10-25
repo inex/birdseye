@@ -54,6 +54,7 @@
                 <li><a href="{{$url}}/lg">Looking Glass</a></li>
             @endif
             <li><a href="{{$url}}/">API Overview</a></li>
+            <li><a href="{{$url}}/lg/route">Route Lookup</a></li>
             <li><a href="https://github.com/inex/birdseye/">GitHub</a></li>
           </ul>
         </div><!--/.nav-collapse -->

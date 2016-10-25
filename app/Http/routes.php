@@ -17,7 +17,10 @@ $url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORW
 
 
 $app->get('/', function () use ($app,$url) {
-    return $app->make('view')->make('index')->with( [ 'url' => $url ] );
+    return $app->make('view')->make('index')->with( [
+        'url'    => $url,
+        'status' => json_decode( $app->call('\App\Http\Controllers\Status@show' )->content() )
+    ]);
 });
 
 $app->get('api/status', 'Status@show');
@@ -55,10 +58,11 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         });
 
         $app->get('protocols/bgp',              'Protocols\Bgp@summary' );
-        $app->get('routes/protocol/{protocol}', 'Routes@protocol' );
-        $app->get('routes/table/{table}',       'Routes@table' );
+        $app->get('routes/protocol/{protocol}', 'Routes@protocol'       );
+        $app->get('routes/table/{table}',       'Routes@table'          );
 
+        $app->get('route',                           'Routes@getLookup'      );
         $app->get('route/{net}/protocol/{protocol}', 'Routes@lookupProtocol' );
-        $app->get('route/{net}/table/{table}',       'Routes@lookupTable' );
+        $app->get('route/{net}/table/{table}',       'Routes@lookupTable'    );
     });
 }

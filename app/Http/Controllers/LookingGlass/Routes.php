@@ -32,4 +32,10 @@ class Routes extends BaseController
             'content' => json_decode( app()->call('\App\Http\Controllers\Routes@lookupTable', ['net'=>$net,'table'=>$table])->content() ),
         ] );
     }
+
+    public function getLookup() {
+        return app()->make('view')->make('lg/route-lookup')->with( [
+            'content' => json_decode( app()->call('\App\Http\Controllers\Symbols@all' )->content() ),
+        ] );
+    }
 }
