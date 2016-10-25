@@ -25,6 +25,7 @@ class Bgp extends ProtocolParser
                 // pb_0081_as30900 BGP      t_0081_as30900 start  2015-11-27  Active        Socket: No route to host
 
                 $p['protocol']      = $matches[1];
+                $p['bird_protocol'] = 'BGP';
                 $p['table']         = $matches[2];
                 $p['state']         = $matches[3];
                 if( strpos($matches[4], ':' ) ) {

@@ -69,7 +69,10 @@ This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requ
 Download the release package and install on your server. E.g.:
 
 ```sh
+# E.g. Ubuntu 16.04 LTS
 apt-get install php-cgi php-mbstring php-xml
+# E.g. Ubuntu 14.04 LTS
+# apt-get install php5-cgi
 cd /srv
 wget https://github.com/inex/birdseye/releases/download/v1.0.0/birdseye-v1.0.0.tar.bz2
 tar jxf birdseye-v1.0.0.tar.bz2
