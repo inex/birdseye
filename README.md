@@ -152,6 +152,22 @@ LOOKING_GLASS_ENABLED=true
 
 This will activate the looking glass routes, add a link to the header and make the looking glass available under the base URL `/lg`.
 
+## Serving Behind a Proxy
+
+The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests and so they need to be URL encoded. Some web servers such as Apache squash these. A sample Apache configuration for proxying Bird's Eye requests is:
+
+```
+<VirtualHost 192.0.2.17:80 [2001:db8::17]:80>
+        ServerName rc1-lan1-ipv4.example.com
+        ServerAlias rc1-lan1-ipv6.example.com
+
+        AllowEncodedSlashes NoDecode
+
+        ProxyPass               /       http://10.8.5.126/     nocanon
+        ProxyPassReverse        /       http://10.8.5.126/
+</VirtualHost>
+```
+
 ## License
 
 This application is open-sourced software licensed under the MIT license - see [the license file](LICENSE.md).
