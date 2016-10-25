@@ -32,7 +32,7 @@
         <td>
             <a class="btn btn-default btn-xs" data-toggle="modal"
                 href="{{$url}}/lg/route/{{urlencode($r->network)}}/{{$source}}/{{$name}}"
-                data-target="#route-modal">Details</button>
+                data-target="#route-modal">Details</a>
         </td>
     </tr>
 
