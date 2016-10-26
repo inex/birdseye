@@ -85,8 +85,14 @@ if( $httpcode == 503 ) {
     exit( STATUS_UNKNOWN );
 }
 
+
 list($header, $body) = explode("\r\n\r\n", $response, 2);
 $content = json_decode($body);
+
+if( $content === null ) {
+    echo "UNKNOWN - invalid / no JSON returned from API endpoint. Check your URL.\n";
+    exit( STATUS_UNKNOWN );
+}
 
 if( isset( $cmdargs['protocol'] ) ) {
     // just checking on a single protocol
@@ -114,27 +120,29 @@ if( isset( $cmdargs['protocol'] ) ) {
 $total = 0;
 $up = 0;
 
-foreach( $content->protocols as $p ) {
+if( isset($content->protocols) ) {
+    foreach( $content->protocols as $p ) {
 
-    if( $p->bird_protocol != 'BGP' ) {
-        continue;
+        if( $p->bird_protocol != 'BGP' ) {
+            continue;
+        }
+
+        $total++;
+
+        if( $p->state == 'up' ) {
+            $up++;
+            continue;
+        }
+
+        $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $p->state_changed ) )->days . " days";
+        $asnInfo = 'AS' . $p->neighbor_as;
+        if( $cmdargs['dns'] ) {
+            $asnInfo .= " [" . resolveAsnToName( $p->neighbor_as ) . "]";
+        }
+
+        $criticals .= "{$asnInfo} down ($stateLastChanged). ";
+        setStatus( STATUS_CRITICAL );
     }
-
-    $total++;
-
-    if( $p->state == 'up' ) {
-        $up++;
-        continue;
-    }
-
-    $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $p->state_changed ) )->days . " days";
-    $asnInfo = 'AS' . $p->neighbor_as;
-    if( $cmdargs['dns'] ) {
-        $asnInfo .= " [" . resolveAsnToName( $p->neighbor_as ) . "]";
-    }
-
-    $criticals .= "{$asnInfo} down ($stateLastChanged). ";
-    setStatus( STATUS_CRITICAL );
 }
 
 $normals .= "{$up}/{$total} BGP sessions up. ";

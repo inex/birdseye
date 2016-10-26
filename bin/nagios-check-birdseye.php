@@ -79,7 +79,7 @@ curl_close($ch);
 
 if( $httpcode == 503 ) {
     // Bird's Eye could not query Bird
-    echo 'CRITICAL - could not query Bird daemon';
+    echo "Could not query Bird daemon\n";
     exit( STATUS_CRITICAL );
 }
 
@@ -87,7 +87,12 @@ list($header, $body) = explode("\r\n\r\n", $response, 2);
 
 $content = json_decode($body);
 
-$normals .= " Bird " . $content->status->version . ". Bird's Eye " . $content->api->version . ". "
+if( $content === null ) {
+    echo "UNKNOWN - invalid / no JSON returned from API endpoint. Check your URL.\n";
+    exit( STATUS_UNKNOWN );
+}
+
+$normals .= "Bird " . $content->status->version . ". Bird's Eye " . $content->api->version . ". "
     . "Router ID " . $content->status->router_id . ". "
     . "Uptime: " . (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reboot ) )->days . " days. "
     . "Last Reconfigure: " . DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reconfig )->format( 'Y-m-d H:i:s' ) . ".";
@@ -95,27 +100,27 @@ $normals .= " Bird " . $content->status->version . ". Bird's Eye " . $content->a
 if( ( $bgpSum = json_decode( file_get_contents($cmdargs['apihost'].'/protocols/bgp') ) ) !== false ) {
     $total = 0;
     $up = 0;
-    
+
     foreach( $bgpSum->protocols as $name => $p ) {
         if( $p->bird_protocol != 'BGP' ) {
             continue;
         }
         $total++;
-        
+
         if( $p->state == 'up' ) {
             $up++;
         }
     }
-    
+
     $normals .= " {$up} BGP sessions up of {$total}.";
 } else {
     setStatus( STATUS_WARNING );
     $warnings .= " Could not query BGP protocols.";
 }
-    
+
 
 if( $status == STATUS_OK )
-    $msg = "OK -{$normals}\n";
+    $msg = "{$normals}\n";
 else
     $msg .= "{$criticals}{$warnings}{$unknowns}{$normals}\n";
 echo $msg;
