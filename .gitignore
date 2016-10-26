@@ -6,3 +6,5 @@
 .vagrant
 
 birdseye-*.env
+
+composer.phar

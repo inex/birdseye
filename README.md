@@ -76,6 +76,8 @@ apt-get install php-cgi php-mbstring php-xml
 cd /srv
 wget https://github.com/inex/birdseye/releases/download/v1.0.0/birdseye-v1.0.0.tar.bz2
 tar jxf birdseye-v1.0.0.tar.bz2
+cd birdseye  # or whatever the resultant directory is called
+chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
 You'll need a web server to front it. Apache or Lighttpd are good choices. As the requirements are small and you most likely don't have any other use for a web server on the route server / collector boxes, Lighttpd has a small footprint:
@@ -96,6 +98,7 @@ If you prefer to install from source with composer:
 git clone https://github.com/inex/birdseye.git
 cd birdseye
 composer install
+chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
 ## Configuration
