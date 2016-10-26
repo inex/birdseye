@@ -100,7 +100,7 @@ composer install
 
 ## Configuration
 
-I have tried to make configuration as easy as possible while allowing for the fact that we'll typically have *at least* two Bird processed to query on the same server. Explanation is easiest with an example:
+I have tried to make configuration as easy as possible while allowing for the fact that we'll typically have *at least* two Bird processes to query on the same server. Explanation is easiest with an example:
 
 Let's say we have a route server providing IPv4 and IPv6 services to two peering LANs on a server called `rs1.inex.ie`.
 
@@ -113,7 +113,7 @@ rs1-lan2-ipv4.inex.ie IN CNAME rs1.inex.ie
 rs1-lan2-ipv6.inex.ie IN CNAME rs1.inex.ie
 ```
 
-The micro-service will extract the first element of the hostname (see beginning of `bootstrap/app.php`) and look for an environment file in the applications root directory (say `/srv/birdseye`) named as follows for the above examples:
+The micro-service will extract the first element of the hostname (e.g. `rs1-lan1-ipv4`, see beginning of `bootstrap/app.php`) and look for an environment file in the applications root directory (say `/srv/birdseye`) named as follows for the above examples:
 
 ```
 rs1-lan1-ipv4.inex.ie -> /srv/birdseye/birdseye-rs1-lan1-ipv4.env
@@ -137,7 +137,13 @@ BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.c
 
 with the assumption that we've named and located the Bird socket at that location.
 
-The last thing you need to do is give the `www-data` user permission to run the `birdc` script. Edit `/etc/sudoers` and add (example):
+If you have a single Bird daemon, you can skip DNS and just do:
+
+```sh
+cp .exv.example .env
+```
+
+The last thing you need to do is give the `www-data` (or the appropriate web server user) user permission to run the `birdc` script. Edit `/etc/sudoers` and add (example):
 
 ```
 www-data        ALL=(ALL)       NOPASSWD: /srv/birdseye/bin/birdc
