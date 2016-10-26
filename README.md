@@ -185,12 +185,12 @@ There are two basic Nagios plugins in the the `bin/` directory which can be down
 ```
 # Bird daemon stopped:
 $ ./nagios-check-birdseye.php -a http://rc1q-cix-ipv4.inex.ie/api
-Could not query Bird daemon
+CRITICAL: Could not query Bird daemon
 $ echo $?
 2
 # Bird daemon running:
 $ ./nagios-check-birdseye.php -a http://rc1q-cix-ipv4.inex.ie/api
-Bird 1.5.0. Bird's Eye 1.0.0. Router ID 185.1.69.126. Uptime: 0 days. Last Reconfigure: 2016-10-26 11:22:35. 0 BGP sessions up of 0.
+OK: Bird 1.5.0. Bird's Eye 1.0.0. Router ID 185.1.69.126. Uptime: 0 days. Last Reconfigure: 2016-10-26 11:22:35. 0 BGP sessions up of 0.
 $ echo $?
 0
 ```
@@ -199,11 +199,11 @@ The second will monitor BGP session states (all or a named protocol):
 
 ```
 $ ./nagios-check-birdseye-bgp-sessions.php -a http://rc1-cix-ipv4.inex.ie/api
-11/11 BGP sessions up.
+OK: 11/11 BGP sessions up.
 $ echo $?
 0
 $ ./nagios-check-birdseye-bgp-sessions.php -a http://rc1-cix-ipv6.inex.ie/api
-AS42090 [RAPIDBB , IE] down (152 days). 8/9 BGP sessions up.
+CRITICAL: Protocol pb_as42090_vli239_ipv6 - AS42090 down (152 days). 8/9 BGP sessions up.
 $ echo $?
 2
 ```
@@ -212,9 +212,15 @@ You can disable the Team Cymru ASN to ASN name resolution above (via DNS) by set
 
 ```
 $ ./nagios-check-birdseye-bgp-sessions.php -a http://rc1-cix-ipv6.inex.ie/api -n
-AS42090 down (152 days). 8/9 BGP sessions up.
+CRITICAL: Protocol pb_as42090_vli239_ipv6 - AS42090 down (152 days). 8/9 BGP sessions up.
 ```
 
+And you can query a specific protocol with:
+
+```
+$ ./nagios-check-birdseye-bgp-sessions.php -a http://rc1-cix-ipv4.inex.ie/api -p pb_as43760_vli226_ipv4
+OK: BGP session pb_as43760_vli226_ipv4 with AS43760 [INEX-RS Internet Neutral Exchange Association Limited, IE] up (197 days)
+```
 
 ## License
 

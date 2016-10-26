@@ -66,7 +66,7 @@ $cmdargs = [
 parseArguments();
 
 if( !isset( $cmdargs['apihost'] ) || !is_string($cmdargs['apihost']) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $cmdargs['apihost'] ) ) {
-    _log( "You must set a valid API host", LOG__ERROR );
+    _log( "UNKNOWN: You must set a valid API host", LOG__ERROR );
     exit( STATUS_UNKNOWN );
 }
 
@@ -81,8 +81,8 @@ curl_close($ch);
 
 if( $httpcode == 503 ) {
     // Bird's Eye could not query Bird
-    echo "UNKNOWN - could not query Bird\n";
-    exit( STATUS_UNKNOWN );
+    echo "CRITICAL: Could not query Bird\n";
+    exit( STATUS_CRITICAL );
 }
 
 
@@ -90,14 +90,14 @@ list($header, $body) = explode("\r\n\r\n", $response, 2);
 $content = json_decode($body);
 
 if( $content === null ) {
-    echo "UNKNOWN - invalid / no JSON returned from API endpoint. Check your URL.\n";
+    echo "UNKNOWN: Invalid / no JSON returned from API endpoint. Check your URL.\n";
     exit( STATUS_UNKNOWN );
 }
 
 if( isset( $cmdargs['protocol'] ) ) {
     // just checking on a single protocol
     if( !isset( $content->protocols->{$cmdargs['protocol']} ) ) {
-        echo "UNKNOWN - the requested policy does not exist\n";
+        echo "UNKNOWN: The requested protocol does not exist\n";
         exit( STATUS_UNKNOWN );
     }
     $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->protocols->{$cmdargs['protocol']}->state_changed ) )->days . " days";
@@ -108,11 +108,11 @@ if( isset( $cmdargs['protocol'] ) ) {
     }
 
     if( $content->protocols->{$cmdargs['protocol']}->state == 'up' ) {
-        echo "OK - BGP session {$cmdargs['protocol']} with {$asnInfo} up ({$stateLastChanged})\n";
+        echo "OK: BGP session {$cmdargs['protocol']} with {$asnInfo} up ({$stateLastChanged})\n";
         exit( STATUS_OK );
     }
 
-    echo "CRITICAL - BGP session {$cmdargs['protocol']} with {$asnInfo} not up (current state: {$content->protocols->{$cmdargs['protocol']}->state}) ({$stateLastChanged})\n";
+    echo "CRITICAL: BGP session {$cmdargs['protocol']} with {$asnInfo} not up (current state: {$content->protocols->{$cmdargs['protocol']}->state}) ({$stateLastChanged})\n";
     exit( STATUS_OK );
 }
 
@@ -121,7 +121,7 @@ $total = 0;
 $up = 0;
 
 if( isset($content->protocols) ) {
-    foreach( $content->protocols as $p ) {
+    foreach( $content->protocols as $name => $p ) {
 
         if( $p->bird_protocol != 'BGP' ) {
             continue;
@@ -140,17 +140,30 @@ if( isset($content->protocols) ) {
             $asnInfo .= " [" . resolveAsnToName( $p->neighbor_as ) . "]";
         }
 
-        $criticals .= "{$asnInfo} down ($stateLastChanged). ";
+        $criticals .= "Protocol {$name} - {$asnInfo} down ($stateLastChanged). ";
         setStatus( STATUS_CRITICAL );
     }
 }
 
 $normals .= "{$up}/{$total} BGP sessions up. ";
 
-if( $status == STATUS_OK )
-    $msg = "{$normals}\n";
-else
+if( $status == STATUS_OK ) {
+    $msg = "OK: {$normals}\n";
+} else {
     $msg .= "{$criticals}{$warnings}{$unknowns}{$normals}\n";
+}
+
+switch( $status ) {
+    case STATUS_CRITICAL:
+        echo 'CRITICAL: ';
+        break;
+    case STATUS_WARNING:
+        echo 'WARNING: ';
+        break;
+    case STATUS_UNKNOWN:
+        echo 'UNKNOWN: ';
+        break;
+}
 echo $msg;
 exit( $status );
 

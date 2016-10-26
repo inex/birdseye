@@ -64,7 +64,7 @@ $cmdargs = [
 parseArguments();
 
 if( !isset( $cmdargs['apihost'] ) || !is_string($cmdargs['apihost']) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $cmdargs['apihost'] ) ) {
-    _log( "You must set a valid API host", LOG__ERROR );
+    _log( "UNKNOWN: You must set a valid API host", LOG__ERROR );
     exit( STATUS_UNKNOWN );
 }
 
@@ -79,7 +79,7 @@ curl_close($ch);
 
 if( $httpcode == 503 ) {
     // Bird's Eye could not query Bird
-    echo "Could not query Bird daemon\n";
+    echo "CRITICAL: Could not query Bird daemon\n";
     exit( STATUS_CRITICAL );
 }
 
@@ -88,7 +88,7 @@ list($header, $body) = explode("\r\n\r\n", $response, 2);
 $content = json_decode($body);
 
 if( $content === null ) {
-    echo "UNKNOWN - invalid / no JSON returned from API endpoint. Check your URL.\n";
+    echo "UNKNOWN: Invalid / no JSON returned from API endpoint. Check your URL.\n";
     exit( STATUS_UNKNOWN );
 }
 
@@ -97,32 +97,47 @@ $normals .= "Bird " . $content->status->version . ". Bird's Eye " . $content->ap
     . "Uptime: " . (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reboot ) )->days . " days. "
     . "Last Reconfigure: " . DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reconfig )->format( 'Y-m-d H:i:s' ) . ".";
 
-if( ( $bgpSum = json_decode( file_get_contents($cmdargs['apihost'].'/protocols/bgp') ) ) !== false ) {
+if( ( $bgpSum = json_decode( file_get_contents($cmdargs['apihost'].'/protocols/bgp') ) ) !== null ) {
     $total = 0;
     $up = 0;
 
-    foreach( $bgpSum->protocols as $name => $p ) {
-        if( $p->bird_protocol != 'BGP' ) {
-            continue;
-        }
-        $total++;
+    if( isset( $bgpSum->protocols ) ) {
+        foreach( $bgpSum->protocols as $name => $p ) {
+            if( $p->bird_protocol != 'BGP' ) {
+                continue;
+            }
+            $total++;
 
-        if( $p->state == 'up' ) {
-            $up++;
+            if( $p->state == 'up' ) {
+                $up++;
+            }
         }
     }
-
-    $normals .= " {$up} BGP sessions up of {$total}.";
+    
+    $normals .= "{$up} BGP sessions up of {$total}.";
 } else {
     setStatus( STATUS_WARNING );
-    $warnings .= " Could not query BGP protocols.";
+    $warnings .= "Could not query BGP protocols.";
 }
 
 
-if( $status == STATUS_OK )
-    $msg = "{$normals}\n";
-else
+if( $status == STATUS_OK ) {
+    $msg = "OK: {$normals}\n";
+} else {
     $msg .= "{$criticals}{$warnings}{$unknowns}{$normals}\n";
+}
+
+switch( $status ) {
+    case STATUS_CRITICAL:
+        echo 'CRITICAL: ';
+        break;
+    case STATUS_WARNING:
+        echo 'WARNING: ';
+        break;
+    case STATUS_UNKNOWN:
+        echo 'UNKNOWN: ';
+        break;
+}
 echo $msg;
 exit( $status );
 
