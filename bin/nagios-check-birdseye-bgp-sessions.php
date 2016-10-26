@@ -53,11 +53,13 @@ $criticals = "";
 $warnings  = "";
 $unknowns  = "";
 $normals   = "";
+$msg       = "";
 
 // set default values for command line arguments
 $cmdargs = [
     'verbose' => false,
     'debug'   => false,
+    'dns'     => true,
 ];
 
 // parse the command line arguments
@@ -68,12 +70,7 @@ if( !isset( $cmdargs['apihost'] ) || !is_string($cmdargs['apihost']) || ! preg_m
     exit( STATUS_UNKNOWN );
 }
 
-if( !isset( $cmdargs['protocol'] ) || !is_string($cmdargs['protocol']) || !preg_match('/^[a-zA-Z0-9_]+$/', $cmdargs['protocol'] ) ) {
-    _log( "You must set a valid protocol name", LOG__ERROR );
-    exit( STATUS_UNKNOWN );
-}
-
-$ch = curl_init($cmdargs['apihost'].'/protocol/'.$cmdargs['protocol']);
+$ch = curl_init($cmdargs['apihost'].'/protocols/bgp');
 curl_setopt($ch, CURLOPT_HEADER, true);      // we want headers
 curl_setopt($ch, CURLOPT_NOBODY, false);    // we need body
 curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
@@ -82,51 +79,89 @@ $response = curl_exec($ch);
 $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-echo "$httpcode\n\n";
-
-if( $httpcode == 404 ) {
+if( $httpcode == 503 ) {
     // Bird's Eye could not query Bird
-    echo "UNKNOWN - unknown protocol\n";
+    echo "UNKNOWN - could not query Bird\n";
     exit( STATUS_UNKNOWN );
 }
 
 list($header, $body) = explode("\r\n\r\n", $response, 2);
-
 $content = json_decode($body);
 
-$normals .= " Bird " . $content->status->version . ". Bird's Eye " . $content->api->version . ". "
-    . "Router ID " . $content->status->router_id . ". "
-    . "Uptime: " . (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reboot ) )->days . " days. "
-    . "Last Reconfigure: " . DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->status->last_reconfig )->format( 'Y-m-d H:i:s' ) . ".";
-
-if( ( $bgpSum = json_decode( file_get_contents($cmdargs['apihost'].'/protocols/bgp') ) ) !== false ) {
-    $total = 0;
-    $up = 0;
-    
-    foreach( $bgpSum->protocols as $name => $p ) {
-        if( $p->bird_protocol != 'BGP' ) {
-            continue;
-        }
-        $total++;
-        
-        if( $p->state == 'up' ) {
-            $up++;
-        }
+if( isset( $cmdargs['protocol'] ) ) {
+    // just checking on a single protocol
+    if( !isset( $content->protocols->{$cmdargs['protocol']} ) ) {
+        echo "UNKNOWN - the requested policy does not exist\n";
+        exit( STATUS_UNKNOWN );
     }
-    
-    $normals .= " {$up} BGP sessions up of {$total}.";
-} else {
-    setStatus( STATUS_WARNING );
-    $warnings .= " Could not query BGP protocols.";
+    $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->protocols->{$cmdargs['protocol']}->state_changed ) )->days . " days";
+
+    $asnInfo = 'AS' . $content->protocols->{$cmdargs['protocol']}->neighbor_as;
+    if( $cmdargs['dns'] ) {
+        $asnInfo .= " [" . resolveAsnToName( $content->protocols->{$cmdargs['protocol']}->neighbor_as ) . "]";
+    }
+
+    if( $content->protocols->{$cmdargs['protocol']}->state == 'up' ) {
+        echo "OK - BGP session {$cmdargs['protocol']} with {$asnInfo} up ({$stateLastChanged})\n";
+        exit( STATUS_OK );
+    }
+
+    echo "CRITICAL - BGP session {$cmdargs['protocol']} with {$asnInfo} not up (current state: {$content->protocols->{$cmdargs['protocol']}->state}) ({$stateLastChanged})\n";
+    exit( STATUS_OK );
 }
-    
+
+// otherwise, check all protocols
+$total = 0;
+$up = 0;
+
+foreach( $content->protocols as $p ) {
+
+    if( $p->bird_protocol != 'BGP' ) {
+        continue;
+    }
+
+    $total++;
+
+    if( $p->state == 'up' ) {
+        $up++;
+        continue;
+    }
+
+    $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $p->state_changed ) )->days . " days";
+    $asnInfo = 'AS' . $p->neighbor_as;
+    if( $cmdargs['dns'] ) {
+        $asnInfo .= " [" . resolveAsnToName( $p->neighbor_as ) . "]";
+    }
+
+    $criticals .= "{$asnInfo} down ($stateLastChanged). ";
+    setStatus( STATUS_CRITICAL );
+}
+
+$normals .= "{$up}/{$total} BGP sessions up. ";
 
 if( $status == STATUS_OK )
-    $msg = "OK -{$normals}\n";
+    $msg = "{$normals}\n";
 else
     $msg .= "{$criticals}{$warnings}{$unknowns}{$normals}\n";
 echo $msg;
 exit( $status );
+
+
+
+function resolveAsnToName( $asn ) {
+    $rec = dns_get_record ( "AS{$asn}.asn.cymru.com", DNS_TXT );
+
+    if( isset( $rec[0]['txt'] ) ) {
+        $ex = explode( '|', $rec[0]['txt'] );
+
+        if( isset( $ex[4] ) ) {
+            return trim( $ex[4] );
+        }
+    }
+
+    return 'Unknown';
+}
+
 
 
 /**
@@ -162,14 +197,18 @@ function parseArguments()
                 $cmdargs['debug'] = true;
                 $i++;
                 break;
-            case 'a':
-                $cmdargs['apihost'] = $argv[$i+1];
+            case 'n':
+                $cmdargs['dns'] = false;
                 $i++;
                 break;
-                case 'p':
-                    $cmdargs['protocol'] = $argv[$i+1];
-                    $i++;
-                    break;
+            case 'a':
+                $cmdargs['apihost'] = $argv[$i+1];
+                $i+=2;
+                break;
+            case 'p':
+                $cmdargs['protocol'] = $argv[$i+1];
+                $i+=2;
+                break;
             default:
                 if( !isset( $argv[$i+1] ) || substr( $argv[$i+1], 0, 1 ) == '-' )
                     $cmdargs[ substr( $argv[$i], 2 ) ] = true;
@@ -218,7 +257,7 @@ function printUsage()
     global $argv;
     $progname = basename( $argv[0] );
     echo <<<END_USAGE
-{$progname} -a http://api.example.com/api [-V] [-v] [-d]
+{$progname} -a http://api.example.com/api [-p protocol] [-V] [-v] [-d] [-n]
 
 END_USAGE;
 }
