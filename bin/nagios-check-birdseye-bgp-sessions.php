@@ -30,6 +30,8 @@
  * SOFTWARE.
  */
 
+date_default_timezone_set('UTC');
+
 ini_set( 'max_execution_time', '55' );
 ini_set( 'display_errors', true );
 ini_set( 'display_startup_errors', true );
@@ -113,7 +115,7 @@ if( isset( $cmdargs['protocol'] ) ) {
     }
 
     echo "CRITICAL: BGP session {$cmdargs['protocol']} with {$asnInfo} not up (current state: {$content->protocols->{$cmdargs['protocol']}->state}) ({$stateLastChanged})\n";
-    exit( STATUS_OK );
+    exit( STATUS_CRITICAL );
 }
 
 // otherwise, check all protocols

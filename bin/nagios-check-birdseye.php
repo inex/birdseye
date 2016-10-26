@@ -30,6 +30,8 @@
  * SOFTWARE.
  */
 
+date_default_timezone_set('UTC');
+
 ini_set( 'max_execution_time', '55' );
 ini_set( 'display_errors', true );
 ini_set( 'display_startup_errors', true );
@@ -113,7 +115,7 @@ if( ( $bgpSum = json_decode( file_get_contents($cmdargs['apihost'].'/protocols/b
             }
         }
     }
-    
+
     $normals .= "{$up} BGP sessions up of {$total}.";
 } else {
     setStatus( STATUS_WARNING );
