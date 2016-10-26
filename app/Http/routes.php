@@ -12,7 +12,14 @@
 */
 
 // This is pretty kack but fideloper/TrustedProxy seems to not work on Lumen yet
-$proto = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ? 'https://' : 'http://';
+if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
+    $proto = 'https://';
+} else if( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && strtolower( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) == 'https' ) {
+    $proto = 'https://';
+} else {
+    $proto = 'http://';
+}
+
 $url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
 
 
