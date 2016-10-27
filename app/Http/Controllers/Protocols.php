@@ -21,21 +21,21 @@ class Protocols extends Controller
             $this->cacheUsed = true;
         } else {
             $protocols = app('Bird')->protocolsBgp();
-            Cache::put($this->cacheKey() . 'protocols-bgp', $protocols, env( 'CACHE_PROTOCOLS', 5 ) );
+            Cache::put($this->cacheKey() . 'protocols-bgp', $protocols, env( 'CACHE_PROTOCOLS', 2 ) );
         }
         return $protocols;
     }
 
     // public function all()
     // {
-    //     return $this->verifyAndSendJSON( 'protocols', $this->getProtocols(), ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 5 )] );
+    //     return $this->verifyAndSendJSON( 'protocols', $this->getProtocols(), ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 2 )] );
     // }
 
     public function bgp()
     {
         $protocols = $this->getProtocolsBgp();
 
-        return $this->verifyAndSendJSON( 'protocols', $protocols, ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 5 ) ] );
+        return $this->verifyAndSendJSON( 'protocols', $protocols, ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 2 ) ] );
     }
 
     public function protocol($protocol)
@@ -46,7 +46,7 @@ class Protocols extends Controller
             abort( 404, "Protocol not found" );
         }
 
-        return $this->verifyAndSendJSON( 'protocol', $protocols[$protocol], ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 5 )] );
+        return $this->verifyAndSendJSON( 'protocol', $protocols[$protocol], ['from_cache' => $this->cacheUsed,'ttl_mins' => env( 'CACHE_PROTOCOLS', 2 )] );
     }
 
 }

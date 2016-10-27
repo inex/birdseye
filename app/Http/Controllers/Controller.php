@@ -28,6 +28,7 @@ class Controller extends BaseController
         $api['version'] = $_ENV['BIRDSEYE_API_VERSION'];
         if( env('APP_DEBUG',false)) {
             $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
+            $api['cache_disabled'] = ( env( 'CACHE_DRIVER' ) == 'array' );
         }
         $api['max_routes'] = intval(env('MAX_ROUTES',1000));
 
@@ -51,7 +52,7 @@ class Controller extends BaseController
             $this->cacheUsed = true;
         } else {
             $symbols = app('Bird')->symbols();
-            Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 1 ) );
+            Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 5 ) );
         }
         return $symbols;
     }
