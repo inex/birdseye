@@ -34,6 +34,14 @@ class Controller extends BaseController
         if( !is_array($response) ) {
             abort(503, "Unknown internal error");
         }
+        
+        // check cache status
+        if( env( 'CACHE_DRIVER' ) == 'array' ) {
+            $api['from_cache'] = false;
+            if( isset( $api['ttl_mins'] ) ) {
+                unset( $api['ttl_mins'] );
+            }
+        }
 
         return response()->json(['api' => $api, $key => $response]);
     }
