@@ -225,6 +225,17 @@ $ ./nagios-check-birdseye-bgp-sessions.php -a http://rc1-cix-ipv4.inex.ie/api -p
 OK: BGP session pb_as43760_vli226_ipv4 with AS43760 [INEX-RS Internet Neutral Exchange Association Limited, IE] up (197 days)
 ```
 
+This also performs prefix limit checking and warning at 80% by default:
+
+```
+$ ./nagios-check-birdseye-bgp-sessions.php -a http://birdseye.dev/api
+WARNING: BGP session pb_0182_as61337 with AS61337 [ECOM-AS, GB] up (161 days) but prefix limit at 46/50. BGP session pb_0160_as199256 with AS199256 [LTH-AS , IE] up (161 days) but prefix limit at 18/20. 69/73 BGP sessions up.
+$ echo $?
+1
+```
+
+prefix limit checking can be disabled with a `-l` option.
+
 ## License
 
 This application is open-sourced software licensed under the MIT license - see [the license file](LICENSE.md).

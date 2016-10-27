@@ -68,17 +68,22 @@ $cmdargs = [
 // parse the command line arguments
 parseArguments();
 
-if( !isset( $cmdargs['apihost'] ) || !is_string($cmdargs['apihost']) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $cmdargs['apihost'] ) ) {
+if( !isset( $cmdargs['apihost'] ) || !is_string($cmdargs['apihost']) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $cmdargs['apihost'] )
+        || !( $ch = curl_init($cmdargs['apihost'].'/protocols/bgp') ) ) {
     _log( "UNKNOWN: You must set a valid API host", LOG__ERROR );
     exit( STATUS_UNKNOWN );
 }
 
-$ch = curl_init($cmdargs['apihost'].'/protocols/bgp');
 curl_setopt($ch, CURLOPT_HEADER, true);      // we want headers
 curl_setopt($ch, CURLOPT_NOBODY, false);    // we need body
 curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 curl_setopt($ch, CURLOPT_TIMEOUT,10);
-$response = curl_exec($ch);
+
+if( !( $response = curl_exec($ch) ) ) {
+    _log( "UNKNOWN: Could not query given API host", LOG__ERROR );
+    exit( STATUS_UNKNOWN );
+}
+
 $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
@@ -86,6 +91,12 @@ if( $httpcode == 503 ) {
     // Bird's Eye could not query Bird
     echo "CRITICAL: Could not query Bird\n";
     exit( STATUS_CRITICAL );
+}
+
+if( $httpcode != 200 ) {
+    // Bad resposne
+    echo "UNKNOWN: Non HTTP 200 response from API - Code: {$httpcode}\n";
+    exit( STATUS_UNKNOWN );
 }
 
 
@@ -154,23 +165,24 @@ function checkProtocol( $name, $p ) {
     
     if( $p->state == 'up' ) {
         
-        if( $cmdargs['limit'] && isset( $p->import_limit ) && $p->import_limit ) {
+        if( $cmdargs['limits'] && isset( $p->import_limit ) && $p->import_limit ) {
             if( ((float)$p->route_limit_at ) / $p->import_limit >= .8 ) {
-                $warnings .= "BGP session {$name} with " . asnInfo( $p->neighbor_as ) . " up ({$stateLastChanged}) but prefix limit at "
+                $warnings .= "BGP session {$name} with " . asnInfo( $p->neighbor_as, $cmdargs['dns'] ) . " up ({$stateLastChanged}) but prefix limit at "
                     . $p->route_limit_at . "/" . $p->import_limit . ". ";
                 setStatus( STATUS_WARNING );
             }
         }
     } else {
-        $criticals .= "Protocol {$name} - " . asnInfo( $p->neighbor_as ) . " down ($stateLastChanged). ";
+        $criticals .= "Protocol {$name} - " . asnInfo( $p->neighbor_as, $cmdargs['dns'] ) . " down ($stateLastChanged). ";
         setStatus( STATUS_CRITICAL );
     }
 }
 
 
-function asnInfo( $asn ) {
-    if( $cmdargs['dns'] ) {
-        $net = 'Unknown';
+function asnInfo( $asn, $resolve = true ) {
+    $net = "";
+    if( $resolve ) {
+        $net = ' [Unknown]';
         
         $rec = dns_get_record ( "AS{$asn}.asn.cymru.com", DNS_TXT );
 
@@ -178,12 +190,12 @@ function asnInfo( $asn ) {
             $ex = explode( '|', $rec[0]['txt'] );
 
             if( isset( $ex[4] ) ) {
-                $net = trim( $ex[4] );
+                $net = ' [' . trim( $ex[4] ) . ']';
             }
         }
     }
 
-    return "AS{$asn} [{$net}]";
+    return "AS{$asn}{$net}";
 }
 
 
@@ -285,7 +297,7 @@ function printUsage()
     global $argv;
     $progname = basename( $argv[0] );
     echo <<<END_USAGE
-{$progname} -a http://api.example.com/api [-p protocol] [-V] [-v] [-d] [-n]
+{$progname} -a http://api.example.com/api [-p protocol] [-V] [-v] [-d] [-n] [-l]
 
 END_USAGE;
 }
