@@ -14,7 +14,15 @@
             </tr>
             <tr>
                 <td><strong>Gateway</strong></td>
-                <td>{{$r->gateway}}</td>
+                <td>
+                    {{$r->gateway}}
+                    &nbsp;&nbsp;
+                    @if ( $r->primary )
+                        <span class="label label-success">PRIMARY</span>
+                    @else
+                        <span class="label label-warning">NOT PRIMARY</span>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td><strong>Interface</strong></td>

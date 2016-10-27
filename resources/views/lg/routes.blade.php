@@ -11,6 +11,7 @@
         <tr>
             <th>Network</th>
             <th>Next Hop</th>
+            <th></th>
             <th>Metric</th>
             <th>AS Path</th>
             <th></th>
@@ -22,7 +23,16 @@
 
     <tr>
         <td>{{$r->network}}</td>
-        <td>{{$r->gateway}}</td>
+        <td>
+            {{$r->gateway}}
+        </td>
+        <td>
+            @if ( $r->primary )
+                <span class="label label-success">P</span>
+            @else
+                <span class="label label-warning">N</span>
+            @endif
+        </td>
         <td>{{$r->metric}}</td>
         <td>
             @if( isset($r->bgp->as_path) )
@@ -44,6 +54,11 @@
 
     </tbody>
 </table>
+
+<p>
+    <br><br>
+    Key: <span class="label label-success">P</span> - Primary / active route. <span class="label label-warning">N</span> - Inactive route.
+</p>
 
 @endsection
 

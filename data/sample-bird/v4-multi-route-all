@@ -1,0 +1,14 @@
+BIRD 1.4.0 ready.
+5.159.40.0/21      via 193.242.111.74 on eth1 [pb_0136_as61194 2016-03-12] * (100) [AS61194i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 61194
+	BGP.next_hop: 193.242.111.74
+	BGP.local_pref: 100
+                   via 193.242.111.79 on eth1 [pb_0143_as13237 2016-08-23] (100) [AS61194i]
+	Type: BGP unicast univ
+	BGP.origin: IGP
+	BGP.as_path: 13237 61194
+	BGP.next_hop: 193.242.111.79
+	BGP.local_pref: 100
+	BGP.community: (0,8218) (13237,45035) (13237,46351)
