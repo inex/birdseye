@@ -62,6 +62,7 @@ $cmdargs = [
     'verbose' => false,
     'debug'   => false,
     'dns'     => true,
+    'limits'  => true, // warn if prefix limit >= 80%
 ];
 
 // parse the command line arguments
@@ -102,52 +103,23 @@ if( isset( $cmdargs['protocol'] ) ) {
         echo "UNKNOWN: The requested protocol does not exist\n";
         exit( STATUS_UNKNOWN );
     }
-    $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $content->protocols->{$cmdargs['protocol']}->state_changed ) )->days . " days";
-
-    $asnInfo = 'AS' . $content->protocols->{$cmdargs['protocol']}->neighbor_as;
-    if( $cmdargs['dns'] ) {
-        $asnInfo .= " [" . resolveAsnToName( $content->protocols->{$cmdargs['protocol']}->neighbor_as ) . "]";
-    }
-
-    if( $content->protocols->{$cmdargs['protocol']}->state == 'up' ) {
-        echo "OK: BGP session {$cmdargs['protocol']} with {$asnInfo} up ({$stateLastChanged})\n";
-        exit( STATUS_OK );
-    }
-
-    echo "CRITICAL: BGP session {$cmdargs['protocol']} with {$asnInfo} not up (current state: {$content->protocols->{$cmdargs['protocol']}->state}) ({$stateLastChanged})\n";
-    exit( STATUS_CRITICAL );
-}
-
-// otherwise, check all protocols
-$total = 0;
-$up = 0;
-
-if( isset($content->protocols) ) {
-    foreach( $content->protocols as $name => $p ) {
-
-        if( $p->bird_protocol != 'BGP' ) {
-            continue;
+    
+    checkProtocol( $cmdargs['protocol'], $content->protocols->{$cmdargs['protocol']} );
+} else {
+    if( isset($content->protocols) ) {
+        $total = 0;
+        $up = 0;
+        foreach( $content->protocols as $name => $p ) {
+            if( $p->state == 'up' ) {
+                $up++;
+            }
+            
+            checkProtocol( $name, $p );
+            $total++;
         }
-
-        $total++;
-
-        if( $p->state == 'up' ) {
-            $up++;
-            continue;
-        }
-
-        $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $p->state_changed ) )->days . " days";
-        $asnInfo = 'AS' . $p->neighbor_as;
-        if( $cmdargs['dns'] ) {
-            $asnInfo .= " [" . resolveAsnToName( $p->neighbor_as ) . "]";
-        }
-
-        $criticals .= "Protocol {$name} - {$asnInfo} down ($stateLastChanged). ";
-        setStatus( STATUS_CRITICAL );
+        $normals .= "{$up}/{$total} BGP sessions up. ";
     }
 }
-
-$normals .= "{$up}/{$total} BGP sessions up. ";
 
 if( $status == STATUS_OK ) {
     $msg = "OK: {$normals}\n";
@@ -170,19 +142,48 @@ echo $msg;
 exit( $status );
 
 
+function checkProtocol( $name, $p ) {
+    global $cmdargs, $warnings, $criticals, $normals;
 
-function resolveAsnToName( $asn ) {
-    $rec = dns_get_record ( "AS{$asn}.asn.cymru.com", DNS_TXT );
+    if( $p->bird_protocol != 'BGP' ) {
+        return;
+    }
 
-    if( isset( $rec[0]['txt'] ) ) {
-        $ex = explode( '|', $rec[0]['txt'] );
 
-        if( isset( $ex[4] ) ) {
-            return trim( $ex[4] );
+    $stateLastChanged = (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $p->state_changed ) )->days . " days";
+    
+    if( $p->state == 'up' ) {
+        
+        if( $cmdargs['limit'] && isset( $p->import_limit ) && $p->import_limit ) {
+            if( ((float)$p->route_limit_at ) / $p->import_limit >= .8 ) {
+                $warnings .= "BGP session {$name} with " . asnInfo( $p->neighbor_as ) . " up ({$stateLastChanged}) but prefix limit at "
+                    . $p->route_limit_at . "/" . $p->import_limit . ". ";
+                setStatus( STATUS_WARNING );
+            }
+        }
+    } else {
+        $criticals .= "Protocol {$name} - " . asnInfo( $p->neighbor_as ) . " down ($stateLastChanged). ";
+        setStatus( STATUS_CRITICAL );
+    }
+}
+
+
+function asnInfo( $asn ) {
+    if( $cmdargs['dns'] ) {
+        $net = 'Unknown';
+        
+        $rec = dns_get_record ( "AS{$asn}.asn.cymru.com", DNS_TXT );
+
+        if( isset( $rec[0]['txt'] ) ) {
+            $ex = explode( '|', $rec[0]['txt'] );
+
+            if( isset( $ex[4] ) ) {
+                $net = trim( $ex[4] );
+            }
         }
     }
 
-    return 'Unknown';
+    return "AS{$asn} [{$net}]";
 }
 
 
@@ -218,6 +219,10 @@ function parseArguments()
                 break;
             case 'd':
                 $cmdargs['debug'] = true;
+                $i++;
+                break;
+            case 'l':
+                $cmdargs['limits'] = false;
                 $i++;
                 break;
             case 'n':
