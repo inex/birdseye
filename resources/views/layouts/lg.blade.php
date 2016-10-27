@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Bird's Eye :: API
+          <a class="navbar-brand" href="{{$url}}/@if( env('LOOKING_GLASS_ENABLED',false) )lg/@endif ">Bird's Eye :: API
               @if( env('LOOKING_GLASS_ENABLED',false) )
                 and Looking Glass
               @endif
