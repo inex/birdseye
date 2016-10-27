@@ -27,7 +27,7 @@
           <li> {{{ $url }}}/api/protocol/$protocol </li>
       </ul>
 
-      <h3>Intrnal Symbols</h3>
+      <h3>Internal Symbols</h3>
 
       <em>
           Mostly used internally to validate passed parameters such as protocol and table names.
