@@ -25,7 +25,11 @@
     <tr @if( $p->state != 'up' ) class="warning" @endif>
         <td>{{$p->neighbor_address}}</td>
         <td>
-            {{$p->description}}
+            @if (isset( $p->description_short ) )
+                {{$p->description_short}}
+            @else
+                {{$p->description}}
+            @endif
         </td>
         <td class="text-right">{{$p->neighbor_as}}</td>
         <td>

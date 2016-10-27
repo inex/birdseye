@@ -38,6 +38,12 @@ class Bgp extends ProtocolParser
             else if( preg_match( "/^\s+Description:\s+(.*)\s*$/", $line, $matches ) ) {
                 //   Description:    RIB for AS42 - Packet Clearing House DNS - VLAN Interface 109
                 $p['description'] = $matches[1];
+                
+                if( env( 'PARSER_PROTOCOL_BGP_DESCRIPTION', false ) && strlen( env( 'PARSER_PROTOCOL_BGP_DESCRIPTION' ) ) && @preg_match('/^\s+Description:\s+'.env( 'PARSER_PROTOCOL_BGP_DESCRIPTION' ).'$/', null) !== false ) {
+                    if( preg_match( '/^\s+Description:\s+'.env( 'PARSER_PROTOCOL_BGP_DESCRIPTION' ).'$/', $line, $matches ) ) { //}&& isset( $matches[1] ) ) {
+                        $p['description_short'] = $matches[1];
+                    }
+                }
             }
             else if( preg_match( "/^\s+Preference:\s+([0-9]+)\s*$/", $line, $matches ) ) {
                 //   Preference:     100
