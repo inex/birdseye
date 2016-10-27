@@ -45,15 +45,7 @@ class Routes extends Parser
                     $routes[] = $r;
                     $r = [];
                 }
-
-                $r['network']         = $matches[1];
-                $r['gateway']         = $matches[2];
-                $r['interface']       = $matches[3];
-                $r['from_protocol']   = $matches[4];
-                $r['age']             = $matches[5];
-                $r['learnt_from']     = $matches[6] == ''  ? null :  $matches[6];
-                $r['primary']         = $matches[7] == '*' ? true : false;
-                $r['metric']          = intval( $matches[8] );
+                $this->mainRouteDetail( $matches, $r );
             }
             else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+([0-9\-\:]+)(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
                 // second entry for previous route
@@ -70,15 +62,7 @@ class Routes extends Parser
                     array_unshift( $matches, $network );
                     array_unshift( $matches, $regMatch );
                 }
-
-                $r['network']         = $matches[1];
-                $r['gateway']         = $matches[2];
-                $r['interface']       = $matches[3];
-                $r['from_protocol']   = $matches[4];
-                $r['age']             = $matches[5];
-                $r['learnt_from']     = $matches[6];
-                $r['primary']         = $matches[7] == '*' ? true : false;
-                $r['metric']          = intval( $matches[8] );
+                $this->mainRouteDetail( $matches, $r );
             }
             else if( preg_match( "/^\s+Type:\s+(.*)\s*$/", $line, $matches ) ) {
                 // 	Type: BGP unicast univ
@@ -120,5 +104,21 @@ class Routes extends Parser
         }
 
         return $routes;
+    }
+    
+    private function mainRouteDetail( $matches, &$r ) {
+        $r['network']         = $matches[1];
+        $r['gateway']         = $matches[2];
+        $r['interface']       = $matches[3];
+        $r['from_protocol']   = $matches[4];
+        if( strpos($matches[5], ':' ) ) {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] )->format('c');
+        } else {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' )->format('c');
+        }
+        $r['learnt_from']     = $matches[6];
+        $r['primary']         = $matches[7] == '*' ? true : false;
+        $r['metric']          = intval( $matches[8] );
+        return $r;
     }
 }

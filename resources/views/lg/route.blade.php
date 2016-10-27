@@ -33,6 +33,10 @@
                 <td>{{$r->from_protocol}}</td>
             </tr>
             <tr>
+                <td><strong>Age</strong></td>
+                <td>{{ strtotime( $r->age ) ? date( "Y-m-d H:i:s", strtotime( $r->age ) ) : '' }}</td>
+            </tr>
+            <tr>
                 <td><strong>Metric</strong></td>
                 <td>{{$r->metric}}</td>
             </tr>

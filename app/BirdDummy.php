@@ -79,25 +79,21 @@ class BirdDummy
 
     public function routesProtocol( $protocol ) {
         $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-protocol') );
-
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
     public function routesProtocolCount( $protocol ) {
         $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count') );
-
         return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
 
     public function routesTable( $table ) {
-        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-table-all') );
-
+        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-show-route-table-small-all') );
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
     public function routesTableCount( $table ) {
-        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count2') );
-
+        $routesCountBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/show-routes-count-969') );
         return ( new RoutesCountParser( $routesCountBlob ) )->parse();
     }
 
