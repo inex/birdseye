@@ -60,15 +60,17 @@
     Key: <span class="label label-success">P</span> - Primary / active route. <span class="label label-warning">N</span> - Inactive route.
 </p>
 
-@endsection
-
-
 <div class="modal fade" id="route-modal" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
     </div>
   </div>
 </div>
+
+
+
+@endsection
+
 
 
 
