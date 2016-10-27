@@ -4,6 +4,8 @@
 
 # param $1 should be the tag - e.g. v1.0.1 - which is assumed to be the current repo state
 
+echo -e "\n\n*************** UPDATE version.sh ******************\n\n"
+
 echo mv birdseye birdseye-$1
 
 cat <<ENDTAR
@@ -18,3 +20,5 @@ tar --exclude=birdseye-$1/.env               \\
 ENDTAR
 
 echo mv birdseye-$1 birdseye
+
+echo -e "\n\n*************** UPDATE version.sh ******************\n\n"

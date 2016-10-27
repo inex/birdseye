@@ -1,3 +1,3 @@
 <?php
 
-$_ENV['BIRDSEYE_API_VERSION'] = '1.0.1';
+$_ENV['BIRDSEYE_API_VERSION'] = '1.0.2';
