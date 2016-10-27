@@ -75,20 +75,19 @@
                     Bird's Eye Looking Glass - API V{{{ $_ENV['BIRDSEYE_API_VERSION'] }}}
                 @endif
             </h1>
-            <p class="lead">
-                Bird {{$status->status->version}}.
+            <div class="well">
+                Bird {{$status->status->version}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                 @if( isset( $status->status->router_id ))
-                    Router ID: {{$status->status->router_id}}.
+                    Router ID: {{$status->status->router_id}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                 @endif
-                Uptime: {{ (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $status->status->last_reboot ) )->days }} days.
-                Last Reconfigure: {{ DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $status->status->last_reconfig )->format( 'Y-m-d H:i:s' ) }}.
+                Uptime: {{ (new DateTime)->diff( DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $status->status->last_reboot ) )->days }} days &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                Last Reconfigure: {{ DateTime::createFromFormat( 'Y-m-d\TH:i:sO', $status->status->last_reconfig )->format( 'Y-m-d H:i:s' ) }}
                 @if (isset( $content->api->from_cache ) and $content->api->from_cache )
-                    <br>
-                    <span class="small">
-                        <em>Results from cached data. Maximum age: {{ $content->api->ttl_mins }}mins.</em>
-                    </span>
+                    <div class="label label-info pull-right">
+                        Results from cached data. Maximum age: {{ $content->api->ttl_mins }}mins.
+                    </div>
                 @endif
-            </p>
+            </div>
           </div>
       @show
 
