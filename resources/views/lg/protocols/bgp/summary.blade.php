@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th>Neighbor</th>
+            <th>Description</th>
             <th>ASN</th>
             <th>Table</th>
             <th>PfxLimit</th>
@@ -23,13 +24,16 @@
 
     <tr @if( $p->state != 'up' ) class="warning" @endif>
         <td>{{$p->neighbor_address}}</td>
-        <td>{{$p->neighbor_as}}</td>
+        <td>
+            {{$p->description}}
+        </td>
+        <td class="text-right">{{$p->neighbor_as}}</td>
         <td>
             <a href="{{$url}}/lg/routes/table/{{$p->table}}">
                 {{$p->table}}
             </a>
         </td>
-        <td>
+        <td class="text-right">
             @if ( isset($p->import_limit) and isset( $p->route_limit_at ) and $p->import_limit )
                 <span
                     @if ( ( (float)$p->route_limit_at / $p->import_limit ) >= .9 )
@@ -42,7 +46,7 @@
                 </span>
             @endif
         </td>
-        <td>
+        <td class="text-right">
             @if( $p->state != 'up' )
                 {{{$p->bgp_state}}}</a>
             @else
@@ -55,7 +59,7 @@
                 @endif
             @endif
         </td>
-        <td>
+        <td class="text-right">
             @if( $p->state == 'up' )
                 @if( is_int( $p->routes->exported ) and is_int( $content->api->max_routes ) and $p->routes->exported < $content->api->max_routes )
                     <a href="{{$url}}/lg/routes/table/{{$p->table}}">
@@ -145,9 +149,10 @@
         $(document).ready(function() {
             $('#bgpsummary').DataTable({
                 paging: false,
-                order: [[ 1, "asc" ]],
+                order: [[ 2, "asc" ]],
                 columnDefs: [
                     { type: 'ip-address', targets: 0 },
+                    { type: 'string', targets: 0 },
                     { type: 'int', targets: 0 },
                     { type: 'string', targets: 0 },
                     { type: 'string', targets: 0 },
