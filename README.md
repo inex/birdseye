@@ -74,9 +74,9 @@ apt-get install php-cgi php-mbstring php-xml
 # E.g. Ubuntu 14.04 LTS
 # apt-get install php5-cgi
 cd /srv
-wget https://github.com/inex/birdseye/releases/download/v1.0.2/birdseye-v1.0.2.tar.bz2
-tar jxf birdseye-v1.0.2.tar.bz2
-cd birdseye-v1.0.2  # or whatever the resultant directory is called
+wget https://github.com/inex/birdseye/releases/download/v1.0.3/birdseye-v1.0.3.tar.bz2
+tar jxf birdseye-v1.0.3.tar.bz2
+cd birdseye-v1.0.3  # or whatever the resultant directory is called
 chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
@@ -88,7 +88,7 @@ lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php
 ```
 
-And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/inex/birdseye/blob/v1.0.2/data/configs/lighttpd.conf) for an example.
+And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/inex/birdseye/blob/v1.0.3/data/configs/lighttpd.conf) for an example.
 
 ### Install from Source with Composer
 
