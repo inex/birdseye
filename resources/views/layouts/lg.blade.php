@@ -198,6 +198,12 @@
                 return ((a < b) ? 1 : ((a > b) ? -1 : 0));
             }
         });
+        
+        
+        // http://stackoverflow.com/questions/12449890/reload-content-in-modal-twitter-bootstrap
+        $(document).on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal');
+        });
     </script>
 
     @yield('scripts')
