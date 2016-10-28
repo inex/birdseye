@@ -17,13 +17,11 @@ At the hackathon, the team also produced comsumers of this API:
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/mhannig/birdseye - Python based web consumer by Matthias Hannig
 
-### Live (Demonstration) Endpoints
-
-*These may not exist indefinitely.*
+### Live Examples
 
 * http://rc1-cix-ipv4.inex.ie (API Endpoint - INEX Cork production route collector, IPv4)
 * http://rc1-cix-ipv6.inex.ie (API Endpoint - INEX Cork production route collector, IPv6)
-* http://hannig.cc:8001/birdseye/app/ (Web based consumer which includes the above)
+* http://hannig.cc:8001/birdseye/app/ (Web based consumer used as demo in hackathon which includes the above, *may not exist indefinitely.*)
 
 
 ## Rationale
