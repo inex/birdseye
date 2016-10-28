@@ -2,7 +2,7 @@
 
 A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON *(with an optional built-in looking glass implementation)*.
 
-This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
+This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.ripe.net/hackathon/ixp-tools/) just prior to [RIPE73](https://ripe73.ripe.net/) in Madrid, Spain. Since the hackathon, substanial improvements have been made.
 
 The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
