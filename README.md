@@ -181,7 +181,9 @@ The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests 
 
 ## Nagios Plugins
 
-There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. The first monitors the basic status of the Bird daemon:
+There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 Bird daemons and ~350 route server sessions. 
+
+The first monitors the basic status of the Bird daemon:
 
 ```
 # Bird daemon stopped:
