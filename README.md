@@ -4,7 +4,7 @@ A simple **secure** PHP micro service to provide some Bird protocol / routing in
 
 This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
 
-The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key) [PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf) [VIDEO](https://ripe73.ripe.net/archives/video/1505).
+The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
 ## Author(s):
 
