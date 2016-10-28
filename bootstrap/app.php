@@ -39,12 +39,14 @@ try {
         $_ENV['BIRDSEYE_CACHE_KEY'] = env('BIRDSEYE_CACHE_KEY');
     }
 
-    if( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) || !strlen( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) {
-        abort( 500, "Cache key not specified" );
+    if( php_sapi_name() !== 'cli' && ( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) || !strlen( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) ) {
+        header('HTTP/1.1 500 Cache key not specified');
+        exit;
     }
 
 } catch (Dotenv\Exception\InvalidPathException $e) {
-    abort( 500, "Configuration issue - see bootstrap/app.php" );
+    header('HTTP/1.1 500 Configuration issue - see bootstrap/app.php');
+    exit;
 }
 
 /*
