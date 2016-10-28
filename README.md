@@ -234,7 +234,7 @@ $ echo $?
 1
 ```
 
-prefix limit checking can be disabled with a `-l` option.
+Prefix limit checking can be disabled with a `-l` option.
 
 ## License
 
