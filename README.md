@@ -1,4 +1,4 @@
-# Bird's Eye - A Bird API
+# Bird's Eye - A Simple Secure Micro Service for Querying Bird
 
 A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON *(with an optional built-in looking glass implementation)*.
 
