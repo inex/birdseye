@@ -22,7 +22,12 @@
 @forelse ($content->routes as $r )
 
     <tr>
-        <td>{{$r->network}}</td>
+        <td>
+            <a href="{{$url}}/lg/route/{{urlencode($r->network)}}/table/master"
+                    data-toggle="modal" data-target="#route-modal">
+                {{$r->network}}
+            </a>
+        </td>
         <td>
             {{$r->gateway}}
         </td>

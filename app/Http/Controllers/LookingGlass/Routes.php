@@ -24,12 +24,14 @@ class Routes extends BaseController
     public function lookupProtocol($net,$protocol) {
         return app()->make('view')->make('lg/route')->with( [
             'content' => json_decode( app()->call('\App\Http\Controllers\Routes@lookupProtocol', ['net'=>$net,'protocol'=>$protocol])->content() ),
+            'source' => 'protocol', 'name' => $protocol, 'net' => urldecode($net)
         ] );
     }
 
     public function lookupTable($net,$table) {
         return app()->make('view')->make('lg/route')->with( [
             'content' => json_decode( app()->call('\App\Http\Controllers\Routes@lookupTable', ['net'=>$net,'table'=>$table])->content() ),
+            'source' => 'table', 'name' => $table, 'net' => urldecode($net)
         ] );
     }
 
