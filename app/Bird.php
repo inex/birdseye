@@ -114,6 +114,19 @@ class Bird
     }
 
 
+    public function exportProtocol( $protocol ) {
+        $routesBlob = $this->run('show route export ' . $protocol . ' all');
+
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
+    public function routesExportCount( $protocol ) {
+        $routesCountBlob = $this->run('show route export ' . $protocol . ' count');
+
+        return ( new RoutesCountParser( $routesCountBlob ) )->parse();
+    }
+
+
     public function routesTable( $table ) {
         $routesBlob = $this->run('show route table ' . $table . ' all');
 

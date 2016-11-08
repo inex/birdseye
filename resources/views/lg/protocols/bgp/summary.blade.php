@@ -66,7 +66,7 @@
         <td class="text-right">
             @if( $p->state == 'up' )
                 @if( is_int( $p->routes->exported ) and is_int( $content->api->max_routes ) and $p->routes->exported < $content->api->max_routes )
-                    <a href="{{$url}}/lg/routes/table/{{$p->table}}">
+                    <a href="{{$url}}/lg/routes/export/{{$name}}">
                 @endif
                 {{$p->routes->exported}}
                 @if( is_int( $p->routes->exported ) and is_int( $content->api->max_routes ) and $p->routes->exported < $content->api->max_routes )

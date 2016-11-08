@@ -39,11 +39,13 @@ $app->get('api/symbols', 'Symbols@all');
 $app->get('api/symbols/tables', 'Symbols@tables');
 $app->get('api/symbols/protocols', 'Symbols@protocols');
 
-$app->get('api/routes/protocol/{protocol}', 'Routes@protocol');
-$app->get('api/routes/table/{table}', 'Routes@table');
+$app->get('api/routes/protocol/{protocol}', 'Routes@protocol' );
+$app->get('api/routes/table/{table}',       'Routes@table'    );
+$app->get('api/routes/export/{protocol}',   'Routes@export'   );
 
-$app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount');
-$app->get('api/routes/count/table/{table}', 'Routes@tableCount');
+$app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount' );
+$app->get('api/routes/count/table/{table}',       'Routes@tableCount'    );
+$app->get('api/routes/count/export/{protocol}',   'Routes@exportCount'   );
 
 $throttle = env('THROTTLE_PER_MIN',20);
 
@@ -67,6 +69,7 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         $app->get('protocols/bgp',              'Protocols\Bgp@summary' );
         $app->get('routes/protocol/{protocol}', 'Routes@protocol'       );
         $app->get('routes/table/{table}',       'Routes@table'          );
+        $app->get('routes/export/{protocol}',   'Routes@export'         );
 
         $app->get('route',                           'Routes@getLookup'      );
         $app->get('route/{net}/protocol/{protocol}', 'Routes@lookupProtocol' );

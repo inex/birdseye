@@ -3,7 +3,7 @@
 
 @section('content')
 
-<h2>Routing Table for {{ucfirst($source)}} <code>{{$name}}</code></h2>
+<h2>Routing Table for {{ucwords($source)}} <code>{{$name}}</code></h2>
 
 
 <table class="table" id="routes">

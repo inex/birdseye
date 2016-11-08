@@ -54,6 +54,30 @@ class Routes extends Controller
         return $routesCount;
     }
 
+    private function getExportRoutes($protocol) {
+        if( $routes = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesExport($protocol);
+            Cache::put($this->cacheKey() . 'routes-export-' . $protocol, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
+    private function getExportRoutesCount($protocol) {
+        if( $routesCount = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol . '-count' ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routesCount = app('Bird')->routesExportCount($protocol);
+            Cache::put($this->cacheKey() . 'routes-export-' . $protocol . '-count', $routesCount, env( 'CACHE_ROUTES', 5 ) );
+        }
+
+        if( $routesCount['routes'] === null ) {
+            about( 500, 'Could not get route count for export to protocol ' . $protocol );
+        }
+        return $routesCount;
+    }
+
     public function protocolCount($protocol)
     {
         // let's make sure the protocol is valid:
@@ -82,6 +106,36 @@ class Routes extends Controller
         $this->cacheUsed = false;
 
         return $this->verifyAndSendJSON( 'routes', $this->getProtocolRoutes($protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
+    public function exportCount($protocol)
+    {
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        return $this->verifyAndSendJSON( 'count', $this->getExportRoutesCount($protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
+
+    public function export($protocol)
+    {
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        // does the number of routes exceed the maximum?
+        $count = $this->getExportRoutesCount($protocol)['routes'];
+        if( $count > env('MAX_ROUTES',1000) ) {
+            abort( 403, "Number of routes exceeds maximum allowed ({$count}/" . env('MAX_ROUTES',1000) . ")" );
+        }
+
+        // reset cache used flag after above count query:
+        $this->cacheUsed = false;
+
+        return $this->verifyAndSendJSON( 'routes', $this->getExportRoutes($protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
     public function tableCount($table)

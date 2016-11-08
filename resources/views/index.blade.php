@@ -54,6 +54,12 @@
                   E.g. <a href="{{{ $url }}}/api/routes/table/t_0119_as50088">{{{$url}}}/api/routes/table/t_0119_as50088</a>
               @endif
           </li>
+          <li> {{{ $url }}}/api/routes/export/$protocol
+              @if (env('USE_BIRD_DUMMY',false) )
+                  <br>
+                  E.g. <a href="{{{ $url }}}/api/routes/export/pb_0127_as42227">{{{$url}}}/api/routes/export/pb_0127_as42227</a>
+              @endif
+          </li>
       </ul>
 
       <h3>Routes</h3>
