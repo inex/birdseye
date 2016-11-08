@@ -81,6 +81,18 @@
                     <td>{{$r->bgp->local_pref}}</td>
                 </tr>
             @endif
+            @if (isset( $r->bgp->atomic_aggr ))
+                <tr>
+                    <td><strong>BGP :: Atomic Aggr</strong></td>
+                    <td>{{$r->bgp->atomic_aggr}}</td>
+                </tr>
+            @endif
+            @if (isset( $r->bgp->aggregator ))
+                <tr>
+                    <td><strong>BGP :: Aggregator</strong></td>
+                    <td>{{$r->bgp->aggregator}}</td>
+                </tr>
+            @endif
             @if (isset( $r->bgp->communities ))
                 <tr>
                     <td><strong>BGP :: Communities</strong></td>

@@ -31,6 +31,8 @@ BIRD 1.4.0 ready.
 	BGP.med: 100
 	BGP.local_pref: 100
 	BGP.community: (0,31122)
+	BGP.atomic_aggr:
+	BGP.aggregator: 193.104.155.9 AS50145
 195.43.155.0/24    via 193.242.111.54 on eth1 [pb_0127_as42227 2016-10-09] * (100) [AS47490i]
 	Type: BGP unicast univ
 	BGP.origin: IGP

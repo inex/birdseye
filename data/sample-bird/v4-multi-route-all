@@ -11,4 +11,6 @@ BIRD 1.4.0 ready.
 	BGP.as_path: 13237 61194
 	BGP.next_hop: 193.242.111.79
 	BGP.local_pref: 100
+	BGP.atomic_aggr:
+	BGP.aggregator: 193.104.155.9 AS50145
 	BGP.community: (0,8218) (13237,45035) (13237,46351)

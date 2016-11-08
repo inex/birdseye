@@ -88,6 +88,14 @@ class Routes extends Parser
                 // 	BGP.med: 100
                 $r['bgp']['med'] = intval( $matches[1] );
             }
+            else if( preg_match( "/^\s+BGP.atomic_aggr:(.*)$/", $line, $matches ) ) {
+                // 	BGP.atomic_aggr:
+                $r['bgp']['atomic_aggr'] = trim( $matches[1] );
+            }
+            else if( preg_match( "/^\s+BGP.aggregator:(.*)$/", $line, $matches ) ) {
+                // 	BGP.aggregator: 193.104.155.9 AS50145
+                $r['bgp']['aggregator'] = trim( $matches[1] );
+            }
             else if( preg_match( "/^\s+BGP.community:\s+(.+)\s*$/", $line, $matches ) ) {
                 // 	BGP.community: (0,31122) (0,6543)
                 foreach( explode( ' ', trim( $matches[1] ) ) as $community ) {
