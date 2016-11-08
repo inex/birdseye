@@ -114,7 +114,7 @@ class Bird
     }
 
 
-    public function exportProtocol( $protocol ) {
+    public function routesExport( $protocol ) {
         $routesBlob = $this->run('show route export ' . $protocol . ' all');
 
         return ( new RoutesParser($routesBlob ) )->parse();
