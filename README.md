@@ -1,10 +1,10 @@
-# Bird's Eye - A Bird API
+# Bird's Eye - A Simple Secure Micro Service for Querying Bird
 
 A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON *(with an optional built-in looking glass implementation)*.
 
-This is the winning project from the RIPE IXP Tools Hackaton just prior to RIPE73 in Madrid, Spain.
+This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.ripe.net/hackathon/ixp-tools/) just prior to [RIPE73](https://ripe73.ripe.net/) in Madrid, Spain. Since the hackathon, substanial improvements have been made.
 
-The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]
+The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
 ## Author(s):
 
@@ -17,13 +17,11 @@ At the hackathon, the team also produced comsumers of this API:
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/mhannig/birdseye - Python based web consumer by Matthias Hannig
 
-### Live (Demonstration) Endpoints
+### Live Examples
 
-*These may not exist indefinitely.*
-
-* http://rc1-cix-ipv4.inex.ie (API Endpoint - INEX Cork production route collector, IPv4)
-* http://rc1-cix-ipv6.inex.ie (API Endpoint - INEX Cork production route collector, IPv6)
-* http://hannig.cc:8001/birdseye/app/ (Web based consumer which includes the above)
+* http://rc1-cix-ipv4.inex.ie/lg (API Endpoint - INEX Cork production route collector, IPv4)
+* http://rc1-cix-ipv6.inex.ie/lg (API Endpoint - INEX Cork production route collector, IPv6)
+* http://hannig.cc:8001/birdseye/app/ (Web based consumer used as demo in hackathon which includes the above, *may not exist indefinitely.*)
 
 
 ## Rationale
@@ -183,7 +181,9 @@ The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests 
 
 ## Nagios Plugins
 
-There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. The first monitors the basic status of the Bird daemon:
+There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 Bird daemons and ~350 route server sessions. 
+
+The first monitors the basic status of the Bird daemon:
 
 ```
 # Bird daemon stopped:
@@ -234,7 +234,7 @@ $ echo $?
 1
 ```
 
-prefix limit checking can be disabled with a `-l` option.
+Prefix limit checking can be disabled with a `-l` option.
 
 ## License
 
