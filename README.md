@@ -162,6 +162,20 @@ LOOKING_GLASS_ENABLED=true
 
 This will activate the looking glass routes, add a link to the header and make the looking glass available under the base URL `/lg`.
 
+## Disabling Caching on a Per-Request Basis
+
+Caching was implemented to provide a natural rate-limiting mechanism for security and to reduce the load on Bird.
+
+In environments where you already have security in place (e.g. authenticated users on IXP Manager), you may want to disable caching for those requests. You can whitelist a set of IP addresses for this purpose by:
+
+```sh
+cp skipcache_ips.php.dist skipcache_ips.php
+```
+
+and then editing `skipcache_ips.php` to add your (for example) IXP Manager server's IP address.
+
+If you then tag `?use_cache=0` to API requests, the cache will be avoided. Note that the results from Bird will still be added to the cache so standard requests will still benefit with the freshest data.
+
 ## Serving Behind a Proxy
 
 The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests and so they need to be URL encoded. Some web servers such as Apache squash these. A sample Apache configuration for proxying Bird's Eye requests is:
@@ -181,7 +195,7 @@ The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests 
 
 ## Nagios Plugins
 
-There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 Bird daemons and ~350 route server sessions. 
+There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 Bird daemons and ~350 route server sessions.
 
 The first monitors the basic status of the Bird daemon:
 
