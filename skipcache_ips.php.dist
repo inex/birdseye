@@ -1,0 +1,15 @@
+<?php
+
+//
+// Whitelisted IPs to disable caching
+//
+// To whitelist any IP addresses and allow them to disable caching on demand
+// (namely by adding ?use_cache=0 to the API URL)
+// add IP addresses to the array below.
+//
+// Then copy this file to skipcache_ips.php
+
+return [
+    '192.0.2.34',
+    '2001:db8::34',
+];

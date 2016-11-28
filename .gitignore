@@ -8,3 +8,5 @@
 birdseye-*.env
 
 composer.phar
+
+skipcache_ips.php

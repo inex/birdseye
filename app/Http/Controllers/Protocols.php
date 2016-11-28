@@ -17,7 +17,7 @@ class Protocols extends Controller
     // }
 
     private function getProtocolsBgp() {
-        if( $protocols = Cache::get( $this->cacheKey() . 'protocols-bgp' ) ) {
+        if( !$this->cacheDisabled && $protocols = Cache::get( $this->cacheKey() . 'protocols-bgp' ) ) {
             $this->cacheUsed = true;
         } else {
             $protocols = app('Bird')->protocolsBgp();

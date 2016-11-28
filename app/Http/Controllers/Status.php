@@ -8,7 +8,7 @@ class Status extends Controller
 {
     public function show()
     {
-        if( $status = Cache::get( $this->cacheKey() . 'status' ) ) {
+        if( !$this->cacheDisabled && $status = Cache::get( $this->cacheKey() . 'status' ) ) {
             $api['from_cache'] = true;
             $api['ttl_mins']   = env( 'CACHE_SHOW_STATUS', 1 );
         } else {

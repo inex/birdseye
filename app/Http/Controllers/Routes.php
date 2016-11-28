@@ -7,7 +7,7 @@ use Cache;
 class Routes extends Controller
 {
     private function getProtocolRoutes($protocol) {
-        if( $routes = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol ) ) {
+        if( !$this->cacheDisabled && $routes = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol ) ) {
             $this->cacheUsed = true;
         } else {
             $routes = app('Bird')->routesProtocol($protocol);
@@ -17,7 +17,7 @@ class Routes extends Controller
     }
 
     private function getProtocolRoutesCount($protocol) {
-        if( $routesCount = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol . '-count' ) ) {
+        if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol . '-count' ) ) {
             $this->cacheUsed = true;
         } else {
             $routesCount = app('Bird')->routesProtocolCount($protocol);
@@ -31,7 +31,7 @@ class Routes extends Controller
     }
 
     private function getTableRoutes($table) {
-        if( $routes = Cache::get( $this->cacheKey() . 'routes-table-' . $table ) ) {
+        if( !$this->cacheDisabled && $routes = Cache::get( $this->cacheKey() . 'routes-table-' . $table ) ) {
             $this->cacheUsed = true;
         } else {
             $routes = app('Bird')->routesTable($table);
@@ -41,7 +41,7 @@ class Routes extends Controller
     }
 
     private function getTableRoutesCount($table) {
-        if( $routesCount = Cache::get( $this->cacheKey() . 'routes-table-' . $table . '-count' ) ) {
+        if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-table-' . $table . '-count' ) ) {
             $this->cacheUsed = true;
         } else {
             $routesCount = app('Bird')->routesTableCount($table);
@@ -55,7 +55,7 @@ class Routes extends Controller
     }
 
     private function getExportRoutes($protocol) {
-        if( $routes = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol ) ) {
+        if( !$this->cacheDisabled && $routes = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol ) ) {
             $this->cacheUsed = true;
         } else {
             $routes = app('Bird')->routesExport($protocol);
@@ -65,7 +65,7 @@ class Routes extends Controller
     }
 
     private function getExportRoutesCount($protocol) {
-        if( $routesCount = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol . '-count' ) ) {
+        if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-export-' . $protocol . '-count' ) ) {
             $this->cacheUsed = true;
         } else {
             $routesCount = app('Bird')->routesExportCount($protocol);

@@ -8,12 +8,18 @@ use Cache;
 
 class Controller extends BaseController
 {
-    private $cacheKey;
-    protected $cacheUsed = false;
+    private   $cacheKey;
+    protected $cacheUsed      = false;
+    protected $cacheDisabled  = false;
+    protected $ipWhitelisted  = false;
+    protected $skipCache      = false;
 
 
     public function __construct() {
-        $this->cacheKey = $_ENV['BIRDSEYE_CACHE_KEY'];
+        $this->cacheKey      = $_ENV['BIRDSEYE_CACHE_KEY'];
+        $this->ipWhitelisted = $this->ipWhitelisted();
+        $this->skipCache     = $this->skipCache();
+        $this->cacheDisabled = ( env( 'CACHE_DRIVER' ) == 'array' ) || $this->skipCache;
     }
 
     public function cacheKey() {
@@ -27,15 +33,16 @@ class Controller extends BaseController
 
         $api['version'] = $_ENV['BIRDSEYE_API_VERSION'];
         if( env('APP_DEBUG',false)) {
-            $api['env']     = $_ENV['BIRDSEYE_ENV_FILE'];
-            $api['cache_disabled'] = ( env( 'CACHE_DRIVER' ) == 'array' );
+            $api['env']            = $_ENV['BIRDSEYE_ENV_FILE'];
+            $api['cache_disabled'] = $this->cacheDisabled;
+            $api['ip_whitelisted'] = $this->skipCache();
         }
         $api['max_routes'] = intval(env('MAX_ROUTES',1000));
 
         if( !is_array($response) ) {
             abort(503, "Unknown internal error");
         }
-        
+
         // check cache status
         if( env( 'CACHE_DRIVER' ) == 'array' ) {
             $api['from_cache'] = false;
@@ -48,13 +55,46 @@ class Controller extends BaseController
     }
 
     protected function getSymbols() {
-        if( $symbols = Cache::get( $this->cacheKey() . 'symbols' ) ) {
+        if( !$this->cacheDisabled && $symbols = Cache::get( $this->cacheKey() . 'symbols' ) ) {
             $this->cacheUsed = true;
         } else {
             $symbols = app('Bird')->symbols();
             Cache::put($this->cacheKey() . 'symbols', $symbols, env( 'CACHE_SHOW_SYMBOLS', 5 ) );
         }
         return $symbols;
+    }
+
+    /**
+     * For a set of whitelisted IP addresses, we'll allow cache skipping
+     */
+    protected function ipWhitelisted() {
+        if( file_exists( __DIR__ . '/../../../skipcache_ips.php' ) ) {
+            $ips = include __DIR__ . '/../../../skipcache_ips.php';
+
+            if( isset( $ips ) && is_array( $ips ) ) {
+                return( in_array( $_SERVER['REMOTE_ADDR'], $ips ) );
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Should the cache be skipped?
+     */
+    protected function skipCache() {
+        if( $this->cacheDisabled ) {
+            return true;
+        }
+
+        if( $this->ipWhitelisted() ) {
+            if( isset( $_GET['use_cache'] ) && $_GET['use_cache'] == "0" ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function assertValidPrefix($net) {
