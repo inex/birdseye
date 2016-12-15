@@ -15,7 +15,7 @@ The end of workshop presentation can be found here: [[Keynote](https://dl.dropbo
 At the hackathon, the team also produced comsumers of this API:
 
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
-* https://github.com/mhannig/birdseye - Python based web consumer by Matthias Hannig
+* https://github.com/ecix/birdseye - Python based web consumer by Matthias Hannig
 
 ### Live Examples
 
