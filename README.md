@@ -6,9 +6,12 @@ This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.rip
 
 The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
-## Author(s):
+Author: [Barry O'Donovan](https://www.barryodonovan.com/contact), [INEX](https://www.inex.ie/), Dublin, Ireland
 
- * Barry O'Donovan, INEX, Dublin, Ireland
+
+## Live Examples
+
+INEX runs a number of Bird instances and many of them have a public looking glass powered by Bird's Eye with IXP Manager as a frontend consumer. See them all at: https://www.inex.ie/ixp/lg
 
 ## Complementary Projects
 
@@ -17,9 +20,6 @@ At the hackathon, the team also produced comsumers of this API:
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/ecix/birdseye - Python based web consumer by Matthias Hannig
 
-### Live Examples
-
-INEX runs a number of Bird instances and many of them have a public looking glass powered by Birdseye with IXP Manager as a frontend consdumer. See them all at: https://www.inex.ie/ixp/lg
 
 ## Rationale
 
