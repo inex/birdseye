@@ -13,9 +13,11 @@ try {
         $envpath = realpath( __DIR__.'/..' );
     }
 
-    if( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) && strpos( $_SERVER['HTTP_X_FORWARDED_HOST'], '.' ) ) {
+    if( isset( $_SERVER['HTTP_X_BIRDSEYE'] ) ) {
+        $name = $_SERVER['HTTP_X_BIRDSEYE'];
+    } else if( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) && strpos( $_SERVER['HTTP_X_FORWARDED_HOST'], '.' ) ) {
         $name = explode( '.', $_SERVER['HTTP_X_FORWARDED_HOST'] )[0];
-    }else if( isset( $_SERVER['HTTP_HOST'] ) && strpos( $_SERVER['HTTP_HOST'], '.' ) ) {
+    } else if( isset( $_SERVER['HTTP_HOST'] ) && strpos( $_SERVER['HTTP_HOST'], '.' ) ) {
         $name = explode( '.', $_SERVER['HTTP_HOST'] )[0];
     }
 

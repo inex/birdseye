@@ -22,6 +22,22 @@ if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
 
 $url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
 
+// A proxy can optionally set HTTP_X_URL to add a prefix to the URL (http://www.example.com/prefix/).
+if( isset($_SERVER['HTTP_X_URL'] ) ) {
+    if( substr( $url, -1 ) == '/' && substr( $_SERVER['HTTP_X_URL'], 0, 1 ) == '/' ) {
+        $url .= substr( $_SERVER['HTTP_X_URL'], 1 );
+    } else if( substr( $url, -1 ) != '/' && substr( $_SERVER['HTTP_X_URL'], 0, 1 ) != '/' ) {
+         $url .= '/' . $_SERVER['HTTP_X_URL'];
+    } else {
+         $url .=  $_SERVER['HTTP_X_URL'];
+    }
+}
+
+// remove tailing slash
+if( substr( $url, -1 ) == '/' ) {
+    $url = substr( $url, 0, -1 );
+}
+
 
 $app->get('/', function () use ($app,$url) {
     return $app->make('view')->make('index')->with( [
