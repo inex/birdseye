@@ -11,7 +11,14 @@ Author: [Barry O'Donovan](https://www.barryodonovan.com/contact), [INEX](https:/
 
 ## Live Examples
 
-INEX runs a number of Bird instances and many of them have a public looking glass powered by Bird's Eye with IXP Manager as a frontend consumer. See them all at: https://www.inex.ie/ixp/lg
+INEX runs a number of Bird instances and many of them have a public looking glass powered by Bird's Eye as a standlone live example and also integrated with with IXP Manager as a frontend consumer. 
+
+* INEX Cork IPv4 Router Collector: https://www.inex.ie/rc1-cork-ipv4/
+* INEX Cork IPv6 Router Collector: https://www.inex.ie/rc1-cork-ipv6/
+
+The landing pages for the above also document the API calls available.
+
+You can see the IXP Manager integration for ~30 Bird damons at: https://www.inex.ie/ixp/lg
 
 ## Complementary Projects
 
@@ -127,6 +134,8 @@ cd /srv/birdseye
 cp .env.example birdseye-rs1-lan1-ipv4.env
 ```
 
+If you do not want to use hostnames and your Bird's Eye install is behind a proxy, you can set the same element as above in the HTTP request header: `X-BIRDSEYE`. See the Varnish example below in the *Serving Behind a Proxy* section.
+
 This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) we'd set it to:
 
 ```
@@ -179,16 +188,56 @@ The API requires prefixes (e.g. `192.0.2.0/24`) to be submitted as GET requests 
 
 ```
 <VirtualHost 192.0.2.17:80 [2001:db8::17]:80>
-        ServerName rc1-lan1-ipv4.example.com
-        ServerAlias rc1-lan1-ipv6.example.com
+    ServerName rc1-lan1-ipv4.example.com
+    ServerAlias rc1-lan1-ipv6.example.com
 
-        AllowEncodedSlashes NoDecode
+    AllowEncodedSlashes NoDecode
 
-        ProxyPass               /       http://10.8.5.126/     nocanon
-        ProxyPassReverse        /       http://10.8.5.126/
+    ProxyPass               /       http://10.8.5.126/     nocanon
+    ProxyPassReverse        /       http://10.8.5.126/
 </VirtualHost>
 ```
 
+The code to work out what URL should be used in links [can be seen here](https://github.com/inex/birdseye/blob/master/app/Http/routes.php). In essence:
+
+* if the server is configured for HTTPS, then `https://` is forced.
+  * otherwise if `$_SERVER['HTTP_X_FORWARDED_PROTO']` (`X-Forwarded-Proto` in the HTTP request header) is `https`, then `https://` is forced.
+  * otherwise it is `http://`
+* if `$_SERVER['HTTP_X_FORWARDED_HOST']` (`X-Forwarded-Host` in the HTTP request header) is set, then that host is used in the URL. Otherwise it is worked out by PHP in the normal manner.
+* if `$_SERVER['HTTP_X_URL']` (`X-Url` in the HTTP request header) is set, then that is tacked onto the hostname as a path / URL prefix.
+
+For example, the live demos above (such as https://www.inex.ie/rc1-cork-ipv4/) is served via a Varnish proxy to an internal host with the following Varish configuration:
+
+```
+backend rc1_cork_ipv4 {
+    .host = "rc1-ipv4.cork.inex.ie";
+    .port = "80";
+}
+
+sub vcl_recv {
+    ...
+    # Birdseye Example Sites
+    if (req.url ~ "^/rc1-cork-ipv4/?" ) {
+        set req.backend_hint = rc1_cork_ipv4;
+        set req.http.x-url = req.url;
+        set req.http.x-birdseye = "rc1-ipv4";
+        set req.url = regsub( req.url, "^/rc1-cork-ipv4/?", "/");
+        return(pass);
+    }
+}
+```
+
+When a request to Varnish for https://www.inex.ie/rc1-cork-ipv4/ hits the internal host, it sees a HTTP request with with following in PHP's `$_SERVER` array:
+
+```
+GET / HTTP/1.0
+HTTP_HOST: www.inex.ie
+HTTP_X_FORWARDED_PROTO: https
+HTTP_X_URL: /rc1-cork-ipv4/
+HTTP_X_BIRDSEYE: rc1-ipv4
+```        
+
+Using the above logic, the resolves to a base URL of: `https://www.inex.ie/rc1-cork-ipv4`.
 
 ## Nagios Plugins
 
