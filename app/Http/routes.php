@@ -20,7 +20,7 @@ if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
     $proto = 'http://';
 }
 
-$url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url();
+$url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url( '', [], $proto == 'https://' );
 
 // A proxy can optionally set HTTP_X_URL to add a prefix to the URL (http://www.example.com/prefix/).
 if( isset($_SERVER['HTTP_X_URL'] ) ) {
@@ -78,8 +78,8 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         $app->make('view')->share('url',$url);
         $app->make('view')->share('status', json_decode( $app->call('\App\Http\Controllers\Status@show' )->content() ) );
 
-        $app->get('', function() use ($app) {
-            return redirect( '/lg/protocols/bgp' );
+        $app->get('', function() use ($app,$url) {
+            return redirect( $url . '/lg/protocols/bgp' );
         });
 
         $app->get('protocols/bgp',              'Protocols\Bgp@summary' );
