@@ -1,0 +1,17 @@
+BIRD 1.6.2 ready.
+37.32.128.0/17     via 176.126.38.31 on eth0 [b_grnet88 2017-05-10 18:38:29] * (100) [AS5408i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 5408
+        BGP.next_hop: 176.126.38.31
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.community: (5408,1003) (50745,65102)
+                   via 176.126.38.1 on eth0 [b_grnet6 2017-05-17 19:14:44] (100) [AS5408i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 5408
+        BGP.next_hop: 176.126.38.1
+        BGP.med: 2
+        BGP.local_pref: 100
+        BGP.community: (5408,1003) (50745,65101)
