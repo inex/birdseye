@@ -34,7 +34,7 @@ class Routes extends Parser
                 continue;
             }
 
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+([0-9\-\: ]+)(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
                 // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
                 // 2a02:2078::/32 via 2001:7f8:18:210::15 on ens160 [pb_as43760_vli226_ipv6 2016-10-13 from 2001:7f8:18:210::8] (100) [AS47720i]
                 // 94.247.48.52/30    via 93.92.8.65 on eth1 [pb_core_rl01 2016-10-19 from 93.92.8.20] * (100/65559) [?]
@@ -47,7 +47,7 @@ class Routes extends Parser
                 }
                 $this->mainRouteDetail( $matches, $r );
             }
-            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+([0-9\-\: ]+)(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+(\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
                 // second entry for previous route
                 if( $r == [] ) {
                     // something's not right:
@@ -119,18 +119,17 @@ class Routes extends Parser
         $r['gateway']         = $matches[2];
         $r['interface']       = $matches[3];
         $r['from_protocol']   = $matches[4];
-        if( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] ) ) {
-            $r['age'] = $x->format('c');
+
+        if( preg_match( '/^\d\d\d\d\-\d{1,2}\-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}$/', $matches[5] ) ) {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] )->format('c');
+        } else if( preg_match( '/^\d{1,2}:\d{1,2}:\d{1,2}$/', $matches[5] ) ) {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] )->format('c');
+        } else if( preg_match( '/^\d\d\d\d\-\d{1,2}\-\d{1,2}$/', $matches[5] ) ) {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' )->format('c');
+        } else {
+            $r['age'] = '0000-00-00T00:00:00+00:00';
         }
-        elseif( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] ) ) {
-            $r['age'] = $x->format('c');
-        }
-        elseif( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' ) ) {
-            $r['age'] = $x->format('c');
-        }
-        else {
-            abort( 500, "Cannot extract date from string: ".$matches[5] );
-        }
+
         $r['learnt_from']     = $matches[6];
         $r['primary']         = $matches[7] == '*' ? true : false;
         $r['metric']          = intval( $matches[8] );

@@ -108,7 +108,7 @@ class BirdDummy
     }
 
     public function routesLookupTable( $net, $table ) {
-        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-multi-route-all') );
+        $routesBlob = file_get_contents( realpath(__DIR__.'/../data/sample-bird/v4-multi-route-all-2') );
         return ( new RoutesParser($routesBlob ) )->parse();
     }
 
