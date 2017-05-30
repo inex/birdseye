@@ -119,10 +119,17 @@ class Routes extends Parser
         $r['gateway']         = $matches[2];
         $r['interface']       = $matches[3];
         $r['from_protocol']   = $matches[4];
-        if( strpos($matches[5], ':' ) ) {
-            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] )->format('c');
-        } else {
-            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' )->format('c');
+        if( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] ) ) {
+            $r['age'] = $x->format('c');
+        }
+        elseif( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] ) ) {
+            $r['age'] = $x->format('c');
+        }
+        elseif( $x = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' ) ) {
+            $r['age'] = $x->format('c');
+        }
+        else {
+            abort( 500, "Cannot extract date from string: ".$matches[5] );
         }
         $r['learnt_from']     = $matches[6];
         $r['primary']         = $matches[7] == '*' ? true : false;
