@@ -96,7 +96,7 @@
 
         <footer class="footer">
             <p>
-                &copy; 2016 Internet Neutral Exchange Association Limited by Guarantee
+                &copy; 2016 - {{ date('Y') }} Internet Neutral Exchange Association Limited by Guarantee
                 (<a href="https://www.inex.ie/">INEX</a>).
                 <a href="https://github.com/inex/birdseye/blob/master/LICENSE.md">MIT License</a>.<br>
                 A simple secure PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON.
