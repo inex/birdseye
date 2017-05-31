@@ -219,7 +219,7 @@ sub vcl_recv {
     # Birdseye Example Sites
     if (req.url ~ "^/rc1-cork-ipv4/?" ) {
         set req.backend_hint = rc1_cork_ipv4;
-        set req.http.x-url = req.url;
+        set req.http.x-url = "/rc1-cork-ipv4";
         set req.http.x-birdseye = "rc1-ipv4";
         set req.url = regsub( req.url, "^/rc1-cork-ipv4/?", "/");
         return(pass);
@@ -233,7 +233,7 @@ When a request to Varnish for https://www.inex.ie/rc1-cork-ipv4/ hits the intern
 GET / HTTP/1.0
 HTTP_HOST: www.inex.ie
 HTTP_X_FORWARDED_PROTO: https
-HTTP_X_URL: /rc1-cork-ipv4/
+HTTP_X_URL: /rc1-cork-ipv4
 HTTP_X_BIRDSEYE: rc1-ipv4
 ```        
 
