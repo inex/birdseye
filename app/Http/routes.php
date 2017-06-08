@@ -11,6 +11,12 @@
 |
 */
 
+// just for testing
+$app->get( 'test', function() {
+    return "Hello, world!";
+});
+
+
 // This is pretty kack but fideloper/TrustedProxy seems to not work on Lumen yet
 if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
     $proto = 'https://';
@@ -92,3 +98,4 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         $app->get('route/{net}/table/{table}',       'Routes@lookupTable'    );
     });
 }
+

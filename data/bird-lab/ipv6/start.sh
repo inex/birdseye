@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # add ips we need
-/bin/ip addr add fc00::1/64 dev enp0s3
-/bin/ip addr add fc00::111/64 dev enp0s3
-/bin/ip addr add fc00::222/64 dev enp0s3
-/bin/ip addr add fc00::244/64 dev enp0s3
+/bin/ip addr add fc00::1/64 dev lo
+/bin/ip addr add fc00::111/64 dev lo
+/bin/ip addr add fc00::222/64 dev lo
+/bin/ip addr add fc00::244/64 dev lo
 
 mkdir -p /var/run/bird
 

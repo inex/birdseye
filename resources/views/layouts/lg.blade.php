@@ -70,7 +70,7 @@
           <div class="starter-template">
             <h1>
                 @if( env('LOOKING_GLASS_TITLE', false) )
-                    {{ env('LOOKING_GLASS_TITLE') }}
+                    {{ str_replace( '{!VERSION!}', $_ENV['BIRDSEYE_API_VERSION'], env('LOOKING_GLASS_TITLE') ) }}
                 @else
                     Bird's Eye Looking Glass - API V{{{ $_ENV['BIRDSEYE_API_VERSION'] }}}
                 @endif

@@ -296,6 +296,24 @@ $ echo $?
 
 Prefix limit checking can be disabled with a `-l` option.
 
+## Vagrant / Development
+
+This repository includes a [Vagrant](https://www.vagrantup.com/) file with a 
+[bootstrap script](https://github.com/inex/birdseye/blob/master/Vagrant-bootstrap.sh) which, 
+on first run of `vagrant up` will:
+
+* Boot an instance of Ubuntu 16.04 LTS.
+* Update / upgrade all packages.
+* Installs latest stable bird from [CZ.NIC's Ubuntu PPA](https://launchpad.net/~cz.nic-labs) (at 
+time of writing this is 1.6.3 with Large BGP Community support).
+* Installs and configures Lighttpd ([config](https://github.com/inex/birdseye/blob/master/data/vagrant/lighttpd.conf)).
+* Spins up the lab IPv4 and IPv6 environments (see `start.sh` scripts in `data/bird-lab/ipv[46]`).
+
+Bird's Eye should now be accessible on: http://localhost::8088/
+
+To switch to the IPv6 lab, swap the `BIRDC` option in the `.env` file (the IPv6 version is commented out).
+
+
 ## License
 
 This application is open-sourced software licensed under the MIT license - see [the license file](LICENSE.md).
