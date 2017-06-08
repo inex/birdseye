@@ -13,7 +13,6 @@ class Routes extends Parser
     }
 
     public function parse() {
-
         $routes  = [];
         $r       = [];
         $matches = [];
@@ -101,6 +100,16 @@ class Routes extends Parser
                 foreach( explode( ' ', trim( $matches[1] ) ) as $community ) {
                     if( preg_match( "/^\((\d+),(\d+)\)/", $community, $matches ) ) {
                         $r['bgp']['communities'][] = [ intval( $matches[1] ), intval( $matches[2] ) ];
+                    }
+                }
+            }
+            else if( preg_match( "/^\s+BGP.large_community:\s+(.+)\s*$/", $line, $matches ) ) {
+                // BGP.large_community: (999, 1, 111)
+                // BGP.large_community: (999, 1, 111) (999, 156, 111) (999, 157, 111)
+                $m = substr( trim( $matches[1] ), 1, -1 );
+                foreach( explode( ') (', $m ) as $community ) {
+                    if( preg_match( "/^(\d+),\s*(\d+),\s*(\d+)/", trim( $community ), $matches ) ) {
+                        $r['bgp']['large_communities'][] = [ intval( $matches[1] ), intval( $matches[2] ), intval( $matches[3] )  ];
                     }
                 }
             }

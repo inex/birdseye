@@ -98,7 +98,17 @@
                     <td><strong>BGP :: Communities</strong></td>
                     <td>
                         @foreach( $r->bgp->communities as $c )
-                            ({{implode(',',$c)}})
+                            ({{implode(', ',$c)}})
+                        @endforeach
+                    </td>
+                </tr>
+            @endif
+            @if (isset( $r->bgp->large_communities ))
+                <tr>
+                    <td><strong>BGP :: Large Communities</strong></td>
+                    <td>
+                        @foreach( $r->bgp->large_communities as $c )
+                            ({{implode(', ',$c)}})
                         @endforeach
                     </td>
                 </tr>
