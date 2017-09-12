@@ -38,7 +38,7 @@ try {
         $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
         $dotenv->load();
         $_ENV['BIRDSEYE_ENV_FILE'] = '.env';
-        $_ENV['BIRDSEYE_CACHE_KEY'] = env('BIRDSEYE_CACHE_KEY');
+        $_ENV['BIRDSEYE_CACHE_KEY'] = env('BIRDSEYE_CACHE_KEY', 'SomeCacheKey');
     }
 
     if( php_sapi_name() !== 'cli' && ( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) || !strlen( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) ) {
