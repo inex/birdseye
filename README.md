@@ -68,7 +68,7 @@ This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requ
 * PHP >= 5.5.9
 * Mbstring PHP Extension
 
-Download the release package and install on your server. E.g.:
+Download the release package **(ensure you get the latest version rather than the example version listed below!)** and install on your server. E.g.:
 
 ```sh
 # E.g. Ubuntu 16.04 LTS
@@ -76,8 +76,8 @@ apt-get install php-cgi php-mbstring php-xml
 # E.g. Ubuntu 14.04 LTS
 # apt-get install php5-cgi
 cd /srv
-wget https://github.com/inex/birdseye/releases/download/v1.0.3/birdseye-v1.0.3.tar.bz2
-tar jxf birdseye-v1.0.3.tar.bz2
+wget https://github.com/inex/birdseye/releases/download/v1.1.0/birdseye-v1.1.0.tar.bz2
+tar jxf birdseye-v1.1.0.tar.bz2
 cd birdseye-v1.0.3  # or whatever the resultant directory is called
 chown -R www-data: storage  # or the appropriate web user on your system
 ```
