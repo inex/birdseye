@@ -76,9 +76,9 @@ apt-get install php-cgi php-mbstring php-xml
 # E.g. Ubuntu 14.04 LTS
 # apt-get install php5-cgi
 cd /srv
-wget https://github.com/inex/birdseye/releases/download/v1.1.0/birdseye-v1.1.0.tar.bz2
-tar jxf birdseye-v1.1.0.tar.bz2
-cd birdseye-v1.0.3  # or whatever the resultant directory is called
+wget https://github.com/inex/birdseye/releases/download/v1.1.0/birdseye-vx.y.z.tar.bz2
+tar jxf birdseye-vx.y.z.tar.bz2
+cd birdseye-vx.y.z 
 chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
