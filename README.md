@@ -94,7 +94,7 @@ And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/ine
 
 ### Install from Source with Composer
 
-If you prefer to install from source with composer:
+If you prefer to install from source [with composer](https://getcomposer.org/download/):
 
 ```sh
 git clone https://github.com/inex/birdseye.git
