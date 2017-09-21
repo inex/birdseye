@@ -72,9 +72,9 @@ Download the release package **(ensure you get the latest version rather than th
 
 ```sh
 # E.g. Ubuntu 16.04 LTS
-apt-get install php-cgi php-mbstring php-xml
+apt-get install php-cgi php-mbstring php-xml unzip
 # E.g. Ubuntu 14.04 LTS
-# apt-get install php5-cgi
+# apt-get install php5-cgi unzip
 cd /srv
 wget https://github.com/inex/birdseye/releases/download/v1.1.0/birdseye-vx.y.z.tar.bz2
 tar jxf birdseye-vx.y.z.tar.bz2
