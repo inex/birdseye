@@ -147,7 +147,7 @@ with the assumption that we've named and located the Bird socket at that locatio
 If you have a single Bird daemon, you can skip DNS and just do:
 
 ```sh
-cp .exv.example .env
+cp .env.example .env
 ```
 
 The last thing you need to do is give the `www-data` (or the appropriate web server user) user permission to run the `birdc` script. Edit `/etc/sudoers` and add (example):
