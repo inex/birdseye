@@ -1,8 +1,8 @@
-# Bird's Eye - A Simple Secure Micro Service for Querying Bird
+# Bird's Eye - A Simple Secure Micro Service for Querying BIRD
 
-A simple **secure** PHP micro service to provide some Bird protocol / routing information via a HTTP API as JSON *(with an optional built-in looking glass implementation)*.
+A simple **secure** PHP micro service to provide some BIRD protocol / routing information via a HTTP API as JSON, with an optional built-in looking-glass implementation.
 
-This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.ripe.net/hackathon/ixp-tools/) just prior to [RIPE73](https://ripe73.ripe.net/) in Madrid, Spain. Since the hackathon, substanial improvements have been made.
+This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.ripe.net/hackathon/ixp-tools/) just prior to [RIPE73](https://ripe73.ripe.net/) in Madrid, Spain. Since the hackathon, substantial improvements have been made.
 
 The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
@@ -11,18 +11,18 @@ Author: [Barry O'Donovan](https://www.barryodonovan.com/contact), [INEX](https:/
 
 ## Live Examples
 
-INEX runs a number of Bird instances and many of them have a public looking glass powered by Bird's Eye as a standlone live example and also integrated with with IXP Manager as a frontend consumer. 
+INEX runs a number of BIRD instances and many of them have a public looking glass powered by Bird's Eye as a standalone live example and also integrated with IXP Manager as a frontend consumer.
 
 * INEX Cork IPv4 Router Collector: https://www.inex.ie/rc1-cork-ipv4/
 * INEX Cork IPv6 Router Collector: https://www.inex.ie/rc1-cork-ipv6/
 
 The landing pages for the above also document the API calls available.
 
-You can see the IXP Manager integration for ~30 Bird daemons at INEX at https://www.inex.ie/ixp/lg. [GRNET](https://grnet.gr/en/) have also a public IXP Manager integration at: https://portal.gr-ix.gr/lg.
+You can see the IXP Manager integration for ~30 BIRD daemons at INEX at https://www.inex.ie/ixp/lg. [GRNET](https://grnet.gr/en/) have also a public IXP Manager integration at: https://portal.gr-ix.gr/lg.
 
 ## Complementary Projects
 
-At the hackathon, the team also produced comsumers of this API:
+At the hackathon, the team also produced consumers of this API:
 
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
 * https://github.com/ecix/birdseye - Python based web consumer by Matthias Hannig
@@ -30,36 +30,32 @@ At the hackathon, the team also produced comsumers of this API:
 
 ## Rationale
 
-Historically, IXPs made route collector and route server information available via looking glasses. Over the past few years, many IXPs have selected Bird as their route server / collector BGP daemon for a number of good reasons.
+Historically, IXPs made route collector and route server information available via looking-glasses. Over the past few years, many IXPs have selected BIRD as their route server / collector BGP daemon for a number of good reasons.
 
-Bird is however lacking an API to allow IXPs to provide thise same looking glass type tools. More over, this also affects an IXP's ability to monitor these routing daemons and member sessions to them.
+BIRD lacks an API to allow IXPs to provide these looking glass type tools. Moreover, this also affects an IXP's ability to monitor these routing daemons and peering participant sessions to them.
 
 In a typical IXP, there will be six daemons per peering LAN:
 
  * two route servers and one route collector
- * a daemon per protocol
+ * separate daemon for ipv4 and ipv6
 
-Having looked at existing Bird LG implementations, I could not identify one that met my requirements. Specifically:
-
-1. One that could be bent to meet my requires in less time to (re)create this micro-service;
-2. Fitted my skill set for such bending (primarily PHP);
-3. Assured security.
+Having looked at existing BIRD LG implementations, INEX could not identify one that was designed with security in mind.  Bird's Eye was written with security as a primary consideration.
 
 ## Security
 
-As this is intended to be deployed on IXP's route servers / route collectors, security is vital. In that regard, I have made the following considerations:
+As this is intended to be deployed on an IXP's route server / route collector, security is vital. In that regard, the following considerations have been made:
 
-* Natural rate limiting via caching by default. All queries are cached for a (configurable) period of at least one minute. This means the most you can hit the Bird daemon for a specific request is once / minute.
+* Natural rate limiting via caching by default. All queries are cached for a (configurable) period of at least one minute. This means the most you can hit the BIRD daemon for a specific request is once per minute.
 * Built in rate limiter for queries that take variable parameters (e.g. route lookup).
 * Strict parameter parsing and checking.
-* Bundled `birdc` bash script for safe use via sudo (web process will require this to access the Bird socket).
-* `birdc` executed in *restricted* mode (allows show commands only).
+* Bundled `birdc` bash script for safe use via sudo - the web process will require this to access the BIRD socket.
+* `birdc` executed in *restricted* mode, to allow ''show'' commands only.
 
-This API was not designed with the notion of making it publically available. *It can be, but probably for route collectors rather than route servers in production.* Ideally it would be run on an internal private network and fronted by one of the looking glass frontends above that consume this API.
+This API was not designed with the notion of making it publicly available.  Ideally it would be run on an internal private network and fronted by one of the looking glass frontends above that consume this API, thereby providing multiple levels of API parameter validation.
 
 ## Outlook
 
-In an ideal world, this micro-service will be deprecated once the good folks who develop Bird release a version with a HTTP JSON API built in. This is a (hopefully) temporary solution to plug a gap.
+In an ideal world, this micro-service will be deprecated once the BIRD developers release a version with a built-in HTTP JSON API. This is a (hopefully) temporary solution to plug a gap.
 
 ## Installation
 
@@ -78,7 +74,7 @@ apt-get install php-cgi php-mbstring php-xml unzip
 cd /srv
 wget https://github.com/inex/birdseye/releases/download/v1.1.0/birdseye-vx.y.z.tar.bz2
 tar jxf birdseye-vx.y.z.tar.bz2
-cd birdseye-vx.y.z 
+cd birdseye-vx.y.z
 chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
@@ -105,9 +101,9 @@ chown -R www-data: storage  # or the appropriate web user on your system
 
 ## Configuration
 
-I have tried to make configuration as easy as possible while allowing for the fact that we'll typically have *at least* two Bird processes to query on the same server. Explanation is easiest with an example:
+We have tried to make configuration as easy as possible while allowing for the fact that there will typically be at least two BIRD processes to query on the same server. An explanation is easiest with an example:
 
-Let's say we have a route server providing IPv4 and IPv6 services to two peering LANs on a server called `rs1.inex.ie`.
+Let's say there is a route server called `rs1.inex.ie` which provides both IPv4 and IPv6 services to two separate peering LANs.
 
 To query the individual four daemons, we create DNS aliases as follows:
 
@@ -118,7 +114,7 @@ rs1-lan2-ipv4.inex.ie IN CNAME rs1.inex.ie
 rs1-lan2-ipv6.inex.ie IN CNAME rs1.inex.ie
 ```
 
-The micro-service will extract the first element of the hostname (e.g. `rs1-lan1-ipv4`, see beginning of `bootstrap/app.php`) and look for an environment file in the applications root directory (say `/srv/birdseye`) named as follows for the above examples:
+The micro-service will extract the first element of the hostname (e.g. `rs1-lan1-ipv4`, see beginning of `bootstrap/app.php`) and look for an environment file in the applications root directory (e.g. `/srv/birdseye`) named as follows for the above examples:
 
 ```
 rs1-lan1-ipv4.inex.ie -> /srv/birdseye/birdseye-rs1-lan1-ipv4.env
@@ -134,7 +130,7 @@ cd /srv/birdseye
 cp .env.example birdseye-rs1-lan1-ipv4.env
 ```
 
-If you do not want to use hostnames and your Bird's Eye install is behind a proxy, you can set the same element as above in the HTTP request header: `X-BIRDSEYE`. See the Varnish example below in the *Serving Behind a Proxy* section.
+If you do not want to use hostnames and your Bird's Eye installation is behind a proxy, you can set the same element as above in the HTTP request header: `X-BIRDSEYE`. See the Varnish example below in the *Serving Behind a Proxy* section.
 
 This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) we'd set it to:
 
@@ -142,9 +138,9 @@ This example file has sane defaults but you need to edit it and fix the `BIRDC` 
 BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.ctl"
 ```
 
-with the assumption that we've named and located the Bird socket at that location.
+with the assumption that we've named and located the BIRD socket at that location.
 
-If you have a single Bird daemon, you can skip DNS and just do:
+If you have a single BIRD daemon, you can skip DNS and just do:
 
 ```sh
 cp .env.example .env
@@ -158,7 +154,7 @@ www-data        ALL=(ALL)       NOPASSWD: /srv/birdseye/bin/birdc
 
 ## Built in Looking Glass
 
-This API has an optional built in looking glass which utilises the API internally. This is mildly inefficient as it means a json_encode/json_decode of the same data but it proves the API, keeps us honest and it not a major performance overhead.
+This API has an optional built-in looking glass which utilises the API internally. This is mildly inefficient as it means a json_encode/json_decode of the same data but it proves the API, keeps us honest and the performance overhead is not excessive.
 
 To enable it, set the following parameter to true in your configuration file:
 
@@ -170,7 +166,7 @@ This will activate the looking glass routes, add a link to the header and make t
 
 ## Disabling Caching on a Per-Request Basis
 
-Caching was implemented to provide a natural rate-limiting mechanism for security and to reduce the load on Bird.
+Caching was implemented to provide a natural rate-limiting mechanism for security and to reduce the load on BIRD.
 
 In environments where you already have security in place (e.g. authenticated users on IXP Manager), you may want to disable caching for those requests. You can whitelist a set of IP addresses for this purpose by:
 
@@ -180,7 +176,7 @@ cp skipcache_ips.php.dist skipcache_ips.php
 
 and then editing `skipcache_ips.php` to add your (for example) IXP Manager server's IP address.
 
-If you then tag `?use_cache=0` to API requests, the cache will be avoided. Note that the results from Bird will still be added to the cache so standard requests will still benefit with the freshest data.
+If you then tag `?use_cache=0` to API requests, the cache will be avoided. Note that the results from BIRD will still be added to the cache so standard requests will still benefit with the freshest data.
 
 ## Serving Behind a Proxy
 
@@ -204,9 +200,9 @@ The code to work out what URL should be used in links [can be seen here](https:/
   * otherwise if `$_SERVER['HTTP_X_FORWARDED_PROTO']` (`X-Forwarded-Proto` in the HTTP request header) is `https`, then `https://` is forced.
   * otherwise it is `http://`
 * if `$_SERVER['HTTP_X_FORWARDED_HOST']` (`X-Forwarded-Host` in the HTTP request header) is set, then that host is used in the URL. Otherwise it is worked out by PHP in the normal manner.
-* if `$_SERVER['HTTP_X_URL']` (`X-Url` in the HTTP request header) is set, then that is tacked onto the hostname as a path / URL prefix.
+* if `$_SERVER['HTTP_X_URL']` (`X-Url` in the HTTP request header) is set, then that is appended to the hostname as a path / URL prefix.
 
-For example, the live demos above (such as https://www.inex.ie/rc1-cork-ipv4/) is served via a Varnish proxy to an internal host with the following Varish configuration:
+For example, the live demos above (such as https://www.inex.ie/rc1-cork-ipv4/) is served via a Varnish proxy to an internal host with the following Varnish configuration:
 
 ```
 backend rc1_cork_ipv4 {
@@ -241,17 +237,17 @@ Using the above logic, the resolves to a base URL of: `https://www.inex.ie/rc1-c
 
 ## Nagios Plugins
 
-There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 Bird daemons and ~350 route server sessions.
+There are two basic Nagios plugins in the the `bin/` directory which can be downloaded to your Nagios server. As of October 2016, these were in production use at [INEX](https://www.inex.ie/) monitoring 24 BIRD daemons and ~350 route server sessions.
 
-The first monitors the basic status of the Bird daemon:
+The first monitors the basic status of the BIRD daemon:
 
 ```
-# Bird daemon stopped:
+# BIRD daemon stopped:
 $ ./nagios-check-birdseye.php -a http://rc1q-cix-ipv4.inex.ie/api
 CRITICAL: Could not query Bird daemon
 $ echo $?
 2
-# Bird daemon running:
+# BIRD daemon running:
 $ ./nagios-check-birdseye.php -a http://rc1q-cix-ipv4.inex.ie/api
 OK: Bird 1.5.0. Bird's Eye 1.0.0. Router ID 185.1.69.126. Uptime: 0 days. Last Reconfigure: 2016-10-26 11:22:35. 0 BGP sessions up of 0.
 $ echo $?
@@ -298,13 +294,13 @@ Prefix limit checking can be disabled with a `-l` option.
 
 ## Vagrant / Development
 
-This repository includes a [Vagrant](https://www.vagrantup.com/) file with a 
-[bootstrap script](https://github.com/inex/birdseye/blob/master/Vagrant-bootstrap.sh) which, 
+This repository includes a [Vagrant](https://www.vagrantup.com/) file with a
+[bootstrap script](https://github.com/inex/birdseye/blob/master/Vagrant-bootstrap.sh) which,
 on first run of `vagrant up` will:
 
 * Boot an instance of Ubuntu 16.04 LTS.
 * Update / upgrade all packages.
-* Installs latest stable bird from [CZ.NIC's Ubuntu PPA](https://launchpad.net/~cz.nic-labs) (at 
+* Installs latest stable BIRD from [CZ.NIC's Ubuntu PPA](https://launchpad.net/~cz.nic-labs) (at
 time of writing this is 1.6.3 with Large BGP Community support).
 * Installs and configures Lighttpd ([config](https://github.com/inex/birdseye/blob/master/data/vagrant/lighttpd.conf)).
 * Spins up the lab IPv4 and IPv6 environments (see `start.sh` scripts in `data/bird-lab/ipv[46]`).
