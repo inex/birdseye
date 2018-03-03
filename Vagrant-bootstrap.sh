@@ -8,7 +8,7 @@ apt install software-properties-common python-software-properties
 
 add-apt-repository -yu ppa:cz.nic-labs/bird
 
-apt install bird quagga
+apt install bird quagga joe
 
 sleep 1
 
