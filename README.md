@@ -4,7 +4,7 @@ A simple **secure** PHP micro service to provide some BIRD protocol / routing in
 
 This is the winning project from the [RIPE IXP Tools Hackaton](https://atlas.ripe.net/hackathon/ixp-tools/) just prior to [RIPE73](https://ripe73.ripe.net/) in Madrid, Spain. Since the hackathon, substantial improvements have been made.
 
-The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed RIPE73 [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) presentation (kindly delivered by @nickhilliard) can be found here: [[KEY](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye-OpenSourceWG.pdf)] [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
+The end of workshop presentation can be found here: [[Keynote](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.key)] [[PDF](https://dl.dropboxusercontent.com/u/42407394/2016-10-RIPE73-IXP-Tools/2016-10-RIPE73-IXP-Tools-BirdsEye.pdf)]. A more detailed presentation to the [Open Source Working Group](https://ripe73.ripe.net/programme/meeting-plan/os-wg/) at RIPE73, delivered by @nickhilliard, can be found here: [[VIDEO](https://ripe73.ripe.net/archives/video/1505)]
 
 Author: [Barry O'Donovan](https://www.barryodonovan.com/contact), [INEX](https://www.inex.ie/), Dublin, Ireland
 
