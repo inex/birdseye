@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+### BUILD WITH --no-dev --prefer-dist for composer!!
+
 # sample package command line
 
 # param $1 should be the tag - e.g. v1.0.1 - which is assumed to be the current repo state
