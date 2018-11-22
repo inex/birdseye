@@ -18,7 +18,7 @@ INEX runs a number of BIRD instances and many of them have a public looking glas
 
 The landing pages for the above also document the API calls available.
 
-You can see the IXP Manager integration for ~30 BIRD daemons at INEX at https://www.inex.ie/ixp/lg. [GRNET](https://grnet.gr/en/) have also a public IXP Manager integration at: https://portal.gr-ix.gr/lg.
+You can see the IXP Manager integration for ~30 BIRD daemons at INEX at https://www.inex.ie/ixp/lg. [GR-IX](https://www.gr-ix.gr/) have also a public IXP Manager integration at: https://portal.gr-ix.gr/lg.
 
 ## Complementary Projects
 
