@@ -8,9 +8,8 @@ use DateTime;
 
 class Bgp extends ProtocolParser
 {
-    public function __contrust( $data ) {
-        parent::__contrust($data);
-        return $this;
+    public function __construct( $data ) {
+        parent::__construct($data);
     }
 
     public function parse() {
@@ -20,21 +19,15 @@ class Bgp extends ProtocolParser
 
         foreach( preg_split("/((\r?\n)|(\r\n?))/", $this->data()) as $line ) {
 
-            if( preg_match( "/^(\w+)\s+BGP\s+(\w+)\s+(\w+)\s+([0-9\-\:]+)(\s*|\s+(\w+).*)$/", $line, $matches ) ) {
-                // pb_0109_as42    BGP      t_0109_as42       up     2016-09-30  Established
-                // pb_0081_as30900 BGP      t_0081_as30900    start  2015-11-27  Active        Socket: No route to host
-                // R222x1          BGP      t_R222x1          down   15:03:01
-
+            if( preg_match( "/^(\w+)\s+BGP\s+([\-\w]+)\s+(\w+)\s+([0-9\-]+\s[0-9\:]+)(\s*|\s+(\w+).*)$/", $line, $matches ) ) {
+                // pb_0109_as42    BGP      t_0109_as42       up     2016-09-30 14:18:49  Established
+                // pb_0081_as30900 BGP      t_0081_as30900    start  2015-11-27 14:18:49  Active        Socket: No route to host
+                // R244x1     BGP        ---        up     2019-01-23 14:18:49  Established
                 $p['protocol']      = $matches[1];
                 $p['bird_protocol'] = 'BGP';
                 $p['table']         = $matches[2];
                 $p['state']         = $matches[3];
-                if( strpos($matches[4], ':' ) ) {
-                    $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[4] )->format('c');
-                } else {
-                    $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] . ' 00:00:00' )->format('c');
-                }
-
+                $p['state_changed'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[4] )->format('c');
                 $p['connection']    = trim( $matches[5] ) ? $matches[5] : '';
             }
             else if( preg_match( "/^\s+Description:\s+(.*)\s*$/", $line, $matches ) ) {
@@ -46,6 +39,10 @@ class Bgp extends ProtocolParser
                         $p['description_short'] = $matches[1];
                     }
                 }
+            }
+            else if( preg_match( "/^\s+Table:\s+(.*+)\s*$/", $line, $matches ) ) {
+                //   Table:          t_R244x1
+                $p['table'] = $matches[1];
             }
             else if( preg_match( "/^\s+Preference:\s+([0-9]+)\s*$/", $line, $matches ) ) {
                 //   Preference:     100
@@ -67,12 +64,12 @@ class Bgp extends ProtocolParser
                 //     Action:       restart
                 $p['limit_action'] = $matches[1];
             }
-            else if( preg_match( "/^\s+Routes:\s+(\d+)\s+imported,\s+(\d+)\s+exported,\s+(\d+)\s+preferred\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+Routes:\s+(\d+)\s+imported,\s+(\d+)\s+exported\s*$/", $line, $matches ) ) {
                 //   Routes:         35 imported, 41127 exported, 2590 preferred
                 $p['routes'] = [
                     'imported'  => intval( $matches[1] ),
                     'exported'  => intval( $matches[2] ),
-                    'preferred' => intval( $matches[3] ),
+                    'preferred' => 0,
                 ];
             }
             else if( preg_match( "/^\s+Import updates:\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$/", $line, $matches ) ) {

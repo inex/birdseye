@@ -6,9 +6,8 @@ use App\Bird\Parser;
 
 abstract class Protocol extends Parser {
 
-    public function __contrust( $data ) {
-        parent::__contrust($data);
-        return $this;
+    public function __construct( $data ) {
+        parent::__construct($data);
     }
 
 }

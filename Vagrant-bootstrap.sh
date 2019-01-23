@@ -4,16 +4,19 @@ apt update
 
 apt full-upgrade -y
 
-apt install software-properties-common python-software-properties
+apt install -y software-properties-common python-software-properties
 
-add-apt-repository -yu ppa:cz.nic-labs/bird
-
-apt install bird quagga joe
+apt install -y build-essential libssh-dev libreadline-dev libncurses-dev flex bison quagga joe checkinstall
 
 sleep 1
 
-killall bird
-killall bird6
+cd /usr/src
+wget ftp://bird.network.cz/pub/bird/bird-2.0.3.tar.gz
+tar zxf  bird-2.0.3.tar.gz
+cd bird-2.0.3/
+./configure  --prefix=/usr --sysconfdir=/etc
+make -j2
+checkinstall -y
 
 # install packages for Birdseye
 apt install -y lighttpd php-cgi php-mbstring php-xml

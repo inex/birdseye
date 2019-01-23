@@ -7,9 +7,8 @@ use DateTime;
 
 class Count extends Parser
 {
-    public function __contrust( $data ) {
-        parent::__contrust($data);
-        return $this;
+    public function __construct( $data ) {
+        parent::__construct($data);
     }
 
     public function parse() {

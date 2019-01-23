@@ -1,0 +1,174 @@
+BIRD 2.0.3 ready.
+Name       Proto      Table      State  Since         Info
+device1    Device     ---        up     2019-01-23 14:18:45
+
+pp_R111x1  Pipe       ---        up     2019-01-23 14:18:45  master4 <=> t_R111x1
+  Description:    Pipe for AS111 - VLAN Interface
+  Channel main
+    Table:          master4
+    Peer table:     t_R111x1
+    Import state:   up
+    Export state:   up
+    Import filter:  ACCEPT
+    Export filter:  ACCEPT
+  Routes:         4 imported, 8 exported
+  Route change stats:     received   rejected   filtered    ignored   accepted
+    Import updates:             12          8          0          0          4
+    Import withdraws:            0          0        ---          0          0
+    Export updates:             12          4          0          0          8
+    Export withdraws:            0          0        ---          0          0
+
+R111x1     BGP        ---        up     2019-01-23 14:18:50  Established
+  Description:    Test Member 1 - Peer 1
+  BGP state:          Established
+    Neighbor address: 192.0.2.111
+    Neighbor AS:      111
+    Neighbor ID:      192.0.2.111
+    Local capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+      Enhanced refresh
+      Long-lived graceful restart
+    Neighbor capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+    Session:          external multihop route-server AS4
+    Source address:   192.0.2.100
+    Hold timer:       147.392/180
+    Keepalive timer:  16.989/60
+  Channel ipv4
+    State:          UP
+    Table:          t_R111x1
+    Preference:     100
+    Input filter:   (unnamed)
+    Output filter:  ACCEPT
+    Import limit:   10000
+      Action:       restart
+    Routes:         4 imported, 8 exported
+    Route change stats:     received   rejected   filtered    ignored   accepted
+      Import updates:              4          0          0          0          4
+      Import withdraws:            0          0        ---          0          0
+      Export updates:             12          4          0        ---          8
+      Export withdraws:            0        ---        ---        ---          0
+    BGP Next hop:   192.0.2.100
+    IGP IPv4 table: t_R111x1
+
+pp_R222x1  Pipe       ---        up     2019-01-23 14:18:45  master4 <=> t_R222x1
+  Description:    Pipe for AS222 - VLAN Interface
+  Channel main
+    Table:          master4
+    Peer table:     t_R222x1
+    Import state:   up
+    Export state:   up
+    Import filter:  ACCEPT
+    Export filter:  ACCEPT
+  Routes:         4 imported, 8 exported
+  Route change stats:     received   rejected   filtered    ignored   accepted
+    Import updates:             12          8          0          0          4
+    Import withdraws:            0          0        ---          0          0
+    Export updates:             12          4          0          0          8
+    Export withdraws:            0          0        ---          0          0
+
+R222x1     BGP        ---        up     2019-01-23 14:18:49  Established
+  Description:    Test Member 2 - Peer 1
+  BGP state:          Established
+    Neighbor address: 192.0.2.222
+    Neighbor AS:      222
+    Neighbor ID:      192.0.2.222
+    Local capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+      Enhanced refresh
+      Long-lived graceful restart
+    Neighbor capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+    Session:          external multihop route-server AS4
+    Source address:   192.0.2.100
+    Hold timer:       123.875/180
+    Keepalive timer:  48.793/60
+  Channel ipv4
+    State:          UP
+    Table:          t_R222x1
+    Preference:     100
+    Input filter:   ACCEPT
+    Output filter:  ACCEPT
+    Import limit:   10000
+      Action:       restart
+    Routes:         4 imported, 8 exported
+    Route change stats:     received   rejected   filtered    ignored   accepted
+      Import updates:              4          0          0          0          4
+      Import withdraws:            0          0        ---          0          0
+      Export updates:             12          4          0        ---          8
+      Export withdraws:            0        ---        ---        ---          0
+    BGP Next hop:   192.0.2.100
+    IGP IPv4 table: t_R222x1
+
+pp_R244x1  Pipe       ---        up     2019-01-23 14:18:45  master4 <=> t_R244x1
+  Description:    Pipe for AS244 - VLAN Interface
+  Channel main
+    Table:          master4
+    Peer table:     t_R244x1
+    Import state:   up
+    Export state:   up
+    Import filter:  ACCEPT
+    Export filter:  ACCEPT
+  Routes:         4 imported, 8 exported
+  Route change stats:     received   rejected   filtered    ignored   accepted
+    Import updates:             12          8          0          0          4
+    Import withdraws:            0          0        ---          0          0
+    Export updates:             12          4          0          0          8
+    Export withdraws:            0          0        ---          0          0
+
+R244x1     BGP        ---        up     2019-01-23 14:18:49  Established
+  Description:    Test Member 3 - Peer 1
+  BGP state:          Established
+    Neighbor address: 192.0.2.244
+    Neighbor AS:      244
+    Neighbor ID:      192.0.2.244
+    Local capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+      Enhanced refresh
+      Long-lived graceful restart
+    Neighbor capabilities
+      Multiprotocol
+        AF announced: ipv4
+      Route refresh
+      Graceful restart
+      4-octet AS numbers
+    Session:          external multihop route-server AS4
+    Source address:   192.0.2.100
+    Hold timer:       126.749/180
+    Keepalive timer:  38.066/60
+  Channel ipv4
+    State:          UP
+    Table:          t_R244x1
+    Preference:     100
+    Input filter:   ACCEPT
+    Output filter:  ACCEPT
+    Import limit:   10000
+      Action:       restart
+    Routes:         4 imported, 8 exported
+    Route change stats:     received   rejected   filtered    ignored   accepted
+      Import updates:              4          0          0          0          4
+      Import withdraws:            0          0        ---          0          0
+      Export updates:             12          4          0        ---          8
+      Export withdraws:            0        ---        ---        ---          0
+    BGP Next hop:   192.0.2.100
+    IGP IPv4 table: t_R244x1

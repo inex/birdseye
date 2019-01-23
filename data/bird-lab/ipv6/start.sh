@@ -8,7 +8,7 @@
 
 mkdir -p /var/run/bird
 
-/usr/sbin/bird6 -c rs.conf -s /var/run/bird/rs6.sock -P /var/run/bird/rs6.pid
+/usr/sbin/bird -c rs.conf -s /var/run/bird/rs6.sock -P /var/run/bird/rs6.pid
 
 /usr/lib/quagga/bgpd  -u quagga -f client-quagga-111.conf -i /var/run/quagga/client6-111 -z /var/run/quagga/client6-111.sock -l fc00::111 -A fc00::111 -nd
 /usr/lib/quagga/bgpd  -u quagga -f client-quagga-222.conf -i /var/run/quagga/client6-222 -z /var/run/quagga/client6-222.sock -l fc00::222 -A fc00::222 -nd

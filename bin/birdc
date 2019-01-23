@@ -4,7 +4,7 @@
 
 # requires:
 #
-# parameter $1: either -4 or -6 to chose between birdc and birdc6
+# parameter $1: either -4 or -6 to chose between birdc and birdc6, or -2 for Bird v2
 # parameter $2 $3: -s /path/to/bird/socket
 IFS=" "
 
@@ -12,6 +12,8 @@ if [[ "$1" = "-4" ]]; then
     CMD=$(which birdc)
 elif [[ "$1" = "-6" ]]; then
     CMD=$(which birdc6)
+elif [[ "$1" = "-2" ]]; then
+    CMD=$(which birdc)
 else
     echo "Bad parameters"
     exit 1

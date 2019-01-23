@@ -7,11 +7,20 @@ use DateTime;
 
 class Routes extends Parser
 {
-    public function __contrust( $data ) {
-        parent::__contrust($data);
-        return $this;
+    public function __construct( $data ) {
+        parent::__construct($data);
     }
 
+//172.18.1.0/24        unreachable [R111x1 2019-01-23 14:18:51 from 192.0.2.111] * (100/-) [AS111i]
+//Type: BGP univ
+//BGP.origin: IGP
+//BGP.as_path: 111
+//BGP.next_hop: 192.0.2.111
+//BGP.med: 0
+//BGP.local_pref: 100
+//BGP.community: (999,111)
+//BGP.large_community: (999, 1, 111)
+//
     public function parse() {
         $routes  = [];
         $r       = [];
@@ -33,7 +42,7 @@ class Routes extends Parser
                 continue;
             }
 
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|unreachable)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
                 // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
                 // 2a02:2078::/32 via 2001:7f8:18:210::15 on ens160 [pb_as43760_vli226_ipv6 2016-10-13 from 2001:7f8:18:210::8] (100) [AS47720i]
                 // 94.247.48.52/30    via 93.92.8.65 on eth1 [pb_core_rl01 2016-10-19 from 93.92.8.20] * (100/65559) [?]
@@ -110,7 +119,7 @@ class Routes extends Parser
                 $m = substr( trim( $matches[1] ), 1, -1 );
                 foreach( explode( ') (', $m ) as $community ) {
                     if( preg_match( "/^(\d+),\s*(\d+),\s*(\d+)/", trim( $community ), $matches ) ) {
-                        $r['bgp']['large_communities'][] = [ intval( $matches[1] ), intval( $matches[2] ), intval( $matches[3] )  ];
+                        $r['bgp']['large_communities'][] = [ (int)$matches[1], (int)$matches[2], (int)$matches[3] ];
                     }
                 }
             }
@@ -125,19 +134,27 @@ class Routes extends Parser
     }
     
     private function mainRouteDetail( $matches, &$r ) {
+
+        if( $matches[2] === "unreachable" ) {
+            $m = $matches;
+            $matches = [];
+            $matches[1] = $m[1];
+            $matches[2] = $m[2];
+            $matches[3] = $m[2];
+            $matches[4] = $m[5];
+            $matches[5] = $m[6];
+            $matches[6] = $m[7];
+            $matches[7] = $m[8];
+            $matches[8] = $m[9];
+        }
+
         $r['network']         = $matches[1];
         $r['gateway']         = $matches[2];
         $r['interface']       = $matches[3];
         $r['from_protocol']   = $matches[4];
 
-        if( preg_match( '/^\d\d\d\d\-\d{1,2}\-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}$/', $matches[5] ) ) {
+        if( preg_match( '/^\d\d\d\d\-\d\d\-\d\d\s\d\d:\d\d:\d\d$/', $matches[5] ) ) {
             $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] )->format('c');
-        } else if( preg_match( '/^\d{1,2}:\d{1,2}:\d{1,2}$/', $matches[5] ) ) {
-            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', date('Y-m-d') . ' ' . $matches[5] )->format('c');
-        } else if( preg_match( '/^\d\d\d\d\-\d{1,2}\-\d{1,2}$/', $matches[5] ) ) {
-            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] . ' 00:00:00' )->format('c');
-        } else {
-            $r['age'] = '0000-00-00T00:00:00+00:00';
         }
 
         $r['learnt_from']     = $matches[6];
