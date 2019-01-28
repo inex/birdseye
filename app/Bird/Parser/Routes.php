@@ -42,12 +42,13 @@ class Routes extends Parser
                 continue;
             }
 
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|unreachable)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|unreachable)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\-\d*){0,1}\).*$/", $line, $matches ) ) {
                 // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
                 // 2a02:2078::/32 via 2001:7f8:18:210::15 on ens160 [pb_as43760_vli226_ipv6 2016-10-13 from 2001:7f8:18:210::8] (100) [AS47720i]
                 // 94.247.48.52/30    via 93.92.8.65 on eth1 [pb_core_rl01 2016-10-19 from 93.92.8.20] * (100/65559) [?]
                 // 5.159.40.0/21      via 193.242.111.74 on eth1 [pb_0136_as61194 2016-03-12] * (100) [AS61194i]
-                //  203.159.70.0/24    via 203.159.68.3 on eth0.99 [pb_0065_as63528 2018-07-01] * (100) [AS63528i]
+                // 203.159.70.0/24    via 203.159.68.3 on eth0.99 [pb_0065_as63528 2018-07-01] * (100) [AS63528i]
+                // 172.24.1.0/24        unreachable [R244x1 2019-01-23 14:18:50 from 192.0.2.244] * (100/-) [AS244i]
 
                 // this is the start of a route definition - so store the previous one if it exists:
                 if( $r !== [] ) {
@@ -134,7 +135,6 @@ class Routes extends Parser
     }
     
     private function mainRouteDetail( $matches, &$r ) {
-
         if( $matches[2] === "unreachable" ) {
             $m = $matches;
             $matches = [];
@@ -149,7 +149,7 @@ class Routes extends Parser
         }
 
         $r['network']         = $matches[1];
-        $r['gateway']         = $matches[2];
+        $r['gateway']         = 'none';
         $r['interface']       = $matches[3];
         $r['from_protocol']   = $matches[4];
 
