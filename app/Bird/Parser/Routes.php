@@ -42,12 +42,15 @@ class Routes extends Parser
                 continue;
             }
 
-            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|unreachable)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            if( preg_match( "/^([0-9a-f\.\:\/]+)\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\-\d*){0,1}\).*$/", $line, $matches ) ) {
                 // 188.93.0.0/21      via 193.242.111.54 on eth1   [pb_0127_as42227 2016-10-09] * (100) [AS42227i]
                 // 2a02:2078::/32 via 2001:7f8:18:210::15 on ens160 [pb_as43760_vli226_ipv6 2016-10-13 from 2001:7f8:18:210::8] (100) [AS47720i]
                 // 94.247.48.52/30    via 93.92.8.65 on eth1 [pb_core_rl01 2016-10-19 from 93.92.8.20] * (100/65559) [?]
                 // 5.159.40.0/21      via 193.242.111.74 on eth1 [pb_0136_as61194 2016-03-12] * (100) [AS61194i]
-                //  203.159.70.0/24    via 203.159.68.3 on eth0.99 [pb_0065_as63528 2018-07-01] * (100) [AS63528i]
+                // 203.159.70.0/24    via 203.159.68.3 on eth0.99 [pb_0065_as63528 2018-07-01] * (100) [AS63528i]
+                // 172.24.1.0/24        unreachable [R244x1 2019-01-23 14:18:50 from 192.0.2.244] * (100/-) [AS244i]
+                // 70.40.15.0/24        unicast [pb_0003_as42 2019-01-28 10:58:03] * (100) [AS42i]
+                // 192.175.48.0/24      blackhole [static_as112 2019-01-29 11:57:09] * (200)
 
                 // this is the start of a route definition - so store the previous one if it exists:
                 if( $r !== [] ) {
@@ -56,7 +59,7 @@ class Routes extends Parser
                 }
                 $this->mainRouteDetail( $matches, $r );
             }
-            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+|\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
                 // second entry for previous route
                 if( $r == [] ) {
                     // something's not right:
@@ -72,6 +75,11 @@ class Routes extends Parser
                     array_unshift( $matches, $regMatch );
                 }
                 $this->mainRouteDetail( $matches, $r );
+            }
+            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+).*$/", $line, $matches ) ) {
+                //      via 172.30.201.110 on eth0  (Bird v2)
+                $r['gateway']         = $matches[1];
+                $r['interface']       = $matches[2];
             }
             else if( preg_match( "/^\s+Type:\s+(.*)\s*$/", $line, $matches ) ) {
                 // 	Type: BGP unicast univ
@@ -140,8 +148,7 @@ class Routes extends Parser
     }
     
     private function mainRouteDetail( $matches, &$r ) {
-
-        if( $matches[2] === "unreachable" ) {
+        if( preg_match( "/^\w+$/", $matches[2] ) ) {
             $m = $matches;
             $matches = [];
             $matches[1] = $m[1];
@@ -156,7 +163,7 @@ class Routes extends Parser
 
         $r['network']         = $matches[1];
         $r['gateway']         = $matches[2];
-        $r['interface']       = $matches[3];
+        $r['interface']       = 'none';
         $r['from_protocol']   = $matches[4];
 
         if( preg_match( '/^\d\d\d\d\-\d\d\-\d\d\s\d\d:\d\d:\d\d$/', $matches[5] ) ) {
@@ -164,8 +171,8 @@ class Routes extends Parser
         }
 
         $r['learnt_from']     = $matches[6];
-        $r['primary']         = $matches[7] == '*' ? true : false;
-        $r['metric']          = intval( $matches[8] );
+        $r['primary']         = $matches[7] === '*' ? true : false;
+        $r['metric']          = (int) $matches[8];
         return $r;
     }
 }
