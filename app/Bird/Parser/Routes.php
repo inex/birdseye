@@ -132,7 +132,7 @@ class Routes extends Parser
                     if( preg_match( "/^(\d+),\s*(\d+),\s*(\d+)/", trim( $community ), $matches ) ) {
                         $c = [ (int)$matches[1], (int)$matches[2], (int)$matches[3] ];
                         if( !isset( $r['bgp']['large_communities'] ) || !in_array( $c, $r['bgp']['large_communities'] ) ) {
-                            $r['bgp']['large_communities'][] = [ $c ];
+                            $r['bgp']['large_communities'][] = $c;
                         }
                     }
                 }
