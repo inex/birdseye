@@ -118,7 +118,7 @@ class Routes extends Parser
                 foreach( explode( ' ', trim( $matches[1] ) ) as $community ) {
                     if( preg_match( "/^\((\d+),(\d+)\)/", $community, $matches ) ) {
                         $c = [ intval( $matches[1] ), intval( $matches[2] ) ];
-                        if( !in_array( $c, $r['bgp']['communities'] ) ) {
+                        if( !isset( $r['bgp']['communities'] ) || !in_array( $c, $r['bgp']['communities'] ) ) {
                             $r['bgp']['communities'][] = $c;
                         }
                     }
@@ -131,7 +131,7 @@ class Routes extends Parser
                 foreach( explode( ') (', $m ) as $community ) {
                     if( preg_match( "/^(\d+),\s*(\d+),\s*(\d+)/", trim( $community ), $matches ) ) {
                         $c = [ (int)$matches[1], (int)$matches[2], (int)$matches[3] ];
-                        if( !in_array( $c, $r['bgp']['large_communities'] ) ) {
+                        if( !isset( $r['bgp']['large_communities'] ) || !in_array( $c, $r['bgp']['large_communities'] ) ) {
                             $r['bgp']['large_communities'][] = [ $c ];
                         }
                     }
