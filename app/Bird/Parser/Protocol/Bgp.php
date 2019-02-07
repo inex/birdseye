@@ -141,11 +141,13 @@ class Bgp extends ProtocolParser
             }
             else if( preg_match( "/^\s+Hold timer:\s+([\d\.]+)\/([\d\.]+)\s*$/", $line, $matches ) ) {
                 //     Hold timer:       124.5/180
-                $p['hold_timer'] = intval( $matches[2] );
+                $p['hold_timer']     = intval( $matches[2] );
+                $p['hold_timer_now'] = intval( $matches[1] );
             }
             else if( preg_match( "/^\s+Keepalive timer:\s+([\d\.]+)\/([\d\.]+)\s*$/", $line, $matches ) ) {
                 //     Keepalive timer:  39.5/60
-                $p['keepalive'] = intval( $matches[2] );
+                $p['keepalive']     = intval( $matches[2] );
+                $p['keepalive_now'] = intval( $matches[1] );
             }
 
         }
