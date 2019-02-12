@@ -139,15 +139,22 @@ class Bgp extends ProtocolParser
                 //     Route limit:      35/1000
                 $p['route_limit_at'] = intval( $matches[1] );
             }
-            else if( preg_match( "/^\s+Hold timer:\s+(\d+)\/(\d+)\s*$/", $line, $matches ) ) {
-                //     Hold timer:       124/180
-                $p['hold_timer'] = intval( $matches[2] );
+            else if( preg_match( "/^\s+Hold timer:\s+([\d\.]+)\/([\d\.]+)\s*$/", $line, $matches ) ) {
+                //     Hold timer:       124.5/180
+                $p['hold_timer']     = intval( $matches[2] );
+                $p['hold_timer_now'] = intval( $matches[1] );
             }
-            else if( preg_match( "/^\s+Keepalive timer:\s+(\d+)\/(\d+)\s*$/", $line, $matches ) ) {
-                //     Keepalive timer:  39/60
-                $p['keepalive'] = intval( $matches[2] );
+            else if( preg_match( "/^\s+Keepalive timer:\s+([\d\.]+)\/([\d\.]+)\s*$/", $line, $matches ) ) {
+                //     Keepalive timer:  39.5/60
+                $p['keepalive']     = intval( $matches[2] );
+                $p['keepalive_now'] = intval( $matches[1] );
             }
 
+        }
+
+        // Bird 2
+        if( !isset( $p['route_limit_at'] ) && isset( $p['routes']['imported'] ) ) {
+            $p['route_limit_at'] = $p['routes']['imported'];
         }
 
         return $p;

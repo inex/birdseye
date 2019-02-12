@@ -59,7 +59,7 @@ class Routes extends Parser
                 }
                 $this->mainRouteDetail( $matches, $r );
             }
-            else if( preg_match( "/^\s+via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+|\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\d+){0,1}\).*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+(via\s+([0-9a-f\.\:]+)\s+on\s+([a-zA-Z0-9_\.\-\/]+)|\w+)\s+\[(\w+)\s+([0-9\-\:]+(?:\s[0-9\-\:]+){0,1})(?:\s+from\s+([0-9a-f\.\:\/]+)){0,1}\]\s+(?:(\*)\s+){0,1}\((\d+)(?:\/\-\d*){0,1}\).*$/", $line, $matches ) ) {
                 // second entry for previous route
                 if( $r == [] ) {
                     // something's not right:
@@ -117,7 +117,10 @@ class Routes extends Parser
                 // 	BGP.community: (0,31122) (0,6543)
                 foreach( explode( ' ', trim( $matches[1] ) ) as $community ) {
                     if( preg_match( "/^\((\d+),(\d+)\)/", $community, $matches ) ) {
-                        $r['bgp']['communities'][] = [ intval( $matches[1] ), intval( $matches[2] ) ];
+                        $c = [ intval( $matches[1] ), intval( $matches[2] ) ];
+                        if( !isset( $r['bgp']['communities'] ) || !in_array( $c, $r['bgp']['communities'] ) ) {
+                            $r['bgp']['communities'][] = $c;
+                        }
                     }
                 }
             }
@@ -127,7 +130,10 @@ class Routes extends Parser
                 $m = substr( trim( $matches[1] ), 1, -1 );
                 foreach( explode( ') (', $m ) as $community ) {
                     if( preg_match( "/^(\d+),\s*(\d+),\s*(\d+)/", trim( $community ), $matches ) ) {
-                        $r['bgp']['large_communities'][] = [ (int)$matches[1], (int)$matches[2], (int)$matches[3] ];
+                        $c = [ (int)$matches[1], (int)$matches[2], (int)$matches[3] ];
+                        if( !isset( $r['bgp']['large_communities'] ) || !in_array( $c, $r['bgp']['large_communities'] ) ) {
+                            $r['bgp']['large_communities'][] = $c;
+                        }
                     }
                 }
             }
