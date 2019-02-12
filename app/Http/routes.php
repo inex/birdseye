@@ -75,6 +75,7 @@ $app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Co
     $app->get('api/route/{net}',                     'Routes@lookupTable');
     $app->get('api/route/{net}/table/{table}',       'Routes@lookupTable');
     $app->get('api/route/{net}/protocol/{protocol}', 'Routes@lookupProtocol');
+    $app->get('api/route/{net}/export/{protocol}',   'Routes@lookupExport');
 });
 
 if( env('LOOKING_GLASS_ENABLED', false ) ) {

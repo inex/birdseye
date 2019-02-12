@@ -150,4 +150,10 @@ class Bird
 
         return ( new RoutesParser($routesBlob ) )->parse();
     }
+
+    public function routesLookupExport( $net, $protocol ) {
+        $routesBlob = $this->run('show route for ' . $net . ' export ' . $protocol . ' all');
+
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
 }

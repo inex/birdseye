@@ -220,4 +220,30 @@ class Routes extends Controller
         return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutesProtocol($net, $protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
+    private function getLookupRoutesExport($net,$protocol) {
+        if( $routes = Cache::get( $this->cacheKey() . 'routes-lookup-' . $net . '-export-' . $protocol ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesLookupExport($net,$protocol);
+            Cache::put($this->cacheKey() . 'routes-lookup-' . $net . '-export-' . $protocol, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
+    public function lookupExport( $net, $protocol ) {
+        $net = urldecode($net);
+
+        $this->assertValidPrefix($net);
+
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        // reset cache used flag after above query:
+        $this->cacheUsed = false;
+
+        return $this->verifyAndSendJSON( 'routes', $this->getLookupRoutesExport($net, $protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
 }

@@ -97,6 +97,7 @@
                   E.g. <a href="{{{ $url }}}/api/route/net/1.2.3.4/protocol/master">{{{$url}}}/api/route/net/1.2.3.4/table/master</a>
               @endif
           </li>
+          <li> {{{ $url }}}/api/route/$net/export/$protocol</li>
       </ul>
 
       <h3>Route Counts</h3>
