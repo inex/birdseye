@@ -64,7 +64,7 @@ class Bgp extends ProtocolParser
                 //     Action:       restart
                 $p['limit_action'] = $matches[1];
             }
-            else if( preg_match( "/^\s+Routes:\s+(\d+)\s+imported,\s+(\d+)\s+exported\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+Routes:\s+(\d+)\s+imported,\s+(\d+)\s+exported\s*.*$/", $line, $matches ) ) {
                 //   Routes:         35 imported, 41127 exported, 2590 preferred
                 $p['routes'] = [
                     'imported'  => intval( $matches[1] ),
