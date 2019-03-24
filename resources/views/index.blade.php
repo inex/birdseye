@@ -62,6 +62,14 @@
           </li>
       </ul>
 
+      <p>
+      While card large communitity lookup in protocol tables of the form (x,y,*):
+      </p>
+
+      <ul>
+          <li> {{{ $url }}}/api/routes/lc-zwild/protocol/$protocol/$x/$y </li>
+      </ul>
+
       <h3>Routes</h3>
 
       <p>
