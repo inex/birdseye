@@ -16,6 +16,16 @@ class Routes extends Controller
         return $routes;
     }
 
+    private function getProtocolLargeCommunityWildXYRoutes($protocol,$x,$y) {
+        if( !$this->cacheDisabled && $routes = Cache::get( $this->cacheKey() . 'routes-protocols-lcwild-xy-' . $protocol . '-' . $x . '-' . $y ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesProtocolLargeCommunityWildXYRoutes($protocol,$x,$y);
+            Cache::put($this->cacheKey() . 'routes-protocols-lcwild-xy-' . $protocol . '-' . $x . '-' . $y, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
     private function getProtocolRoutesCount($protocol) {
         if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol . '-count' ) ) {
             $this->cacheUsed = true;
@@ -107,6 +117,25 @@ class Routes extends Controller
 
         return $this->verifyAndSendJSON( 'routes', $this->getProtocolRoutes($protocol), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
+
+    /**
+     * API call to return output of:
+     *
+     * show route all filter { if bgp_large_community ~ [( 2128, 1101, * )] then accept;} protocol pb_as1213_vli222_ipv4
+     */
+    public function protocolLargeCommunityWildXY( $protocol, $x, $y )
+    {
+        $x = (int)$x;
+        $y = (int)$y;
+
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) || !$x || !$y ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        return $this->verifyAndSendJSON( 'routes', $this->getProtocolLargeCommunityWildXYRoutes($protocol,$x,$y), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
 
     public function exportCount($protocol)
     {

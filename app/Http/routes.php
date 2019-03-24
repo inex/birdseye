@@ -69,6 +69,10 @@ $app->get('api/routes/count/protocol/{protocol}', 'Routes@protocolCount' );
 $app->get('api/routes/count/table/{table}',       'Routes@tableCount'    );
 $app->get('api/routes/count/export/{protocol}',   'Routes@exportCount'   );
 
+// Get wildcard large communities in protocol tabe of form ( x, y, * )
+$app->get('api/routes/lc-zwild/protocol/{protocol}/{x}/{y}', 'Routes@protocolLargeCommunityWildXY' );
+
+
 $throttle = env('THROTTLE_PER_MIN',20);
 
 $app->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($app) {
@@ -99,4 +103,3 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
         $app->get('route/{net}/table/{table}',       'Routes@lookupTable'    );
     });
 }
-
