@@ -18,14 +18,15 @@ cat <<ENDTAR
 tar --exclude=birdseye-$1/.env                 \\
     --exclude='birdseye-$1/birdseye-*.env'     \\
     --exclude='birdseye-$1/.git'               \\
+    --exclude='birdseye-$1/skipcache_ips.php'  \\
     --exclude='birdseye-$1/.vagrant'           \\
     --exclude='birdseye-$1/data/bird-lab'      \\
     --exclude='birdseye-$1/data/vagrant'       \\
     --exclude='birdseye-$1/data/sample-bird'   \\
     --exclude='birdseye-$1/storage/views/*php' \\
     --exclude='birdseye-$1/storage/cache/*'    \\
+    --exclude='birdseye-$1/storage/logs/*'     \\
     --exclude='*~'                             \\
-    --exclude='*log'                           \\
     -vcjf                                      \\
     birdseye-$1.tar.bz2 birdseye-$1
 ENDTAR
