@@ -71,7 +71,7 @@ class Controller extends BaseController
         if( file_exists( __DIR__ . '/../../../skipcache_ips.php' ) ) {
             $ips = include __DIR__ . '/../../../skipcache_ips.php';
 
-            if( isset( $ips ) && is_array( $ips ) ) {
+            if( isset( $_SERVER['REMOTE_ADDR'] ) && isset( $ips ) && is_array( $ips ) ) {
                 return( in_array( $_SERVER['REMOTE_ADDR'], $ips ) );
             }
         }
