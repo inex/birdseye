@@ -8,16 +8,25 @@
 
 echo -e "\n\n*************** UPDATE version.sh ******************\n\n"
 
+echo 'rm -rf storage/framework/cache/*'
+echo 'rm storage/framework/views/*php'
+echo 'rm storage/logs/*log'
+
 echo mv birdseye birdseye-$1
 
 cat <<ENDTAR
-tar --exclude=birdseye-$1/.env               \\
-    --exclude='birdseye-$1/birdseye-*.env'   \\
-    --exclude='birdseye-$1/.git'             \\
-    --exclude='birdseye-$1/.vagrant'         \\
-    --exclude='*~'                           \\
-    --exclude='*log'                         \\
-    -vcjf                                    \\
+tar --exclude=birdseye-$1/.env                 \\
+    --exclude='birdseye-$1/birdseye-*.env'     \\
+    --exclude='birdseye-$1/.git'               \\
+    --exclude='birdseye-$1/.vagrant'           \\
+    --exclude='birdseye-$1/data/bird-lab'      \\
+    --exclude='birdseye-$1/data/vagrant'       \\
+    --exclude='birdseye-$1/data/sample-bird'   \\
+    --exclude='birdseye-$1/storage/views/*php' \\
+    --exclude='birdseye-$1/storage/cache/*'    \\
+    --exclude='*~'                             \\
+    --exclude='*log'                           \\
+    -vcjf                                      \\
     birdseye-$1.tar.bz2 birdseye-$1
 ENDTAR
 
