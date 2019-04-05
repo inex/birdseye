@@ -292,6 +292,20 @@ $ echo $?
 
 Prefix limit checking can be disabled with a `-l` option.
 
+## BIRD Configuration File
+
+Bird's Eye expects timestamps to be presented in ISO 8601 format.  This
+needs to be configured in the BIRD configuration file using the following
+statements:
+
+```
+# Use ISO 8601 time formats:
+timeformat base         iso long;
+timeformat log          iso long;
+timeformat protocol     iso long;
+timeformat route        iso long;
+```
+
 ## Vagrant / Development
 
 This repository includes a [Vagrant](https://www.vagrantup.com/) file with a
