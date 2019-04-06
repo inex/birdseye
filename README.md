@@ -294,7 +294,9 @@ Prefix limit checking can be disabled with a `-l` option.
 
 ## BIRD Configuration File
 
-Bird's Eye expects timestamps to be presented in ISO 8601 format.  This
+Before version v1.2.0, Bird's Eye used the default timeformat settings in Bird.
+
+From v1.2.0 onwards, Bird's Eye expects timestamps to be presented in ISO 8601 format.  This
 needs to be configured in the BIRD configuration file using the following
 statements:
 
