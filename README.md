@@ -132,13 +132,13 @@ cp .env.example birdseye-rs1-lan1-ipv4.env
 
 If you do not want to use hostnames and your Bird's Eye installation is behind a proxy, you can set the same element as above in the HTTP request header: `X-BIRDSEYE`. See the Varnish example below in the *Serving Behind a Proxy* section.
 
-This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) we'd set it to:
+This example file has sane defaults but you need to edit it and fix the `BIRDC` parameter. In our naming case above (and for `rs1-lan1-ipv4.inex.ie`) and with Bird v1.x.y we'd set it to:
 
 ```
 BIRDC="/usr/bin/sudo /srv/birdseye/bin/birdc -4 -s /var/run/bird/rs1-lan1-ipv4.ctl"
 ```
 
-with the assumption that we've named and located the BIRD socket at that location.
+with the assumption that we've named and located the BIRD socket at that location. If you are using Bird v1.x.y with the IPv6 daemon, change the `-4` switch to `-6`. From Bird's Eye v1.2.0 onwards, we now also support Bird v2; in this case use the `-2` switch. 
 
 If you have a single BIRD daemon, you can skip DNS and just do:
 
