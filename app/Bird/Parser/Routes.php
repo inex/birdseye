@@ -154,25 +154,29 @@ class Routes extends Parser
             $matches[1] = $m[1];
             $matches[2] = $m[2];
             $matches[3] = $m[2];
-            $matches[4] = $m[5];
-            $matches[5] = $m[6];
-            $matches[6] = $m[7];
-            $matches[7] = $m[8];
-            $matches[8] = $m[9];
+            $matches[4] = 'none';
+            $matches[5] = $m[5];
+            $matches[6] = $m[6];
+            $matches[7] = $m[7];
+            $matches[8] = $m[8];
+            $matches[9] = $m[9];
         }
 
         $r['network']         = $matches[1];
-        $r['gateway']         = $matches[2];
-        $r['interface']       = 'none';
-        $r['from_protocol']   = $matches[4];
+        $r['gateway']         = $matches[3];
+        $r['interface']       = $matches[4];
+        $r['from_protocol']   = $matches[5];
 
-        if( preg_match( '/^\d\d\d\d\-\d\d\-\d\d\s\d\d:\d\d:\d\d$/', $matches[5] ) ) {
-            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[5] )->format('c');
+        if( preg_match( '/^\d\d\d\d\-\d\d\-\d\d\s\d\d:\d\d:\d\d$/', $matches[6] ) ) {
+            $r['age'] = DateTime::createFromFormat( 'Y-m-d H:i:s', $matches[6] )->format('c');
         }
+        # maybe there should be an else here, because if $matches[6] does not match the above
+        # pattern, some controller will cause some view to whine about not having the age property
+        # and the user/admin will have a hard time figuring out what happened exactly
 
-        $r['learnt_from']     = $matches[6];
-        $r['primary']         = $matches[7] === '*' ? true : false;
-        $r['metric']          = (int) $matches[8];
+        $r['learnt_from']     = $matches[7];
+        $r['primary']         = $matches[8] === '*' ? true : false;
+        $r['metric']          = (int) $matches[9];
         return $r;
     }
 }
