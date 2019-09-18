@@ -18,7 +18,8 @@ class Status extends Parser
 
         foreach( preg_split("/((\r?\n)|(\r\n?))/", $this->data()) as $line ) {
 
-            if( preg_match( "/^BIRD\s([0-9\.]+)\s*$/", $line, $matches ) ) {
+            // "BIRD debian/2.0.5-1-x ready." or "BIRD 2.0.4 ready."
+            if( preg_match( "/^BIRD\s([0-9a-zA-Z\/\-\.]+)\s.*$/", $line, $matches ) ) {
                 $response['version'] = $matches[1];
             }
             else if( preg_match( "/^Router\sID\sis\s([0-9\.]+)\s*$/", $line, $matches ) ) {
