@@ -95,7 +95,7 @@ If you prefer to install from source [with composer](https://getcomposer.org/dow
 ```sh
 git clone https://github.com/inex/birdseye.git
 cd birdseye
-composer install
+composer install --prefer-dist --no-dev
 chown -R www-data: storage  # or the appropriate web user on your system
 ```
 
