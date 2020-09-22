@@ -86,7 +86,7 @@ lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php
 ```
 
-And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/inex/birdseye/blob/v1.0.3/data/configs/lighttpd.conf) for an example.
+And configure Lighttpd - see [data/configs/lighttpd.conf](https://github.com/inex/birdseye/blob/master/data/configs/lighttpd.conf) for an example.
 
 ### Install from Source with Composer
 
