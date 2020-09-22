@@ -67,7 +67,7 @@ This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requ
 Download the release package **(ensure you get the latest version rather than the example version listed below!)** and install on your server. E.g.:
 
 ```sh
-# E.g. Ubuntu 16.04 LTS
+# E.g. Ubuntu 16.04 / 18.04 / 20.04 LTS
 apt-get install php-cgi php-mbstring php-xml unzip
 # E.g. Ubuntu 14.04 LTS
 # apt-get install php5-cgi unzip
