@@ -123,11 +123,6 @@ class Bird
 
         return ( new RoutesCountParser($routesCountBlob ) )->parse();
     }
-    public function routesTableLargeCommunityWildXYZCount( $table, $x, $y, $z ) {
-        $routesCountBlob = $this->run('show route all filter { if bgp_large_community ~ [( ' . ((int)$x) . ', ' . ((int)$y) . ', '. ((int)$z) .')] then accept;} table ' . $table . ' count' );
-
-        return ( new RoutesCountParser($routesCountBlob ) )->parse();
-    }
     public function routesProtocolCount( $protocol ) {
         $routesCountBlob = $this->run('show route protocol ' . $protocol . ' count');
 
