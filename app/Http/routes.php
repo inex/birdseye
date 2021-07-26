@@ -13,7 +13,7 @@
 
 // just for testing
 $app->get( 'test', function() {
-    return "Hello, world";
+    return "Hello, world!";
 });
 
 
