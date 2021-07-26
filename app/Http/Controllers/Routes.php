@@ -25,6 +25,43 @@ class Routes extends Controller
         }
         return $routes;
     }
+    private function getProtocolLargeCommunityWildXYZRoutes($protocol,$x,$y,$z) {
+        if( !$this->cacheDisabled && $routes = Cache::get( $this->cacheKey() . 'routes-protocols-lcwild-xyz-' . $protocol . '-' . $x . '-' . $y . '-' . $z) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routes = app('Bird')->routesProtocolLargeCommunityWildXYZRoutes($protocol,$x,$y,$z);
+            Cache::put($this->cacheKey() . 'routes-protocols-lcwild-xyz-' . $protocol . '-' . $x . '-' . $y . '-' . $z, $routes, env( 'CACHE_ROUTES', 5 ) );
+        }
+        return $routes;
+    }
+
+   
+    private function getProtocolLargeCommunityWildXYZCount($protocol,$x,$y,$z) {
+        if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-protocols-lcwild-xyz-' . $protocol . '-count' . '-' . $x . '-' . $y . '-' . $z ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routesCount = app('Bird')->routesProtocolLargeCommunityWildXYZCount($protocol,$x,$y,$z);
+            Cache::put($this->cacheKey() .'routes-protocols-lcwild-xyz-' . $protocol . '-count' . '-' . $x . '-' . $y . '-' . $z, $routesCount, env( 'CACHE_ROUTES', 5 ) );
+        }
+
+        if( $routesCount['routes'] === null ) {
+            about( 500, 'Could not get route count for protocol ' . $protocol );
+        }
+	return $routesCount;
+    }
+    private function getTableLargeCommunityWildXYZCount($table,$x,$y,$z) {
+        if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-tables-lcwild-xyz-' . $table . '-count' . '-' . $x . '-' . $y . '-' . $z ) ) {
+            $this->cacheUsed = true;
+        } else {
+            $routesCount = app('Bird')->routesTableLargeCommunityWildXYZCount($table,$x,$y,$z);
+            Cache::put($this->cacheKey() .'routes-table-lcwild-xyz-' . $table . '-count' . '-' . $x . '-' . $y . '-' . $z, $routesCount, env( 'CACHE_ROUTES', 5 ) );
+        }
+
+        if( $routesCount['routes'] === null ) {
+            about( 500, 'Could not get route count for protocol ' . $table );
+        }
+	return $routesCount;
+    }
 
     private function getProtocolRoutesCount($protocol) {
         if( !$this->cacheDisabled && $routesCount = Cache::get( $this->cacheKey() . 'routes-protocols-' . $protocol . '-count' ) ) {
@@ -136,7 +173,41 @@ class Routes extends Controller
         return $this->verifyAndSendJSON( 'routes', $this->getProtocolLargeCommunityWildXYRoutes($protocol,$x,$y), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
     }
 
+    #
+    # show route all filter { if bgp_large_community ~ [( 2128, 1101, 1 )] then accept;} protocol pb_as1213_vli222_ipv4
+       public function protocolLargeCommunityWildXYZ( $protocol, $x, $y, $z )
+    {
+        $x = (int)$x;
+        $y = (int)$y;
+        $z = (int)$z;
 
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) || !$x || !$y || !$z ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        return $this->verifyAndSendJSON( 'routes', $this->getProtocolLargeCommunityWildXYZRoutes($protocol,$x,$y, $z), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+       }
+
+    public function protocolLargeCommunityWildXYZCount($protocol,$x,$y,$z)
+    {
+        // let's make sure the protocol is valid:
+        if( !in_array( $protocol, $this->getSymbols()['protocol'] ) ) {
+            abort( 404, "Invalid protocol" );
+        }
+
+        return $this->verifyAndSendJSON( 'count', $this->getProtocolLargeCommunityWildXYZCount($protocol,$x,$y,$z), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
+
+    public function tableLargeCommunityWildXYZCount($table,$x,$y,$z)
+    {
+        // let's make sure the protocol is valid:
+        //if( !in_array( $table, $this->getSymbols()['tables'] ) ) {
+        //    abort( 404, "Invalid table" );
+        //}
+
+        return $this->verifyAndSendJSON( 'count', $this->getTableLargeCommunityWildXYZCount($table,$x,$y,$z), ['from_cache' => $this->cacheUsed, 'ttl_mins' => env( 'CACHE_ROUTES', 5 ) ] );
+    }
     public function exportCount($protocol)
     {
         // let's make sure the protocol is valid:

@@ -112,7 +112,22 @@ class Bird
 
         return ( new RoutesParser($routesBlob ) )->parse();
     }
+    public function routesProtocolLargeCommunityWildXYZRoutes( $protocol, $x, $y, $z ) {
+        $routesBlob = $this->run('show route all filter { if bgp_large_community ~ [( ' . ((int)$x) . ', ' . ((int)$y) . ', '. ((int)$z) .')] then accept;} protocol ' . $protocol );
 
+        return ( new RoutesParser($routesBlob ) )->parse();
+    }
+
+    public function routesProtocolLargeCommunityWildXYZCount( $protocol, $x, $y, $z ) {
+        $routesCountBlob = $this->run('show route all filter { if bgp_large_community ~ [( ' . ((int)$x) . ', ' . ((int)$y) . ', '. ((int)$z) .')] then accept;} protocol ' . $protocol . ' count' );
+
+        return ( new RoutesCountParser($routesCountBlob ) )->parse();
+    }
+    public function routesTableLargeCommunityWildXYZCount( $table, $x, $y, $z ) {
+        $routesCountBlob = $this->run('show route all filter { if bgp_large_community ~ [( ' . ((int)$x) . ', ' . ((int)$y) . ', '. ((int)$z) .')] then accept;} table ' . $table . ' count' );
+
+        return ( new RoutesCountParser($routesCountBlob ) )->parse();
+    }
     public function routesProtocolCount( $protocol ) {
         $routesCountBlob = $this->run('show route protocol ' . $protocol . ' count');
 
@@ -134,7 +149,10 @@ class Bird
 
 
     public function routesTable( $table ) {
-        $routesBlob = $this->run('show route table ' . $table . ' all');
+	$protocol = substr_replace($table,"b",0,1);
+	#dd( $protocol );
+        $routesBlob = $this->run('show route table ' . $table . ' all protocol '.$protocol);
+	#dd( $routesBlob );
 
         return ( new RoutesParser($routesBlob ) )->parse();
     }
