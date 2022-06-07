@@ -16,7 +16,6 @@ $router->get( 'test', function() {
     return "Hello, world!";
 });
 
-
 // This is pretty kack but fideloper/TrustedProxy seems to not work on Lumen yet
 if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
     $proto = 'https://';
@@ -26,7 +25,8 @@ if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] ) {
     $proto = 'http://';
 }
 
-$url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : url( '', [], $proto === 'https://' );
+
+$url = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $proto . $_SERVER['HTTP_X_FORWARDED_HOST'] : $proto . $_SERVER['HTTP_HOST'];
 
 // A proxy can optionally set HTTP_X_URL to add a prefix to the URL (http://www.example.com/prefix/).
 if( isset($_SERVER['HTTP_X_URL'] ) ) {
@@ -43,7 +43,6 @@ if( isset($_SERVER['HTTP_X_URL'] ) ) {
 if( substr( $url, -1 ) == '/' ) {
     $url = substr( $url, 0, -1 );
 }
-$url = 'http://birdseye.test';
 
 $router->get('/', function () use ($router,$url) {
     return $router->app->make('view')->make('index')->with( [
