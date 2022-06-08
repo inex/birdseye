@@ -85,8 +85,8 @@ if( env('LOOKING_GLASS_ENABLED', false ) ) {
 
     $router->group(['prefix' => 'lg', 'namespace' => 'App\Http\Controllers\LookingGlass'], function () use ($router,$url) {
 
-        $router->make('view')->share('url',$url);
-        $router->make('view')->share('status', json_decode( $router->app->call('\App\Http\Controllers\Status@show' )->content() ) );
+        $router->app->make('view')->share('url',$url);
+        $router->app->make('view')->share('status', json_decode( $router->app->call('\App\Http\Controllers\Status@show' )->content() ) );
 
         $router->get('', function() use ($router,$url) {
             return redirect( $url . '/lg/protocols/bgp' );
