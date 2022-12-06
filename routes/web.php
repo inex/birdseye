@@ -74,7 +74,7 @@ $router->get('api/routes/lc-zwild/protocol/{protocol}/{x}/{y}', 'Routes@protocol
 
 $throttle = env('THROTTLE_PER_MIN',20);
 
-$router->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http\Controllers'], function () use ($router) {
+$router->group(['middleware' => 'throttle:' . $throttle,'namespace' => '\App\Http\Controllers'], function () use ($router) {
     $router->get('api/route/{net}',                     'Routes@lookupTable');
     $router->get('api/route/{net}/table/{table}',       'Routes@lookupTable');
     $router->get('api/route/{net}/protocol/{protocol}', 'Routes@lookupProtocol');
@@ -83,7 +83,7 @@ $router->group(['middleware' => 'throttle:' . $throttle,'namespace' => 'App\Http
 
 if( env('LOOKING_GLASS_ENABLED', false ) ) {
 
-    $router->group(['prefix' => 'lg', 'namespace' => 'App\Http\Controllers\LookingGlass'], function () use ($router,$url) {
+    $router->group(['prefix' => 'lg', 'namespace' => '\App\Http\Controllers\LookingGlass'], function () use ($router,$url) {
 
         $router->app->make('view')->share('url',$url);
         $router->app->make('view')->share('status', json_decode( $router->app->call('\App\Http\Controllers\Status@show' )->content() ) );
