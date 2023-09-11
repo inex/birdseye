@@ -71,6 +71,8 @@ $app->get('api/routes/count/export/{protocol}',   'Routes@exportCount'   );
 
 // Get wildcard large communities in protocol tabe of form ( x, y, * )
 $app->get('api/routes/lc-zwild/protocol/{protocol}/{x}/{y}', 'Routes@protocolLargeCommunityWildXY' );
+$app->get('api/routes/lc-zwild/protocol/{protocol}/{x}/{y}/{z}', 'Routes@protocolLargeCommunityWildXYZ' );
+$app->get('api/routes/count/lc-zwild/protocol/{protocol}/{x}/{y}/{z}', 'Routes@protocolLargeCommunityWildXYZCount');
 
 
 $throttle = env('THROTTLE_PER_MIN',20);
