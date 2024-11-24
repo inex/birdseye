@@ -30,5 +30,10 @@
         "post-root-package-install": [
             "php -r \"copy('.env.example', '.env');\""
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": false
+        }
     }
 }
