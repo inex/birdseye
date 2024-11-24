@@ -19,6 +19,8 @@ try {
         $name = explode( '.', $_SERVER['HTTP_X_FORWARDED_HOST'] )[0];
     } else if( isset( $_SERVER['HTTP_HOST'] ) && strpos( $_SERVER['HTTP_HOST'], '.' ) ) {
         $name = explode( '.', $_SERVER['HTTP_HOST'] )[0];
+    } else if( isset( $_SERVER['SERVER_NAME'] ) ) {
+        $name = $_SERVER['SERVER_NAME'];
     }
 
     if( isset( $name ) ) {
