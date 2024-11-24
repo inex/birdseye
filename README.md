@@ -25,7 +25,7 @@ You can see the IXP Manager integration for ~30 BIRD daemons at INEX at https://
 At the hackathon, the team also produced consumers of this API:
 
 * https://github.com/dfkbg/birdseye - Python CLI consumer by Daniel Karrenberg
-* https://github.com/ecix/birdseye - Python based web consumer by Matthias Hannig
+* https://github.com/ecix/birdseye - Python based web consumer by Annika Hannig
 
 
 ## Rationale
@@ -61,16 +61,14 @@ In an ideal world, this micro-service will be deprecated once the BIRD developer
 
 This is a basic [Lumen](https://lumen.laravel.com/) PHP application and the requirements are:
 
-* PHP >= 5.5.9
+* PHP >= 8.1
 * Mbstring PHP Extension
 
 Download the release package **(ensure you get the latest version rather than the example version listed below!)** and install on your server. E.g.:
 
 ```sh
-# E.g. Ubuntu 16.04 / 18.04 / 20.04 LTS
+# E.g. Ubuntu 20.04 / 22.04 / 24.04 LTS
 apt-get install php-cgi php-mbstring php-xml unzip
-# E.g. Ubuntu 14.04 LTS
-# apt-get install php5-cgi unzip
 cd /srv
 wget https://github.com/inex/birdseye/releases/download/vx.y.z/birdseye-vx.y.z.tar.bz2
 tar jxf birdseye-vx.y.z.tar.bz2
