@@ -29,24 +29,26 @@ try {
         $envfile = 'birdseye-' . $name . '.env';
     }
 
+
     if( isset( $envfile ) && file_exists( $envpath.'/'.$envfile ) && is_readable($envpath.'/'.$envfile) ) {
-        $dotenv = new Dotenv\Dotenv($envpath, $envfile);
         $_ENV['BIRDSEYE_ENV_FILE'] = $envpath.'/'.$envfile;
         $_ENV['BIRDSEYE_CACHE_KEY'] = $name . '::';
-        $dotenv->load();
+        (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
+            $envpath, $envfile
+        ))->bootstrap();
     }else {
-        $dotenv = new Dotenv\Dotenv(__DIR__.'/../');
-        $dotenv->load();
         $_ENV['BIRDSEYE_ENV_FILE'] = '.env';
         $_ENV['BIRDSEYE_CACHE_KEY'] = env('BIRDSEYE_CACHE_KEY', 'SomeCacheKey');
+        (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
+            dirname(__DIR__)
+        ))->bootstrap();
     }
 
     if( php_sapi_name() !== 'cli' && ( !isset( $_ENV['BIRDSEYE_CACHE_KEY'] ) || !strlen( $_ENV['BIRDSEYE_CACHE_KEY'] ) ) ) {
         header('HTTP/1.1 500 Cache key not specified');
         exit;
     }
-
-} catch (Dotenv\Exception\InvalidPathException $e) {
+} catch (\Exception) {
     header('HTTP/1.1 500 Configuration issue - see bootstrap/app.php');
     exit;
 }
@@ -63,7 +65,7 @@ try {
 */
 
 $app = new Laravel\Lumen\Application(
-    realpath(__DIR__.'/../')
+    dirname(__DIR__)
 );
 
 $app->withFacades();
@@ -90,6 +92,22 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Register Config Files
+|--------------------------------------------------------------------------
+|
+| Now we will register the "app" configuration file. If the file exists in
+| your configuration directory it will be loaded; otherwise, we'll load
+| the default version. You may register other files below as needed.
+|
+*/
+
+//$app->configure('app');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,8 +156,10 @@ $app->register(App\Providers\BirdServiceProvider::class);
 |
 */
 
-$app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
-    require __DIR__.'/../app/Http/routes.php';
+$app->router->group([
+    'namespace' => 'App\Http\Controllers',
+], function ($router) {
+    require __DIR__.'/../routes/web.php';
 });
 
 return $app;
