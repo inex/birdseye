@@ -81,39 +81,41 @@ class Routes extends Parser
                 $r['gateway']         = $matches[1];
                 $r['interface']       = $matches[2];
             }
-            else if( preg_match( "/^\s+Type:\s+(.*)\s*$/", $line, $matches ) ) {
-                // 	Type: BGP unicast univ
+            else if( preg_match( "/^\s+(?:Type|source):\s+(.*)\s*$/", $line, $matches ) ) {
+		    // 	Type: BGP unicast univ
+		    // 	source: BGP
                 $r['type'] = explode(' ', trim($matches[1]) );
             }
-            else if( preg_match( "/^\s+BGP.origin:\s+(\w+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.origin:\s+(\w+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.origin: IGP
                 $r['bgp']['origin'] = $matches[1];
             }
-            else if( preg_match( "/^\s+BGP.as_path:\s+(.*)\s*$/", $line, $matches ) ) {
-                // 	BGP.as_path: 42227
+            else if( preg_match( "/^\s+(?:BGP\.as_path|bgp_path):\s+(.*)\s*$/", $line, $matches ) ) {
+		    // 	BGP.as_path: 42227
+		    // 	bgp_path: 42227
                 $r['bgp']['as_path'] = explode(' ', trim($matches[1]) );
             }
-            else if( preg_match( "/^\s+BGP.next_hop:\s+([0-9a-f\.\:\/]+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.next_hop:\s+([0-9a-f\.\:\/]+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.next_hop: 193.242.111.54
                 $r['bgp']['next_hop'] = $matches[1];
             }
-            else if( preg_match( "/^\s+BGP.local_pref:\s+(\w+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.local_pref:\s+(\w+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.origin: IGP
                 $r['bgp']['local_pref'] = $matches[1];
             }
-            else if( preg_match( "/^\s+BGP.med:\s+(\d+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.med:\s+(\d+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.med: 100
                 $r['bgp']['med'] = intval( $matches[1] );
             }
-            else if( preg_match( "/^\s+BGP.atomic_aggr:(.*)$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.atomic_aggr:(.*)$/i", $line, $matches ) ) {
                 // 	BGP.atomic_aggr:
                 $r['bgp']['atomic_aggr'] = trim( $matches[1] );
             }
-            else if( preg_match( "/^\s+BGP.aggregator:(.*)$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.aggregator:(.*)$/i", $line, $matches ) ) {
                 // 	BGP.aggregator: 193.104.155.9 AS50145
                 $r['bgp']['aggregator'] = trim( $matches[1] );
             }
-            else if( preg_match( "/^\s+BGP.community:\s+(.+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.community:\s+(.+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.community: (0,31122) (0,6543)
                 foreach( explode( ' ', trim( $matches[1] ) ) as $community ) {
                     if( preg_match( "/^\((\d+),(\d+)\)/", $community, $matches ) ) {
@@ -124,7 +126,7 @@ class Routes extends Parser
                     }
                 }
             }
-            else if( preg_match( "/^\s+BGP.large_community:\s+(.+)\s*$/", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.large_community:\s+(.+)\s*$/i", $line, $matches ) ) {
                 // BGP.large_community: (999, 1, 111)
                 // BGP.large_community: (999, 1, 111) (999, 156, 111) (999, 157, 111)
                 $m = substr( trim( $matches[1] ), 1, -1 );
