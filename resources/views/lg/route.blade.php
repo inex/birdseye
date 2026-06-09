@@ -63,7 +63,7 @@
                     <td>{{implode( ' ', $r->bgp->as_path )}}</td>
                 </tr>
             @endif
-            @if (isset( $r->bgp->nect_hop ))
+            @if (isset( $r->bgp->next_hop ))
                 <tr>
                     <td><strong>BGP :: Next Hop</strong></td>
                     <td>{{$r->bgp->next_hop}}</td>
