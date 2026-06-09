@@ -95,8 +95,9 @@ class Routes extends Parser
 		    // 	bgp_path: 42227
                 $r['bgp']['as_path'] = explode(' ', trim($matches[1]) );
             }
-            else if( preg_match( "/^\s+BGP.next_hop:\s+([0-9a-f\.\:\/]+)\s*$/i", $line, $matches ) ) {
+            else if( preg_match( "/^\s+BGP.next_hop:\s+(.+)\s*$/i", $line, $matches ) ) {
                 // 	BGP.next_hop: 193.242.111.54
+                // 	BGP.next_hop: 2001:db8::1 fe80::10
                 $r['bgp']['next_hop'] = $matches[1];
             }
             else if( preg_match( "/^\s+BGP.local_pref:\s+(\w+)\s*$/i", $line, $matches ) ) {
